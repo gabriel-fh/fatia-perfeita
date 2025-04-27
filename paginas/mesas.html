@@ -1,57 +1,56 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="https://prjpwa-unilasalle.glitch.me/favicon.ico" />
-  <title>Cadastro de Mesas</title>
-  <link rel="stylesheet" href="../styles/global.css" />
-  <link rel="stylesheet" href="../styles/style.css" />
-</head>
-<body class="flex-center">
-  <main class="flex-center" style="width: 100%;">
-    <form id="formMesa">
-      <header>
-        <h2>Cadastro de Mesas</h2>
-      </header>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="https://prjpwa-unilasalle.glitch.me/favicon.ico" />
+    <title>Cadastro de Mesas</title>
+    <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
+  <body class="flex-center">
+    <main class="flex-center" style="width: 100%">
+      <form id="formMesa">
+        <header>
+          <h2>Cadastro de Mesas</h2>
+        </header>
 
-      <div class="form-group">
-        <label for="tfNumero">Número:</label>
-        <input type="number" id="tfNumero" disabled />
-      </div>
+        <div class="form-group">
+          <label for="tfNumero">Número:</label>
+          <input type="number" id="tfNumero" disabled />
+        </div>
 
-      <div class="form-group">
-        <label for="cbSituacaoMesa">Situação:</label>
-        <select id="cbSituacaoMesa" disabled>
-          <option value="LIVRE">LIVRE</option>
-          <option value="OCUPADA">OCUPADA</option>
-          <option value="DESATIVADA">DESATIVADA</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label for="cbSituacaoMesa">Situação:</label>
+          <select id="cbSituacaoMesa" disabled>
+            <option value="LIVRE">LIVRE</option>
+            <option value="OCUPADA">OCUPADA</option>
+            <option value="DESATIVADA">DESATIVADA</option>
+          </select>
+        </div>
 
-      <div id="divNavegar" class="form-group">
-        <button id="btPrimeiro" type="button">Primeiro</button>
-        <button id="btAnterior" type="button">Anterior</button>
-        <button id="btProximo" type="button">Próximo</button>
-        <button id="btUltimo" type="button">Último</button>
-      </div>
+        <div id="divNavegar" class="form-group">
+          <button id="btPrimeiro" type="button">Primeiro</button>
+          <button id="btAnterior" type="button">Anterior</button>
+          <button id="btProximo" type="button">Próximo</button>
+          <button id="btUltimo" type="button">Último</button>
+        </div>
 
-      <div id="divComandos" class="form-group">
-        <button id="btIncluir" type="button">Incluir</button>
-        <button id="btAlterar" type="button">Alterar</button>
-        <button id="btExcluir" type="button">Excluir</button>
-        <button id="btSair" type="button">Sair</button>
-      </div>
+        <div id="divComandos" class="form-group">
+          <button id="btIncluir" type="button">Incluir</button>
+          <button id="btAlterar" type="button">Alterar</button>
+          <button id="btExcluir" type="button">Excluir</button>
+          <button id="btSair" type="button">Sair</button>
+        </div>
 
-      <div id="divDialogo" class="form-group hidden">
-        <button id="btOk" type="button">Ok</button>
-        <button id="btCancelar" type="button">Cancelar</button>
-      </div>
+        <div id="divDialogo" class="form-group hidden">
+          <button id="btOk" type="button">Ok</button>
+          <button id="btCancelar" type="button">Cancelar</button>
+        </div>
 
-      <div id="divAviso" style="padding: 1rem; font-size: 1.4rem;"></div>
+        <div id="divAviso" style="padding: 1rem; font-size: 1.4rem"></div>
+      </form>
+    </main>
 
-    </form>
-  </main>
-
-  <script type="module" src="/controller/CtrlManterMesas.js"></script>
-</body>
+    <script type="module" src="/controller/CtrlManterMesas.js"></script>
+  </body>
 </html>
