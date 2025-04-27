@@ -6,6 +6,7 @@
     "usuarios": {
       ".read": "root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'",
       ".write": "root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'",
+      ".indexOn": ["email"],
       "$uid": {
         ".validate": "newData.hasChildren(['nome', 'email', 'funcao'])",
         "funcao": {
@@ -49,7 +50,7 @@
     "comandas": {
       ".read": "auth.token !== null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'MESA')",
       ".write": "auth.token !== null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON')",
-      ".indexOn": ["codigo", "mesa, garcom"],
+      ".indexOn": ["codigo", "mesa", "garcom"],
       "$uidMesa": {
         ".read": "$uidMesa === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'",
         ".write": "$uidMesa === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || (root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON' && newData.child('garcom').val() === auth.uid)",
@@ -72,11 +73,14 @@
     "produtos": {
       ".read": "auth.token !== null",
       ".write": "auth.token !== null && root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'",
-      ".indexOn": ["nome", "tipo", "situacao"],
+      ".indexOn": ["codigo", "tipo"],
       "$uid": {
-        ".validate": "newData.hasChildren(['nome', 'descricao', 'preco_base', 'tipo', 'situacao'])",
+        ".validate": "newData.hasChildren(['nome', 'descricao', 'preco_base', 'tipo', 'situacao', 'codigo'])",
         "preco": {
           ".validate": "newData.val() > 0"
+        },
+        "codigo": {
+          ".validate": "newData.isString() && newData.val().length > 0"
         }
       },
       "pedidos": {
