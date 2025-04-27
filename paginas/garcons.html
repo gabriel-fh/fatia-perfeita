@@ -1,77 +1,133 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="https://prjpwa-unilasalle.glitch.me/favicon.ico" />
-  <title>Cadastro de Garçons</title>
-  <link rel="stylesheet" href="../styles/styles.css" />
-  <link rel="stylesheet" href="../styles/global.css" />
-</head>
-<body class="flex-center">
-  <main class="flex-center" style="width: 100%;">
-    <form id="formGarcom">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="https://prjpwa-unilasalle.glitch.me/favicon.ico" />
+    <title>Cadastro de Garçons</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
+    <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  </head>
+  <body class="container">
+    <aside class="sidebar hidden auth">
+      <nav>
+        <ul>
+          <li>
+            <img
+              src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/logo.png?v=1744044819325"
+              alt="Logo"
+            />
+          </li>
+          <li>
+            <a href="../index.html" class="nav-icon active">
+              <i class="fa-solid fa-house"></i>
+            </a>
+          </li>
+          <li>
+            <a href="././paginas/garcons.html" class="nav-icon">
+              <i class="fa-solid fa-pizza-slice"></i>
+            </a>
+          </li>
+          <li>
+            <a href="/pedidos" class="nav-icon">
+              <i class="fa-solid fa-list-ul"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="main-content">
       <header>
-        <h2>Cadastro de Garçons</h2>
+        <h2>Garçons</h2>
       </header>
+      <main class="content">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Matrícula</th>
+              <th>Início</th>
+              <th>Fim</th>
+              <th>Situação</th>
+              <th>Ações</th>
+              <!-- nova coluna para os botões -->
+            </tr>
+          </thead>
+          <tbody id="garcons">
+            <tr>
+              <td>Jorge Amado</td>
+              <td>jorge@email.com</td>
+              <td>192884</td>
+              <td>12:00</td>
+              <td>18:00</td>
+              <td>Atendendo</td>
+              <td class="table-actions">
+                <button class="btn btn-primary" id="btn-editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-danger" id="btn-excluir"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>Jorge Amado</td>
+              <td>jorge@email.com</td>
+              <td>192884</td>
+              <td>12:00</td>
+              <td>18:00</td>
+              <td>Atendendo</td>
+              <td class="table-actions">
+                <button class="btn btn-primary" id="btn-editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-danger" id="btn-excluir"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>Jorge Amado</td>
+              <td>jorge@email.com</td>
+              <td>192884</td>
+              <td>12:00</td>
+              <td>18:00</td>
+              <td>Atendendo</td>
+              <td class="table-actions">
+                <button class="btn btn-primary" id="btn-editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-danger" id="btn-excluir"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>Jorge Amado</td>
+              <td>jorge@email.com</td>
+              <td>192884</td>
+              <td>12:00</td>
+              <td>18:00</td>
+              <td>Atendendo</td>
+              <td class="table-actions">
+                <button class="btn btn-primary" id="btn-editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-danger" id="btn-excluir"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>Jorge Amado</td>
+              <td>jorge@email.com</td>
+              <td>192884</td>
+              <td>12:00</td>
+              <td>18:00</td>
+              <td>Atendendo</td>
+              <td class="table-actions">
+                <button class="btn btn-primary" id="btn-editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-danger" id="btn-excluir"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="add-new">
+          <button class="btn btn-primary" id="btn-adicionar">
+            Adicionar Garçom
+          </button>
+        </div>
+      </main>
+    </div>
 
-      <div class="form-group">
-        <label for="tfMatricula">Matrícula:</label>
-        <input type="number" id="tfMatricula" disabled />
-      </div>
-
-      <div class="form-group">
-        <label for="tfNome">Nome:</label>
-        <input type="text" id="tfNome" disabled />
-      </div>
-
-      <div class="form-group">
-        <label for="tfEmail">Email:</label>
-        <input type="email" id="tfEmail" disabled />
-      </div>
-
-      <div class="form-group">
-        <label for="tfHoraInicio">Hora Início:</label>
-        <input type="time" id="tfHoraInicio" disabled />
-      </div>
-
-      <div class="form-group">
-        <label for="tfHoraFim">Hora Fim:</label>
-        <input type="time" id="tfHoraFim" disabled />
-      </div>
-
-      <div class="form-group">
-        <label for="cbSituacao">Situação:</label>
-        <select id="cbSituacao" disabled>
-          <option value="ATIVO">ATIVO</option>
-          <option value="INATIVO">INATIVO</option>
-          <option value="ATENDENDO">ATENDENDO</option>
-        </select>
-      </div>
-
-      <div id="divNavegar" class="form-group">
-        <button id="btPrimeiro" type="button">Primeiro</button>
-        <button id="btAnterior" type="button">Anterior</button>
-        <button id="btProximo" type="button">Próximo</button>
-        <button id="btUltimo" type="button">Último</button>
-      </div>
-
-      <div id="divComandos" class="form-group">
-        <button id="btIncluir" type="button">Incluir</button>
-        <button id="btAlterar" type="button">Alterar</button>
-        <button id="btExcluir" type="button">Excluir</button>
-        <button id="btSair" type="button">Sair</button>
-      </div>
-
-      <div id="divDialogo" class="form-group hidden">
-        <button id="btOk" type="button">Ok</button>
-        <button id="btCancelar" type="button">Cancelar</button>
-      </div>
-
-      <div id="divAviso" style="padding: 1rem; font-size: 1.4rem;"></div>
-
-    </form>
-  </main>
-
-  <script type="module" src="/controller/CtrlManterGarcons.js"></script>
-</body>
+    <script type="module" src="/controller/CtrlManterGarcons.js"></script>
+    <script type="module" src="../viewer/ViewerGarcom.js"></script>
+    <script type="module" src="../middleware.js"></script>
+  </body>
 </html>

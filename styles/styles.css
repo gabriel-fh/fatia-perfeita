@@ -152,7 +152,7 @@ button#cart-btn:hover {
   background-color: var(--bg-tertiary);
   padding: 2rem;
   padding-bottom: 5rem;
-box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -178,4 +178,67 @@ box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   display: grid;
   gap: 2rem;
   font-size: 1.5rem;
+}
+
+.content {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+.table th,
+.table td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+}
+
+.table tbody td {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--bg-tertiary);
+}
+
+.table th {
+  background-color: var(--bg-tertiary);
+  font-weight: bold;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.table tbody {
+  font-size: 15px;
+  background-color: var(--bg-secondary);
+}
+
+.table tbody tr td.table-actions {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.table tbody tr td.table-actions button {
+  width: auto;
+  padding: 0;
+  background: none;
+}
+
+.add-new {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.add-new button {
+  width: auto;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
 }
