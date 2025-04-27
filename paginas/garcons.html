@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="https://prjpwa-unilasalle.glitch.me/favicon.ico" />
+  <title>Cadastro de Garçons</title>
+  <link rel="stylesheet" href="../styles/styles.css" />
+  <link rel="stylesheet" href="../styles/global.css" />
+</head>
+<body class="flex-center">
+  <main class="flex-center" style="width: 100%;">
+    <form id="formGarcom">
+      <header>
+        <h2>Cadastro de Garçons</h2>
+      </header>
+
+      <div class="form-group">
+        <label for="tfMatricula">Matrícula:</label>
+        <input type="number" id="tfMatricula" disabled />
+      </div>
+
+      <div class="form-group">
+        <label for="tfNome">Nome:</label>
+        <input type="text" id="tfNome" disabled />
+      </div>
+
+      <div class="form-group">
+        <label for="tfEmail">Email:</label>
+        <input type="email" id="tfEmail" disabled />
+      </div>
+
+      <div class="form-group">
+        <label for="tfHoraInicio">Hora Início:</label>
+        <input type="time" id="tfHoraInicio" disabled />
+      </div>
+
+      <div class="form-group">
+        <label for="tfHoraFim">Hora Fim:</label>
+        <input type="time" id="tfHoraFim" disabled />
+      </div>
+
+      <div class="form-group">
+        <label for="cbSituacao">Situação:</label>
+        <select id="cbSituacao" disabled>
+          <option value="ATIVO">ATIVO</option>
+          <option value="INATIVO">INATIVO</option>
+          <option value="ATENDENDO">ATENDENDO</option>
+        </select>
+      </div>
+
+      <div id="divNavegar" class="form-group">
+        <button id="btPrimeiro" type="button">Primeiro</button>
+        <button id="btAnterior" type="button">Anterior</button>
+        <button id="btProximo" type="button">Próximo</button>
+        <button id="btUltimo" type="button">Último</button>
+      </div>
+
+      <div id="divComandos" class="form-group">
+        <button id="btIncluir" type="button">Incluir</button>
+        <button id="btAlterar" type="button">Alterar</button>
+        <button id="btExcluir" type="button">Excluir</button>
+        <button id="btSair" type="button">Sair</button>
+      </div>
+
+      <div id="divDialogo" class="form-group hidden">
+        <button id="btOk" type="button">Ok</button>
+        <button id="btCancelar" type="button">Cancelar</button>
+      </div>
+
+      <div id="divAviso" style="padding: 1rem; font-size: 1.4rem;"></div>
+
+    </form>
+  </main>
+
+  <script type="module" src="/controller/CtrlManterGarcons.js"></script>
+</body>
+</html>
