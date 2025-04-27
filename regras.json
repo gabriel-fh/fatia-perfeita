@@ -1,0 +1,94 @@
+{
+  "rules": {
+    ".read": "auth.token.isAdmin === true || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'",
+    ".write": "auth.token.isAdmin === true",
+
+    "usuarios": {
+      ".read": "root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'",
+      ".write": "root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'",
+      "$uid": {
+        ".validate": "newData.hasChildren(['nome', 'email', 'funcao'])",
+        "funcao": {
+          ".validate": "newData.val() === 'ADMIN' || newData.val() === 'GARCON' || newData.val() === 'MESA'"
+        },
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'"
+      }
+    },
+
+    "mesas": {
+      ".read": "auth.token !== null",
+      ".write": "auth != null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN')",
+      ".indexOn": ["numero"],
+      "$uid": {
+        ".validate": "newData.hasChildren(['numero', 'situacao'])",
+        "situacao": {
+          ".validate": "newData.val() === 'OCUPADA' || newData.val() === 'LIVRE' || newData.val() === 'DESATIVADA'"
+        },
+        ".write": "root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN' || (root.child('usuarios').child(auth.uid).child('funcao').val() === 'GARCON' && data.exists() && data.child('numero').val() === newData.child('numero').val())"
+      }
+    },
+
+    "garcons": {
+      ".read": "auth.token !== null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON')",
+      ".write": "auth != null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN')",
+      ".indexOn": ["matricula"],
+      "$uid": {
+        ".validate": "newData.hasChildren(['nome', 'matricula', 'hora_inicio', 'hora_fim', 'situacao'])",
+        "situacao": {
+          ".validate": "newData.val() === 'LIVRE' || newData.val() === 'ATENDENDO'"
+        },
+        ".read": "auth.uid === $uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'",
+        ".write": "auth.uid === $uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || (root.child('comandas').child($uid).child('garcom').val() === auth.uid)",
+        "$uidComanda": {
+          ".validate": "newData.child('garcom').val() === $uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'"
+        }
+      }
+    },
+
+    "comandas": {
+      ".read": "auth.token !== null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'MESA')",
+      ".write": "auth.token !== null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON')",
+      ".indexOn": ["codigo", "mesa, garcom"],
+      "$uidMesa": {
+        ".read": "$uidMesa === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'",
+        ".write": "$uidMesa === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || (root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON' && newData.child('garcom').val() === auth.uid)",
+
+        "$uid": {
+          ".validate": "newData.hasChildren(['codigo','subtotal', 'total', 'data_hora', 'taxa_servico','situacao', 'mesa', 'garcom', 'pedidos'])",
+          "garcom": {
+            ".validate": "root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || newData.val() === data.val() || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON'"
+          },
+          "pedidos": {
+            "$uidPedido": {
+              ".write": "root.child('usuarios').child(auth.uid).child('funcao').val() === 'MESA' || (root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN' || data.parent().parent().child('garcom').val() === auth.uid)",
+              ".validate": "newData.hasChildren(['produtoId', 'quantidade']) && newData.child('quantidade').isNumber() && newData.child('quantidade').val() > 0"
+            }
+          }
+        }
+      }
+    },
+
+    "produtos": {
+      ".read": "auth.token !== null",
+      ".write": "auth.token !== null && root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'",
+      ".indexOn": ["nome", "tipo", "situacao"],
+      "$uid": {
+        ".validate": "newData.hasChildren(['nome', 'descricao', 'preco_base', 'tipo', 'situacao'])",
+        "preco": {
+          ".validate": "newData.val() > 0"
+        }
+      },
+      "pedidos": {
+        "$uidPedido": {
+          "produtos": {
+            "$uidProduto": {
+              ".write": "root.child('usuarios').child(auth.uid).child('funcao').val() === 'MESA' || (root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN' || data.parent().parent().child('garcom').val() === auth.uid)",
+              ".validate": "newData.hasChildren(['quantidade', 'subtotal']) && newData.child('quantidade').isNumber() && newData.child('quantidade').val() > 0"
+            }
+          }
+        }
+      }
+    }
+  }
+}
