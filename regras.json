@@ -34,15 +34,12 @@
       ".write": "auth != null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN')",
       ".indexOn": ["matricula"],
       "$uid": {
-        ".validate": "newData.hasChildren(['nome', 'matricula', 'hora_inicio', 'hora_fim', 'situacao'])",
+        ".validate": "newData.hasChildren(['nome', 'email', 'matricula', 'horaInicio', 'horaFim', 'situacao'])",
         "situacao": {
-          ".validate": "newData.val() === 'LIVRE' || newData.val() === 'ATENDENDO'"
+          ".validate": "newData.val() === 'ATIVO' || newData.val() === 'INATIVO' || newData.val() === 'ATENDENDO'"
         },
         ".read": "auth.uid === $uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'",
-        ".write": "auth.uid === $uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || (root.child('comandas').child($uid).child('garcom').val() === auth.uid)",
-        "$uidComanda": {
-          ".validate": "newData.child('garcom').val() === $uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'"
-        }
+        ".write": "auth.uid === $uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'"
       }
     },
 
