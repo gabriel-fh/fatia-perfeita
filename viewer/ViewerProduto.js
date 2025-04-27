@@ -8,7 +8,6 @@ export default class ViewerProduto {
   constructor(ctrl) {
     this.#ctrl = ctrl;
 
-    this.divNavegar = this.obterElemento('divNavegar');
     this.divComandos = this.obterElemento('divComandos');
     this.divAviso = this.obterElemento('divAviso');
     this.divDialogo = this.obterElemento('divDialogo');
@@ -92,7 +91,6 @@ export default class ViewerProduto {
   }
 
   statusEdicao(operacao) {
-    this.divNavegar.hidden = true;
     this.divComandos.hidden = true;
     this.divDialogo.hidden = false;
 
@@ -121,7 +119,6 @@ export default class ViewerProduto {
   }
 
   statusApresentacao() {
-    this.divNavegar.hidden = false;
     this.divComandos.hidden = false;
     this.divDialogo.hidden = true;
     this.tfCodigo.disabled = true;
