@@ -152,7 +152,7 @@ button#cart-btn:hover {
   background-color: var(--bg-tertiary);
   padding: 2rem;
   padding-bottom: 5rem;
-box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -172,6 +172,7 @@ box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 .cart-header button {
   width: auto;
   background: none;
+  padding: 0;
 }
 
 .cart-footer {

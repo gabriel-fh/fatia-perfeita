@@ -13,6 +13,7 @@ const verifyToken = () => {
     main.classList.remove("flex-center");
     return true;
   } else {
+    window.location.href = "/";
     return false;
   }
 };
