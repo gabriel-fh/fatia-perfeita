@@ -1,77 +1,85 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="https://prjpwa-unilasalle.glitch.me/favicon.ico" />
-  <title>Cadastro de Comandas</title>
-  <link rel="stylesheet" href="../styles/global.css" />
-  <link rel="stylesheet" href="../styles/styles.css" />
-</head>
-<body class="flex-center">
-  <main class="flex-center" style="width: 100%;">
-    <form id="formComanda">
-      <header>
-        <h2>Cadastro de Comandas</h2>
-      </header>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="https://prjpwa-unilasalle.glitch.me/favicon.ico" />
+    <title>Cadastro de Comandas</title>
+    <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="../styles/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 
-      <div class="form-group">
-        <label for="tfCodigo">Código:</label>
-        <input type="number" id="tfCodigo" disabled />
-      </div>
+  </head>
+  <body class="container">
+    <div id="sidebar-container"></div>
+    <main class="flex-center" style="width: 100%">
+      <form id="formComanda">
+        <header>
+          <h2>Cadastro de Comandas</h2>
+        </header>
 
-      <div class="form-group">
-        <label for="tfSubtotal">Subtotal:</label>
-        <input type="number" id="tfSubtotal" step="0.01" disabled />
-      </div>
+        <div class="form-group">
+          <label for="tfCodigo">Código:</label>
+          <input type="number" id="tfCodigo" disabled />
+        </div>
 
-      <div class="form-group">
-        <label for="tfTotal">Total:</label>
-        <input type="number" id="tfTotal" step="0.01" disabled />
-      </div>
+        <div class="form-group">
+          <label for="tfSubtotal">Subtotal:</label>
+          <input type="number" id="tfSubtotal" step="0.01" disabled />
+        </div>
 
-      <div class="form-group">
-        <label for="tfTaxaServico">Taxa de Serviço:</label>
-        <input type="number" id="tfTaxaServico" step="0.01" disabled />
-      </div>
+        <div class="form-group">
+          <label for="tfTotal">Total:</label>
+          <input type="number" id="tfTotal" step="0.01" disabled />
+        </div>
 
-      <div class="form-group">
-        <label for="cbSituacaoComanda">Situação:</label>
-        <select id="cbSituacaoComanda" disabled>
-          <option value="ABERTA">ABERTA</option>
-          <option value="FECHADA">FECHADA</option>
-          <option value="CANCELADA">CANCELADA</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label for="tfTaxaServico">Taxa de Serviço:</label>
+          <input type="number" id="tfTaxaServico" step="0.01" disabled />
+        </div>
 
-      <div class="form-group">
-        <label for="tfDataHora">Data e Hora:</label>
-        <input type="datetime-local" id="tfDataHora" disabled />
-      </div>
+        <div class="form-group">
+          <label for="cbSituacaoComanda">Situação:</label>
+          <select id="cbSituacaoComanda" disabled>
+            <option value="ABERTA">ABERTA</option>
+            <option value="FECHADA">FECHADA</option>
+            <option value="CANCELADA">CANCELADA</option>
+          </select>
+        </div>
 
-      <div id="divNavegar" class="form-group" style="display: flex; gap: 1rem;">
-        <button id="btPrimeiro" type="button">Primeiro</button>
-        <button id="btAnterior" type="button">Anterior</button>
-        <button id="btProximo" type="button">Próximo</button>
-        <button id="btUltimo" type="button">Último</button>
-      </div>
+        <div class="form-group">
+          <label for="tfDataHora">Data e Hora:</label>
+          <input type="datetime-local" id="tfDataHora" disabled />
+        </div>
 
-      <div id="divComandos" class="form-group" style="display: flex; gap: 1rem;">
-        <button id="btIncluir" type="button">Incluir</button>
-        <button id="btAlterar" type="button">Alterar</button>
-        <button id="btExcluir" type="button">Excluir</button>
-        <button id="btSair" type="button">Sair</button>
-      </div>
+        <div id="divNavegar" class="form-group" style="display: flex; gap: 1rem">
+          <button id="btPrimeiro" type="button">Primeiro</button>
+          <button id="btAnterior" type="button">Anterior</button>
+          <button id="btProximo" type="button">Próximo</button>
+          <button id="btUltimo" type="button">Último</button>
+        </div>
 
-      <div id="divDialogo" class="form-group hidden" style="display: flex; gap: 1rem;">
-        <button id="btOk" type="button">Ok</button>
-        <button id="btCancelar" type="button">Cancelar</button>
-      </div>
+        <div id="divComandos" class="form-group" style="display: flex; gap: 1rem">
+          <button id="btIncluir" type="button">Incluir</button>
+          <button id="btAlterar" type="button">Alterar</button>
+          <button id="btExcluir" type="button">Excluir</button>
+          <button id="btSair" type="button">Sair</button>
+        </div>
 
-      <div id="divAviso" style="padding: 1rem; font-size: 1.4rem;"></div>
+        <div id="divDialogo" class="form-group hidden" style="display: flex; gap: 1rem">
+          <button id="btOk" type="button">Ok</button>
+          <button id="btCancelar" type="button">Cancelar</button>
+        </div>
 
-    </form>
-  </main>
+        <div id="divAviso" style="padding: 1rem; font-size: 1.4rem"></div>
+      </form>
+    </main>
 
-  <script type="module" src="/controller/CtrlManterComandas.js"></script>
-</body>
+    <script type="module">
+      import { renderSidebar } from "../components/sidebar.js";
+
+      renderSidebar();
+    </script>
+
+    <script type="module" src="/controller/CtrlManterComandas.js"></script>
+  </body>
 </html>

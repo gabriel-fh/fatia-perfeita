@@ -6,8 +6,10 @@
     <title>Cadastro de Mesas</title>
     <link rel="stylesheet" href="../styles/global.css" />
     <link rel="stylesheet" href="../styles/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   </head>
-  <body class="flex-center">
+  <body class="container">
+    <div id="sidebar-container"></div>
     <main class="flex-center" style="width: 100%">
       <form id="formMesa">
         <header>
@@ -50,6 +52,12 @@
         <div id="divAviso" style="padding: 1rem; font-size: 1.4rem"></div>
       </form>
     </main>
+
+    <script type="module">
+      import { renderSidebar } from "../components/sidebar.js";
+
+      renderSidebar();
+    </script>
 
     <script type="module" src="/controller/CtrlManterMesas.js"></script>
   </body>
