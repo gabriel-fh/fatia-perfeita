@@ -24,10 +24,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app); // Obtém a referência ao banco de dados
 
-(async() => {
-  console.log(auth); 
-})()
-
 export default class CtrlSessao {
   constructor() {
     this.init();

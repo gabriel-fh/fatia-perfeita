@@ -389,15 +389,34 @@ display: flex;
 }
 
 .dish button {
-  background-color: #e95435;
   color: white;
-  border: none;
   padding: 10px;
   width: 100%;
-  font-weight: 600;
+  font-size: 1.3rem;
+  font-weight: 500;
   cursor: pointer;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-radius: .7rem;
+}
+
+.dish .dish-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  align-items: center;
+  background-color: var(--primary-color);
+  border-radius: .7rem;
+}
+
+.dish-buttons .qtd {
+  /* background-color: red; */
+  font-size: 2rem;
+  padding: .5rem;
+}
+
+.dish-buttons span {
+  font-size: 1.5rem;
+  color: #fff;
+  padding: .7rem;
 }
 
 .order-header {
