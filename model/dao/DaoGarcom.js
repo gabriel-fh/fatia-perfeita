@@ -1,6 +1,6 @@
 "use strict";
 
-import { getDatabase, ref, query, orderByChild, get, set, remove, runTransaction } 
+import { getDatabase, ref, query, orderByChild, get, set, remove }
   from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 
 import Garcom from "/model/Garcom.js";
@@ -27,27 +27,23 @@ export default class DaoGarcom {
 
   async obterGarcons() {
     let connectionDB = await this.obterConexao();
+
     return new Promise((resolve) => {
       let conjGarcons = [];
-      let dbRefGarcons = ref(connectionDB, "garcons");
-      let consulta = query(dbRefGarcons, orderByChild("matricula"));
+      let dbRefUsuarios = ref(connectionDB, 'usuarios');
+      let paramConsulta = orderByChild('email');
+      let consulta = query(dbRefUsuarios, paramConsulta);
       let resultPromise = get(consulta);
 
       resultPromise.then(dataSnapshot => {
         dataSnapshot.forEach(dataSnapshotObj => {
           let elem = dataSnapshotObj.val();
-          let garcom = new Garcom(
-            elem.nome,
-            elem.email,
-            elem.matricula,
-            elem.horaInicio,
-            elem.horaFim,
-            elem.situacao
-          );
-          conjGarcons.push(garcom);
+          if (elem.funcao === "GARCOM") {
+            conjGarcons.push(new Garcom(elem.uid, elem.nome, elem.email, elem.situacao));
+          }
         });
         resolve(conjGarcons);
-      }).catch(e => {
+      }).catch((e) => {
         console.error("#ERRO: " + e);
         resolve([]);
       });
@@ -57,10 +53,12 @@ export default class DaoGarcom {
   async incluir(garcom) {
     let connectionDB = await this.obterConexao();
     return new Promise((resolve, reject) => {
-      const dbRefGarcom = ref(connectionDB, `garcons/${garcom.getMatricula()}`);
-      set(dbRefGarcom, {
+      const dbRefUsuario = ref(connectionDB, `usuarios/${garcom.getUid()}`);
+      set(dbRefUsuario, {
+        uid: garcom.getUid(),
         nome: garcom.getNome(),
         email: garcom.getEmail(),
+        funcao: "GARCOM",
         matricula: garcom.getMatricula(),
         horaInicio: garcom.getHoraInicio(),
         horaFim: garcom.getHoraFim(),
@@ -73,10 +71,12 @@ export default class DaoGarcom {
   async alterar(garcom) {
     let connectionDB = await this.obterConexao();
     return new Promise((resolve, reject) => {
-      const dbRefGarcom = ref(connectionDB, `garcons/${garcom.getMatricula()}`);
-      set(dbRefGarcom, {
+      const dbRefUsuario = ref(connectionDB, `usuarios/${garcom.getUid()}`);
+      set(dbRefUsuario, {
+        uid: garcom.getUid(),
         nome: garcom.getNome(),
         email: garcom.getEmail(),
+        funcao: "GARCOM",
         matricula: garcom.getMatricula(),
         horaInicio: garcom.getHoraInicio(),
         horaFim: garcom.getHoraFim(),
@@ -89,8 +89,8 @@ export default class DaoGarcom {
   async excluir(garcom) {
     let connectionDB = await this.obterConexao();
     return new Promise((resolve, reject) => {
-      const dbRefGarcom = ref(connectionDB, `garcons/${garcom.getMatricula()}`);
-      remove(dbRefGarcom)
+      const dbRefUsuario = ref(connectionDB, `usuarios/${garcom.getUid()}`);
+      remove(dbRefUsuario)
         .then(() => resolve(true))
         .catch(error => reject(error));
     });
