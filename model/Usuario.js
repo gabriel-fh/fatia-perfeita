@@ -75,7 +75,7 @@ export default class Usuario {
   static validarFuncao(funcao) {
     const funcoesValidas = ["ADMIN", "GARCOM", "MESA"];
     if (typeof funcao !== "string" || !funcoesValidas.includes(funcao)) {
-      throw new ModelError("Função inválida. As opções válidas são: ADMIN, GARCON ou MESA.");
+      throw new ModelError("Função inválida. As opções válidas são: ADMIN, GARCOM ou MESA.");
     }
   }
 
