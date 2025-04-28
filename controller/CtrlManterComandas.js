@@ -22,21 +22,24 @@ export default class CtrlManterComandas {
     this.#viewer.carregarComandas(comandas);
   }
 
-  async incluir(codigo, subtotal, total, taxa_servico, situacao, data_hora, mesa, garcom) {
+  async incluir(codigo, subtotal, total, taxaServico, situacao, dataHora, mesaUid, garcomUid) {
     try {
-      let daoMesa = new DaoMesa();
-      let mesaDB = await daoMesa.obterMesaPeloId(mesa);
+      const daoMesa = new DaoMesa();
+      const daoGarcom = new DaoGarcom();
 
-      let daoGarcom = new DaoGarcom();
-      let garcomDB = await daoGarcom.obterGarcomPeloId(garcom);
+      const mesa = await daoMesa.obterMesaPeloId(mesaUid);
+      const garcom = await daoGarcom.obterGarcomPeloId(garcomUid);
 
-      let comanda = new Comanda(codigo, subtotal, total, taxa_servico, situacao, data_hora, mesaDB, garcomDB);
+      if (!mesa || !garcom) {
+        throw new Error("Mesa ou Garçom inválido!");
+      }
+
+      let comanda = new Comanda(codigo, subtotal, total, taxaServico, situacao, dataHora, mesa, garcom);
       await this.#daoComanda.incluir(comanda);
       this.#atualizarContextoNavegacao();
     } catch (e) {
-      console.log(e);
-
-      alert(e);
+      console.error(e);
+      alert(e.message || e);
     }
   }
 

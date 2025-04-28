@@ -52,6 +52,10 @@ export default class ViewerComanda {
           <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
         </td>
       `;
+      // ➡️ aqui adiciona o UID da mesa e do garçom na linha
+      tr.setAttribute("data-uid-mesa", comanda.mesa.uid);
+      tr.setAttribute("data-uid-garcom", comanda.garcom.uid);
+
       this.tbody.appendChild(tr);
     });
 
@@ -107,13 +111,6 @@ export default class ViewerComanda {
       const mesaSelecionadaUid = this.cbMesa.value;
       const garcomSelecionadoUid = this.cbGarcom.value;
 
-      // Buscar a Mesa e o Garçom reais (objetos)
-      const daoMesa = new DaoMesa();
-      const daoGarcom = new DaoGarcom();
-
-      const mesaSelecionada = await daoMesa.obterMesaPeloId(mesaSelecionadaUid);
-      const garcomSelecionado = await daoGarcom.obterGarcomPeloId(garcomSelecionadoUid);
-
       // Agora sim, chama o Controller corretamente
       await this.#ctrl.incluir(
         this.tfCodigo.value,
@@ -122,8 +119,8 @@ export default class ViewerComanda {
         parseFloat(this.tfTaxaServico.value),
         this.cbSituacao.value,
         this.tfDataHora.value,
-        mesaSelecionada,
-        garcomSelecionado
+        mesaSelecionadaUid,
+        garcomSelecionadoUid
       );
 
       this.limparFormulario();
@@ -135,7 +132,7 @@ export default class ViewerComanda {
 
   async excluirComanda() {
     try {
-      await this.#ctrl.excluir(Number(this.tfCodigo.value));
+      await this.#ctrl.excluir(this.tfCodigo.value);
       this.limparFormulario();
       this.modal.classList.add("hidden");
     } catch (error) {
@@ -179,7 +176,7 @@ export default class ViewerComanda {
         const codigo = linha.children[0].textContent;
         if (confirm(`Deseja excluir a comanda código ${codigo}?`)) {
           try {
-            await this.#ctrl.excluir(Number(codigo));
+            await this.#ctrl.excluir(codigo);
           } catch (error) {
             console.error("Erro ao excluir:", error);
           }
@@ -212,7 +209,14 @@ export default class ViewerComanda {
     this.tfSubtotal.value = linha.children[1].textContent;
     this.tfTotal.value = linha.children[2].textContent;
     this.tfTaxaServico.value = linha.children[3].textContent;
-    this.cbSituacaoComanda.value = linha.children[4].textContent;
+    this.cbSituacao.value = linha.children[4].textContent;
     this.tfDataHora.value = linha.children[5].textContent;
+
+    // NOVO: preencher selects também
+    const uidMesa = linha.getAttribute("data-uid-mesa");
+    const uidGarcom = linha.getAttribute("data-uid-garcom");
+
+    this.cbMesa.value = uidMesa || "";
+    this.cbGarcom.value = uidGarcom || "";
   }
 }

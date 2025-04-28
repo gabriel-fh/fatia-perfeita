@@ -42,29 +42,36 @@ export default class DaoComanda {
       let dbRefComandas = ref(connectionDB, "comandas");
       let consulta = query(dbRefComandas);
       let resultPromise = get(consulta);
+
       resultPromise
-        .then((dataSnapshot) => {
-          dataSnapshot.forEach(async (dataSnapshotObj) => {
-            let comandaSnap = dataSnapshotObj.val();
+        .then(async (dataSnapshot) => {
+          console.log(Object.values(dataSnapshot.val()));
+          const snapshots = [];
+          Object.values(dataSnapshot.val()).forEach((child) => snapshots.push(child));
+
+          for (const snapshot of snapshots) {
+            let comandaSnap = snapshot;
             let daoMesa = new DaoMesa();
             let mesa = await daoMesa.obterMesaPeloId(comandaSnap.mesa);
 
             let daoGarcom = new DaoGarcom();
             let garcom = await daoGarcom.obterGarcomPeloId(comandaSnap.garcom);
 
-            conjComandas.push(
-              new Comanda(
-                comandaSnap.codigo,
-                comandaSnap.subtotal,
-                comandaSnap.total,
-                parseFloat(comandaSnap.taxaServico),
-                comandaSnap.situacao,
-                comandaSnap.dataHora,
-                mesa,
-                garcom
-              )
+            let comanda = new Comanda(
+              comandaSnap.codigo,
+              parseFloat(comandaSnap.subtotal),
+              parseFloat(comandaSnap.total),
+              parseFloat(comandaSnap.taxa_servico),
+              comandaSnap.situacao,
+              comandaSnap.data_hora,
+              mesa,
+              garcom
             );
-          });
+
+            conjComandas.push(comanda);
+          }
+          console.log(conjComandas);
+
           resolve(conjComandas);
         })
         .catch((e) => {
@@ -77,68 +84,68 @@ export default class DaoComanda {
   async obterComandaPeloCodigo(codigo) {
     let connectionDB = await this.obterConexao();
     return new Promise((resolve) => {
-      let dbRefComandas = ref(connectionDB, "comandas");
-      let paramConsulta = orderByChild("codigo").equalTo(codigo);
-      let consulta = query(dbRefComandas, paramConsulta);
+      let dbRefComandas = ref(connectionDB, "comandas/" + codigo);
+      let consulta = query(dbRefComandas);
       let resultPromise = get(consulta);
-      resultPromise.then((dataSnapshot) => {
+
+      resultPromise.then(async (dataSnapshot) => {
         let comandaSnap = dataSnapshot.val();
+
         if (comandaSnap != null) {
           let daoMesa = new DaoMesa();
-          let mesa = daoMesa.obterMesaPeloId(comandaSnap.mesa);
+          let mesa = await daoMesa.obterMesaPeloId(comandaSnap.mesa);
 
           let daoGarcom = new DaoGarcom();
-          let garcom = daoGarcom.obterGarcomPeloId(comandaSnap.garcom);
+          let garcom = await daoGarcom.obterGarcomPeloId(comandaSnap.garcom);
 
-          resolve(
-            new Comanda(
-              comandaSnap.codigo,
-              comandaSnap.subtotal,
-              comandaSnap.total,
-              comandaSnap.taxaServico,
-              comandaSnap.dataHora,
-              mesa,
-              garcom
-            )
+          const comanda = new Comanda(
+            comandaSnap.codigo,
+            parseFloat(comandaSnap.subtotal),
+            parseFloat(comandaSnap.total),
+            parseFloat(comandaSnap.taxa_servico),
+            comandaSnap.situacao,
+            comandaSnap.data_hora,
+            mesa,
+            garcom
           );
-        } else resolve(null);
+
+          resolve(comanda);
+        } else {
+          resolve(null);
+        }
       });
     });
   }
 
   async incluir(comanda) {
     let connectionDB = await this.obterConexao();
-    return new Promise((resolve, reject) => {
-      let dbRefComandas = ref(connectionDB, "comandas");
-      runTransaction(dbRefComandas, async (comandas) => {
-        let dbRefNovaComanda = child(dbRefComandas, comanda.getCodigo());
+    const dbRefComandas = ref(connectionDB, "comandas");
+    const dbRefNovaComanda = child(dbRefComandas, comanda.getCodigo());
 
-        const mesaUid = typeof comanda.mesa === "object" ? comanda.mesa.getUid() : comanda.mesa;
-        const garcomUid = typeof comanda.garcom === "object" ? comanda.garcom.getUid() : comanda.garcom;
+    const mesaUid = typeof comanda.mesa === "object" ? comanda.mesa.getUid() : comanda.mesa;
+    const garcomUid = typeof comanda.garcom === "object" ? comanda.garcom.getUid() : comanda.garcom;
 
-        if (!mesaUid || !garcomUid) {
-          reject(new Error("Mesa ou Garçom inválidos."));
-          return;
-        }
+    if (!mesaUid || !garcomUid) {
+      throw new Error("Mesa ou Garçom inválidos.");
+    }
+    
+    const comandaData = {
+      codigo: comanda.codigo,
+      subtotal: comanda.subtotal,
+      total: comanda.total,
+      taxa_servico: comanda.taxaServico,
+      situacao: comanda.situacao,
+      data_hora: comanda.dataHora,
+      mesa: mesaUid,
+      garcom: garcomUid,
+    };
 
-        const comandaData = {
-          codigo: comanda.codigo,
-          subtotal: comanda.subtotal,
-          total: comanda.total,
-          taxa_servico: comanda.taxaServico,
-          situacao: comanda.situacao,
-          data_hora: comanda.dataHora,
-          mesa: mesaUid,
-          garcom: garcomUid,
-        };
-
-        let setPromise = set(dbRefNovaComanda, comandaData);
-        setPromise.then(
-          () => resolve(true),
-          (erro) => reject(erro)
-        );
+    return set(dbRefNovaComanda, comandaData)
+      .then(() => true)
+      .catch((e) => {
+        console.error("Erro ao incluir comanda:", e);
+        throw e;
       });
-    });
   }
 
   //-----------------------------------------------------------------------------------------//

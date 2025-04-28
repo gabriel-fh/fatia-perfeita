@@ -133,7 +133,7 @@ export default class Comanda {
   }
 
   static validarDataHora(dataHora) {
-    if (!dataHora || isNaN(new Date(dataHora))) {
+    if (!dataHora || isNaN(new Date(dataHora).getTime())) {
       throw new ModelError("Data e hora inválidas. Use uma data válida.");
     }
   }
