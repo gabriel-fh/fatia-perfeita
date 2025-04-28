@@ -27,7 +27,9 @@ export default class CtrlManterGarcons {
       Usuario.validarEmail(email);
       Usuario.validarSenha(senha);
       const user = await criarUsuario(email, senha);
+      console.log(user.uid);
       let garcom = new Garcom(user.uid, nome, email, situacao);
+      console.log(garcom);
       await this.#daoGarcom.incluir(garcom);
       this.#atualizarContextoNavegacao();
     } catch (e) {

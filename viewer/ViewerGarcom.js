@@ -64,7 +64,7 @@ export default class ViewerGarcom {
         this.situacao.value,
       );
       this.limparFormulario();
-      // this.modal.classList.add("hidden");
+      this.modal.classList.add("hidden");
     } catch (error) {
       console.error(error);
     }

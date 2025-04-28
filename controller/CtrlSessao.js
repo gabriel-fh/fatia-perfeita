@@ -15,7 +15,7 @@ import CtrlManterProdutos from "/controller/CtrlManterProdutos.js";
 import CtrlManterGarcons from "/controller/CtrlManterGarcons.js";
 import ModelError from "../model/ModelError.js";
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyD83f2LeSDIuVWBFUnu_jHOzshsjDkF5iI",
   authDomain: "fatia-perfeita.firebaseapp.com",
   databaseURL: "https://fatia-perfeita-default-rtdb.firebaseio.com",
@@ -30,6 +30,10 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app); // Obtém a referência ao banco de dados
 
+(async() => {
+  console.log(auth); 
+})()
+
 export default class CtrlSessao {
   #daoUsuario;
 
@@ -43,10 +47,6 @@ export default class CtrlSessao {
   async init() {
     try {
       this.usuario = await this.verificandoLogin();
-      // Observe abaixo que temos um problema de ACOPLAMENTO, pois se
-      // precisarmos acrescentar um novo controlador de caso de uso, precisaremos
-      // abrir esse arquivo para alteração. O melhor seria implementar um
-      // mecanismo de INJEÇÃO DE DEPENDÊNCIA.
       if (document.URL.includes("produtos.html")) this.ctrlAtual = new CtrlManterProdutos();
       else if (document.URL.includes("garcons.html")) this.ctrlAtual = new CtrlManterGarcons();
       else if (document.URL.includes("mesas.html")) this.ctrlAtual = new CtrlManterMesas();

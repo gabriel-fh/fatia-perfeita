@@ -13,7 +13,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 
 import Garcom from "/model/Garcom.js";
-import ModelError from "/model/ModelError.js";
+import ModelError from "../ModelError.js";
 
 export default class DaoGarcom {
   static promessaConexao = null;
@@ -74,6 +74,7 @@ export default class DaoGarcom {
           .catch((e) => {
             console.log("#ERRO: " + e);
             resolve(false);
+            throw new ModelError("Erro ao incluir o garçom: " + e);
           });
       });
     });
