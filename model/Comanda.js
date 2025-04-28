@@ -119,7 +119,7 @@ export default class Comanda {
   }
 
   static validarTaxaServico(taxaServico) {
-    if (typeof taxaServico !== "number" || !isFinite(taxaServico) || taxaServico < 0) {
+    if (typeof taxaServico !== "number" || taxaServico < 0) {
       throw new ModelError("Taxa de serviço deve ser um número positivo.");
     }
   }
@@ -133,11 +133,8 @@ export default class Comanda {
   }
 
   static validarDataHora(dataHora) {
-    const regexDataHora =
-      /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[0-2])\/(\d{4})\s(0?[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[1-5][0-9])(:([0-5]?[0-9]))?$/;
-
-    if (!regexDataHora.test(dataHora)) {
-      throw new ModelError("Data e hora inválidas. O formato deve ser 'dd/mm/aaaa HH:mm' ou 'dd/mm/aaaa HH:mm:ss'.");
+    if (!dataHora || isNaN(new Date(dataHora))) {
+      throw new ModelError("Data e hora inválidas. Use uma data válida.");
     }
   }
 

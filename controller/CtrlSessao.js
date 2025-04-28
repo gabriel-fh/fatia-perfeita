@@ -4,9 +4,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebas
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import { getDatabase, ref } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 
-import CtrlManterProdutos from "/controller/CtrlManterProdutos.js";
-import CtrlManterGarcons from "/controller/CtrlManterGarcons.js";
+import CtrlManterProdutos from "./CtrlManterProdutos.js";
+import CtrlManterGarcons from "./CtrlManterGarcons.js";
 import CtrlManterMesas from "./CtrlManterMesas.js";
+import CtrlManterComandas from "./CtrlManterComandas.js";
+import ModelError from "../model/ModelError.js";
 import CtrlInicio from "./CtrlInicio.js";
 
 export const firebaseConfig = {
@@ -38,7 +40,7 @@ export default class CtrlSessao {
       else if (document.URL.includes("garcons.html")) this.ctrlAtual = new CtrlManterGarcons();
       else if (document.URL.includes("mesas.html")) this.ctrlAtual = new CtrlManterMesas();
       else if (document.URL.includes("pedidos.html")) this.ctrlAtual = new CtrlPedidos();
-      else if (document.URL.includes("comandas.html")) this.ctrlAtual = new CtrlComandas();
+      else if (document.URL.includes("comandas.html")) this.ctrlAtual = new CtrlManterComandas();
       else if (document.URL.includes("inicio.html")) this.ctrlAtual = new CtrlInicio();
       else if (document.URL.includes("index.html") || window.location.href === "/") this.ctrlAtual = await this.login();
     } catch (e) {
