@@ -6,69 +6,69 @@ import DaoComanda from "/model/dao/DaoComanda.js"; // DAO para comandas
 import ViewerComanda from "/viewer/ViewerComanda.js"; // Viewer que mostra na tela
 
 export default class CtrlManterComandas {
-  #daoComanda;
-  #viewer;
+    #daoComanda;
+    #viewer;
 
-  constructor() {
-    this.#daoComanda = new DaoComanda();
-    this.#viewer = new ViewerComanda(this);
-    this.#atualizarContextoNavegacao();
-  }
-
-  async #atualizarContextoNavegacao() {
-    let comandas = await this.#daoComanda.obterComandas();
-
-    this.#viewer.carregarComandas(comandas);
-  }
-
-  async incluir(codigo, nome, imagem, descricao, tipo, preco_base, situacao) {
-    try {
-      let comanda = new Comanda(codigo, nome, imagem, descricao, tipo, Number(preco_base), situacao);
-      await this.#daoComanda.incluir(comanda);
-      this.#atualizarContextoNavegacao();
-    } catch (e) {
-      console.log(e);
-
-      alert(e);
+    constructor() {
+        this.#daoComanda = new DaoComanda();
+        this.#viewer = new ViewerComanda(this);
+        this.#atualizarContextoNavegacao();
     }
-  }
 
-  async alterar(codigo, nome, imagem, descricao, tipo, preco_base, situacao) {
-    try {
-      let comanda = await this.#daoComanda.obterComandaPeloId(codigo);
-      if (!comanda) {
-        alert(`Comanda com codigo ${codigo} não encontrado.`);
-      } else {
-        comanda.setNome(nome);
-        comanda.setPreco(preco);
-        comanda.setImagem(imagem);
-        comanda.setDescricao(descricao);
-        comanda.setTipo(tipo);
-        comanda.setPrecoBase(Number(preco_base));
-        comanda.setSituacao(situacao);
-        await this.#daoComanda.alterar(comanda);
-      }
-      this.#atualizarContextoNavegacao();
-    } catch (e) {
-      alert(e);
+    async #atualizarContextoNavegacao() {
+        let comandas = await this.#daoComanda.obterComandas();
+
+        this.#viewer.carregarComandas(comandas);
     }
-  }
 
-  async excluir(codigo) {
-    try {
-      let comanda = await this.#daoComanda.obterComandaPeloCodigo(codigo);
-      if (!comanda) {
-        alert(`Comanda com codigo ${codigo} não encontrado.`);
-      } else {
-        await this.#daoComanda.excluir(comanda);
-      }
-      this.#atualizarContextoNavegacao();
-    } catch (e) {
-      alert(e);
+    async incluir(codigo, subtotal, total, taxaServico, situacao, dataHora, mesa, garcom) {
+        try {
+            let comanda = new Comanda(codigo, subtotal, total, taxaServico, situacao, dataHora, mesa, garcom);
+            await this.#daoComanda.incluir(comanda);
+            this.#atualizarContextoNavegacao();
+        } catch (e) {
+            console.log(e);
+
+            alert(e);
+        }
     }
-  }
 
-  cancelar() {
-    this.#atualizarContextoNavegacao();
-  }
+    async alterar(codigo, subtotal, total, taxaServico, situacao, dataHora, mesa, garcom) {
+        try {
+            let comanda = await this.#daoComanda.obterComandaPeloCodigo(codigo);
+            if (!comanda) {
+                alert(`Comanda com codigo ${codigo} não encontrado.`);
+            } else {
+                comanda.setSubtotal(subtotal);
+                comanda.setTotal(total);
+                comanda.setTaxaServico(taxaServico);
+                comanda.setSituacao(situacao);
+                comanda.setDataHora(dataHora);
+                comanda.setMesa(mesa);
+                comanda.setGarcom(garcom);
+                await this.#daoComanda.alterar(comanda);
+            }
+            this.#atualizarContextoNavegacao();
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+    async excluir(codigo) {
+        try {
+            let comanda = await this.#daoComanda.obterComandaPeloCodigo(codigo);
+            if (!comanda) {
+                alert(`Comanda com codigo ${codigo} não encontrado.`);
+            } else {
+                await this.#daoComanda.excluir(comanda);
+            }
+            this.#atualizarContextoNavegacao();
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+    cancelar() {
+        this.#atualizarContextoNavegacao();
+    }
 }
