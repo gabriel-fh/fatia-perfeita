@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/logo.png?v=1744044819325" />
+    <title>Cadastro de Pedidos</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
+    <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  </head>
+
+  <body class="container">
+    <div id="sidebar-container"></div>
+
+    <div class="main-content">
+      <header>
+        <h2>Pedidos</h2>
+      </header>
+
+      <main class="content">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Data e Hora</th>
+              <th>Situação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="pedidos">
+            <tr>
+              <td>1001</td>
+              <td>2024-05-01T12:30</td>
+              <td>ABERTO</td>
+              <td class="table-actions">
+                <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="add-new">
+          <button class="btn btn-primary" id="btn-adicionar">Adicionar Pedido</button>
+        </div>
+      </main>
+
+      <section class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modal-title">Adicionar Pedido</h3>
+            <button id="close-cart-btn" class="close-btn">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <form id="formPedido">
+            <div class="form-group">
+              <label for="tfCodigoPedido">Código:</label>
+              <input type="number" id="tfCodigoPedido" required />
+            </div>
+
+            <div class="form-group">
+              <label for="tfDataHoraPedido">Data e Hora:</label>
+              <input type="datetime-local" id="tfDataHoraPedido" required />
+            </div>
+
+            <div class="form-group">
+              <label for="cbSituacaoPedido">Situação:</label>
+              <select id="cbSituacaoPedido" required>
+                <option value="ABERTO">ABERTO</option>
+                <option value="FINALIZADO">FINALIZADO</option>
+                <option value="CANCELADO">CANCELADO</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <script type="module">
+      import { renderSidebar } from "../components/Sidebar.js";
+      renderSidebar();
+    </script>
+
+    <script>
+      const modal = document.querySelector(".modal");
+      const modalTitle = document.getElementById("modal-title");
+      const btnAdicionar = document.getElementById("btn-adicionar");
+      const closeModalButton = document.getElementById("close-cart-btn");
+      const formPedido = document.getElementById("formPedido");
+
+      const tfCodigoPedido = document.getElementById("tfCodigoPedido");
+      const tfDataHoraPedido = document.getElementById("tfDataHoraPedido");
+      const cbSituacaoPedido = document.getElementById("cbSituacaoPedido");
+
+      let modoEdicao = false;
+      let linhaSelecionada = null;
+
+      btnAdicionar.addEventListener("click", () => {
+        limparFormulario();
+        modoEdicao = false;
+        modalTitle.innerText = "Adicionar Pedido";
+        modal.classList.remove("hidden");
+      });
+
+      closeModalButton.addEventListener("click", () => {
+        modal.classList.add("hidden");
+      });
+
+      function limparFormulario() {
+        tfCodigoPedido.value = "";
+        tfDataHoraPedido.value = "";
+        cbSituacaoPedido.value = "ABERTO";
+      }
+
+      function preencherFormulario(linha) {
+        tfCodigoPedido.value = linha.children[0].textContent;
+        tfDataHoraPedido.value = linha.children[1].textContent;
+        cbSituacaoPedido.value = linha.children[2].textContent;
+      }
+
+      document.addEventListener("click", (event) => {
+        if (event.target.closest(".btn-editar")) {
+          const linha = event.target.closest("tr");
+          preencherFormulario(linha);
+          linhaSelecionada = linha;
+          modoEdicao = true;
+          modalTitle.innerText = "Editar Pedido";
+          modal.classList.remove("hidden");
+        }
+
+        if (event.target.closest(".btn-excluir")) {
+          const linha = event.target.closest("tr");
+          const codigo = linha.children[0].textContent;
+          if (confirm(`Deseja excluir o pedido ${codigo}?`)) {
+            linha.remove();
+          }
+        }
+      });
+
+      formPedido.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (modoEdicao && linhaSelecionada) {
+          linhaSelecionada.children[0].textContent = tfCodigoPedido.value;
+          linhaSelecionada.children[1].textContent = tfDataHoraPedido.value;
+          linhaSelecionada.children[2].textContent = cbSituacaoPedido.value;
+        } else {
+          const tbody = document.getElementById("pedidos");
+          const novaLinha = document.createElement("tr");
+          novaLinha.innerHTML = `
+            <td>${tfCodigoPedido.value}</td>
+            <td>${tfDataHoraPedido.value}</td>
+            <td>${cbSituacaoPedido.value}</td>
+            <td class="table-actions">
+              <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          `;
+          tbody.appendChild(novaLinha);
+        }
+        modal.classList.add("hidden");
+      });
+    </script>
+
+    <script type="module" src="/controller/CtrlManterPedidos.js"></script>
+  </body>
+</html>

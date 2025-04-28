@@ -18,8 +18,7 @@
 body, main {
   background-color: var(--bg-primary);
   color: #fff;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
 }
 
 .hidden {

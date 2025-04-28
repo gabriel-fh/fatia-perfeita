@@ -2,14 +2,19 @@ import ModelError from "./ModelError.js";
 import Pedido from "./Pedido.js";
 
 export default class Produto {
-  constructor(nome, imagem, descricao, tipo, precoBase, situacao) {
+  constructor(codigo, nome, imagem, descricao, tipo, preco_base, situacao) {
+    this.setCodigo(codigo);
     this.setNome(nome);
     this.setImagem(imagem);
     this.setDescricao(descricao);
     this.setTipo(tipo);
-    this.setPrecoBase(precoBase);
+    this.setPrecoBase(Number(preco_base));
     this.setSituacao(situacao);
     this.pedidos = [];
+  }
+
+  getCodigo() {
+    return this.codigo;
   }
 
   getNome() {
@@ -29,7 +34,7 @@ export default class Produto {
   }
 
   getPrecoBase() {
-    return this.precoBase;
+    return this.preco_base;
   }
 
   getSituacao() {
@@ -38,6 +43,11 @@ export default class Produto {
 
   getPedidos() {
     return this.pedidos;
+  }
+
+  setCodigo(codigo) {
+    Produto.validarCodigo(codigo);
+    this.codigo = codigo;
   }
 
   setNome(nome) {
@@ -60,9 +70,9 @@ export default class Produto {
     this.tipo = tipo;
   }
 
-  setPrecoBase(precoBase) {
-    Produto.validarPrecoBase(precoBase);
-    this.precoBase = precoBase;
+  setPrecoBase(preco_base) {
+    Produto.validarPrecoBase(Number(preco_base));
+    this.preco_base = Number(preco_base);
   }
 
   setSituacao(situacao) {
@@ -75,6 +85,12 @@ export default class Produto {
       this.pedidos.push(pedido);
     } else {
       throw new ModelError("O objeto deve ser uma instância de Pedido");
+    }
+  }
+
+  static validarCodigo(codigo) {
+    if (typeof codigo !== "string" || codigo.trim().length === 0) {
+      throw new ModelError("Código inválido. O código não pode ser vazio.");
     }
   }
 
@@ -97,14 +113,15 @@ export default class Produto {
   }
 
   static validarTipo(tipo) {
-    const tiposValidos = ["ALIMENTO", "BEBIDA", "OUTROS"];
+    const tiposValidos = ["DELIVERY", "BEBIDA", "OUTROS"];
     if (!tiposValidos.includes(tipo)) {
-      throw new ModelError("Tipo inválido. O tipo deve ser um dos seguintes: ALIMENTO, BEBIDA, OUTROS.");
+      throw new ModelError("Tipo inválido. O tipo deve ser um dos seguintes: DELIVERY, BEBIDA, OUTROS.");
     }
   }
 
-  static validarPrecoBase(precoBase) {
-    if (typeof precoBase !== "number" || precoBase < 0) {
+  static validarPrecoBase(preco_base) {
+    
+    if (typeof preco_base !== "number" || preco_base < 0) {
       throw new ModelError("Preço base inválido. O preço base deve ser um número positivo.");
     }
   }
@@ -112,9 +129,7 @@ export default class Produto {
   static validarSituacao(situacao) {
     const situacoesValidas = ["DISPONIVEL", "INDISPONIVEL"];
     if (!situacoesValidas.includes(situacao)) {
-      throw new ModelError(
-        "Situação inválida. A situação deve ser uma das seguintes: DISPONIVEL, INDISPONIVEL."
-      );
+      throw new ModelError("Situação inválida. A situação deve ser uma das seguintes: DISPONIVEL, INDISPONIVEL.");
     }
   }
 }
