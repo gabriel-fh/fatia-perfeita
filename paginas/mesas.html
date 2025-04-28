@@ -21,20 +21,14 @@
         <table class="table">
           <thead>
             <tr>
+              <th>UID</th>
               <th>Número</th>
               <th>Situação</th>
               <th>Ações</th>
             </tr>
           </thead>
           <tbody id="mesas">
-            <tr>
-              <td>1</td>
-              <td>LIVRE</td>
-              <td class="table-actions">
-                <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
-              </td>
-            </tr>
+            <!-- Aqui o ViewerMesa vai montar as linhas -->
           </tbody>
         </table>
 
@@ -43,6 +37,7 @@
         </div>
       </main>
 
+      <!-- Modal -->
       <section class="modal hidden">
         <div class="modal-content">
           <div class="modal-header">
@@ -51,7 +46,13 @@
               <i class="fa-solid fa-xmark"></i>
             </button>
           </div>
+
           <form id="formMesa">
+            <div class="form-group">
+              <label for="tfId">ID:</label>
+              <input type="text" id="tfId" required />
+            </div>
+
             <div class="form-group">
               <label for="tfNumero">Número:</label>
               <input type="number" id="tfNumero" required />
@@ -72,86 +73,13 @@
       </section>
     </div>
 
-    <!-- SCRIPTS -->
+    <!-- Importações -->
     <script type="module">
       import { renderSidebar } from "../components/Sidebar.js";
       renderSidebar();
     </script>
 
-    <script>
-      const modal = document.querySelector(".modal");
-      const modalTitle = document.getElementById("modal-title");
-      const btnAdicionar = document.getElementById("btn-adicionar");
-      const closeModalButton = document.getElementById("close-cart-btn");
-      const formMesa = document.getElementById("formMesa");
-
-      const tfNumero = document.getElementById("tfNumero");
-      const cbSituacaoMesa = document.getElementById("cbSituacaoMesa");
-
-      let modoEdicao = false;
-      let linhaSelecionada = null;
-
-      btnAdicionar.addEventListener("click", () => {
-        limparFormulario();
-        modoEdicao = false;
-        modalTitle.innerText = "Adicionar Mesa";
-        modal.classList.remove("hidden");
-      });
-
-      closeModalButton.addEventListener("click", () => {
-        modal.classList.add("hidden");
-      });
-
-      function limparFormulario() {
-        tfNumero.value = "";
-        cbSituacaoMesa.value = "LIVRE";
-      }
-
-      function preencherFormulario(linha) {
-        tfNumero.value = linha.children[0].textContent;
-        cbSituacaoMesa.value = linha.children[1].textContent.toUpperCase();
-      }
-
-      document.addEventListener("click", (event) => {
-        if (event.target.closest(".btn-editar")) {
-          const linha = event.target.closest("tr");
-          preencherFormulario(linha);
-          linhaSelecionada = linha;
-          modoEdicao = true;
-          modalTitle.innerText = "Editar Mesa";
-          modal.classList.remove("hidden");
-        }
-
-        if (event.target.closest(".btn-excluir")) {
-          const linha = event.target.closest("tr");
-          const numero = linha.children[0].textContent;
-          if (confirm(`Deseja excluir a mesa número ${numero}?`)) {
-            linha.remove();
-          }
-        }
-      });
-
-      formMesa.addEventListener("submit", (e) => {
-        e.preventDefault();
-        if (modoEdicao && linhaSelecionada) {
-          linhaSelecionada.children[0].textContent = tfNumero.value;
-          linhaSelecionada.children[1].textContent = cbSituacaoMesa.options[cbSituacaoMesa.selectedIndex].text;
-        } else {
-          const tbody = document.getElementById("mesas");
-          const novaLinha = document.createElement("tr");
-          novaLinha.innerHTML = `
-            <td>${tfNumero.value}</td>
-            <td>${cbSituacaoMesa.options[cbSituacaoMesa.selectedIndex].text}</td>
-            <td class="table-actions">
-              <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
-              <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
-            </td>
-          `;
-          tbody.appendChild(novaLinha);
-        }
-        modal.classList.add("hidden");
-      });
-    </script>
     <script type="module" src="../middleware.js"></script>
+    <script type="module" src="/controller/CtrlSessao.js"></script>
   </body>
 </html>

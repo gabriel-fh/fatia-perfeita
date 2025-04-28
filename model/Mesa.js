@@ -4,10 +4,15 @@ import Usuario from "./Usuario.js";
 
 export default class Mesa extends Usuario {
   constructor(uid, numero, situacao) {
-    super("Mesa", `mesafatiaperfeita${numero}@email.com`, uid, "MESA");
+    super(`mesafatiaperfeita${numero}@email.com`, "Mesa", uid, "MESA");
+    this.setUid(uid);
     this.setNumero(numero);
     this.setSituacao(situacao);
     this.comandas = [];
+  }
+
+  getUid() {
+    return this.uid;
   }
 
   getNumero() {
@@ -20,6 +25,13 @@ export default class Mesa extends Usuario {
 
   getComandas() {
     return this.comandas;
+  }
+
+  setUid(uid) {
+    if (!Usuario.validarUid(uid)) {
+      throw new ModelError("UID inválido: " + uid);
+    }
+    this.uid = uid;
   }
 
   setNumero(numero) {
@@ -41,7 +53,7 @@ export default class Mesa extends Usuario {
   }
 
   static validarNumero(numero) {
-    if (typeof numero !== "number" || !isFinite(taxaServico) || taxaServico < 0) {
+    if (typeof numero !== "number") {
       throw new ModelError("O número da mesa deve ser um número positivo válido.");
     }
   }

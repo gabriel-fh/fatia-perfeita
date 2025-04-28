@@ -7,6 +7,7 @@ import DaoUsuario from "/model/dao/DaoUsuario.js";
 import Usuario from "/model/Usuario.js";
 import CtrlManterProdutos from "/controller/CtrlManterProdutos.js";
 import CtrlManterGarcons from "/controller/CtrlManterGarcons.js";
+import CtrlManterMesas from "/controller/CtrlManterMesas.js";
 
 
 const firebaseConfig = {
@@ -44,6 +45,10 @@ export default class CtrlSessao {
                 this.ctrlAtual = new CtrlManterProdutos();
             else if (document.URL.includes("garcons.html"))
                 this.ctrlAtual = new CtrlManterGarcons();
+            else if (document.URL.includes("mesas.html"))
+                this.ctrlAtual = new CtrlManterMesas();
+            // else if (document.URL.includes("index.html"))
+            //     this.ctrlAtual = new CtrlManterProdutos();
         } catch (e) {
             alert(e);
         }
