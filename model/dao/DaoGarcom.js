@@ -1,13 +1,21 @@
 "use strict";
 
-import { getDatabase, ref, query, orderByChild, get, set, remove }
-  from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  query,
+  child,
+  orderByChild,
+  get,
+  set,
+  remove,
+  runTransaction,
+} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 
 import Garcom from "/model/Garcom.js";
 import ModelError from "/model/ModelError.js";
 
 export default class DaoGarcom {
-
   static promessaConexao = null;
 
   constructor() {
@@ -30,33 +38,35 @@ export default class DaoGarcom {
 
     return new Promise((resolve) => {
       let conjGarcons = [];
-      let dbRefUsuarios = ref(connectionDB, 'usuarios');
-      let paramConsulta = orderByChild('email');
+      let dbRefUsuarios = ref(connectionDB, "usuarios");
+      let paramConsulta = orderByChild("email");
       let consulta = query(dbRefUsuarios, paramConsulta);
       let resultPromise = get(consulta);
 
-      resultPromise.then(dataSnapshot => {
-        dataSnapshot.forEach(dataSnapshotObj => {
-          let elem = dataSnapshotObj.val();
-          if (elem.funcao === "GARCOM") {
-            conjGarcons.push(new Garcom(elem.uid, elem.nome, elem.email, elem.situacao));
-          }
+      resultPromise
+        .then((dataSnapshot) => {
+          dataSnapshot.forEach((dataSnapshotObj) => {
+            let elem = dataSnapshotObj.val();
+            if (elem.funcao === "GARCOM") {
+              conjGarcons.push(new Garcom(elem.uid, elem.nome, elem.email, elem.situacao));
+            }
+          });
+          resolve(conjGarcons);
+        })
+        .catch((e) => {
+          console.error("#ERRO: " + e);
+          resolve([]);
         });
-        resolve(conjGarcons);
-      }).catch((e) => {
-        console.error("#ERRO: " + e);
-        resolve([]);
-      });
     });
   }
 
-  async incluir(produto) {
+  async incluir(garcom) {
     let connectionDB = await this.obterConexao();
     let resultado = new Promise((resolve, reject) => {
-      let dbRefProdutos = ref(connectionDB, "usuarios");
-      runTransaction(dbRefProdutos, (produtos) => {
-        let dbRefNovoProduto = child(dbRefProdutos, produto.getCodigo());
-        let setPromise = set(dbRefNovoProduto, produto);
+      let dbRefGarcons = ref(connectionDB, "garcons");
+      runTransaction(dbRefGarcons, (produtos) => {
+        let dbRefNovoGarcom = child(dbRefGarcons, garcom.getUid());
+        let setPromise = set(dbRefNovoGarcom, garcom);
         setPromise
           .then((value) => {
             resolve(true);
@@ -79,12 +89,10 @@ export default class DaoGarcom {
         nome: garcom.getNome(),
         email: garcom.getEmail(),
         funcao: "GARCOM",
-        matricula: garcom.getMatricula(),
-        horaInicio: garcom.getHoraInicio(),
-        horaFim: garcom.getHoraFim(),
-        situacao: garcom.getSituacao()
-      }).then(() => resolve(true))
-        .catch(error => reject(error));
+        situacao: garcom.getSituacao(),
+      })
+        .then(() => resolve(true))
+        .catch((error) => reject(error));
     });
   }
 
@@ -94,7 +102,7 @@ export default class DaoGarcom {
       const dbRefUsuario = ref(connectionDB, `usuarios/${garcom.getUid()}`);
       remove(dbRefUsuario)
         .then(() => resolve(true))
-        .catch(error => reject(error));
+        .catch((error) => reject(error));
     });
   }
 }

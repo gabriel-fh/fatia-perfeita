@@ -1,6 +1,6 @@
 export function renderSidebar() {
   const sidebarHTML = `
-      <aside class="sidebar hidden auth">
+      <aside class="sidebar">
         <nav>
           <ul>
             <li>
@@ -9,7 +9,7 @@ export function renderSidebar() {
               </a>
             </li>
             <li>
-              <a href="/" class="nav-icon">
+              <a href="/paginas/inicio.html" class="nav-icon">
                 <i class="fa-solid fa-house"></i>
               </a>
             </li>
@@ -38,6 +38,11 @@ export function renderSidebar() {
                 <i class="fa-solid fa-tablet-screen-button"></i>
               </a>
             </li>
+            <li class='sair'>
+              <a href="" class="nav-icon">
+                <i class="fa-solid fa-power-off"></i>
+              </a>
+            </li>
           </ul>
         </nav>
       </aside>
@@ -46,5 +51,14 @@ export function renderSidebar() {
   const container = document.getElementById("sidebar-container");
   if (container) {
     container.innerHTML = sidebarHTML;
+  }
+
+  const sair = document.querySelector('.sair a')
+  if (sair) {
+    sair.addEventListener('click', (event) => {
+      event.preventDefault();
+      localStorage.removeItem('user'); 
+      window.location.href = '/index.html';
+    });
   }
 }
