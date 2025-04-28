@@ -2,14 +2,17 @@ import ModelError from "./ModelError.js";
 import Comanda from "./Comanda.js";
 import Usuario from "./Usuario.js";
 
-
 export default class Garcom extends Usuario {
   constructor(uid, nome, email, situacao) {
     super(email, nome, uid, "GARCOM");
+    this.setUid(uid);
     this.setSituacao(situacao);
     this.comandas = [];
   }
 
+  getUid() {
+    return this.uid;
+  }
 
   getSituacao() {
     return this.situacao;
@@ -19,6 +22,12 @@ export default class Garcom extends Usuario {
     return this.comandas;
   }
 
+  setUid(uid) {
+    if (!Usuario.validarUid(uid)) {
+      throw new ModelError("UID inválido: " + uid);
+    }
+    this.uid = uid;
+  }
 
   setSituacao(situacao) {
     Garcom.validarSituacao(situacao);

@@ -48,7 +48,7 @@ export default class DaoGarcom {
           dataSnapshot.forEach((dataSnapshotObj) => {
             let elem = dataSnapshotObj.val();
             if (elem.funcao === "GARCOM") {
-              conjGarcons.push(new Garcom(elem.uid, elem.nome, elem.email, elem.situacao));
+              conjGarcons.push(new Garcom(dataSnapshotObj.key, elem.nome, elem.email, elem.situacao));
             }
           });
           resolve(conjGarcons);
@@ -56,6 +56,29 @@ export default class DaoGarcom {
         .catch((e) => {
           console.error("#ERRO: " + e);
           resolve([]);
+        });
+    });
+  }
+
+  async obterGarcomPeloId(uid) {
+    let connectionDB = await this.obterConexao();
+    return new Promise((resolve, reject) => {
+      const dbRefGarcom = ref(connectionDB, "usuarios/" + uid);
+      let consulta = query(dbRefGarcom);
+      let resultPromise = get(consulta);
+      resultPromise
+        .then((dataSnapshot) => {
+          const garcomSnap = dataSnapshot.val();
+          
+          if (garcomSnap && garcomSnap.funcao === "GARCOM") {
+            resolve(new Garcom(garcomSnap.uid, garcomSnap.nome, garcomSnap.email, garcomSnap.situacao));
+          } else {
+            resolve(null);
+          }
+        })
+        .catch((e) => {
+          console.error("Erro ao buscar garçom:", e);
+          reject(e);
         });
     });
   }
@@ -83,7 +106,7 @@ export default class DaoGarcom {
 
   async alterar(email, dados) {
     let connectionDB = await this.obterConexao();
-    const uid = await this.getUid(email)
+    const uid = await this.getUid(email);
     return new Promise((resolve, reject) => {
       const dbRefUsuario = ref(connectionDB, `usuarios/${uid}`);
       set(dbRefUsuario, {

@@ -7,6 +7,7 @@ import { getDatabase, ref } from "https://www.gstatic.com/firebasejs/10.9.0/fire
 import CtrlManterProdutos from "/controller/CtrlManterProdutos.js";
 import CtrlManterGarcons from "/controller/CtrlManterGarcons.js";
 import CtrlManterMesas from "./CtrlManterMesas.js";
+import CtrlManterComandas from "./CtrlManterComandas.js";
 import ModelError from "../model/ModelError.js";
 
 export const firebaseConfig = {
@@ -24,9 +25,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app); // Obtém a referência ao banco de dados
 
-(async() => {
-  console.log(auth); 
-})()
+(async () => {
+  console.log(auth);
+})();
 
 export default class CtrlSessao {
   constructor() {
@@ -42,7 +43,7 @@ export default class CtrlSessao {
       else if (document.URL.includes("garcons.html")) this.ctrlAtual = new CtrlManterGarcons();
       else if (document.URL.includes("mesas.html")) this.ctrlAtual = new CtrlManterMesas();
       else if (document.URL.includes("pedidos.html")) this.ctrlAtual = new CtrlPedidos();
-      else if (document.URL.includes("comandas.html")) this.ctrlAtual = new CtrlComandas();
+      else if (document.URL.includes("comandas.html")) this.ctrlAtual = new CtrlManterComandas();
       else if (document.URL.includes("index.html") || window.location.href === "/") this.ctrlAtual = await this.login();
     } catch (e) {
       alert(e);
