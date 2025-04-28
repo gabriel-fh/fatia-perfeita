@@ -190,6 +190,7 @@ button#cart-btn:hover {
 .modal-header button {
   width: auto;
   background: none;
+  padding: 0;
 }
 
 .cart-footer {

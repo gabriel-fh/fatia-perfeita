@@ -73,9 +73,12 @@
       ".write": "root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
       ".indexOn": ["codigo", "tipo"],
       "$uid": {
-        ".validate": "newData.hasChildren(['nome', 'descricao', 'preco_base', 'tipo', 'situacao'])",
+        ".validate": "newData.hasChildren(['nome', 'descricao', 'preco_base', 'tipo', 'situacao', 'codigo'])",
         "preco": {
           ".validate": "newData.val() > 0"
+        },
+        "codigo": {
+          ".validate": "newData.isString() && newData.val().length > 0"
         }
       },
       "pedidos": {
