@@ -1,7 +1,7 @@
 "use strict";
 
 import Mesa from "/model/Mesa.js"; 
-import daoMesa from "/model/dao/daoMesa.js"; 
+import DaoMesa from "/model/dao/DaoMesa.js"; 
 import ViewerMesa from "/viewer/ViewerMesa.js"; // Viewer que mostra na tela
 
 export default class CtrlManterMesas {
@@ -9,7 +9,7 @@ export default class CtrlManterMesas {
   #viewer;
 
   constructor() {
-    this.#daoMesa = new daoMesa();
+    this.#daoMesa = new DaoMesa();
     this.#viewer = new ViewerMesa(this);
     this.#atualizarContextoNavegacao();
   }

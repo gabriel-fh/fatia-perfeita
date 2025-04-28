@@ -35,12 +35,11 @@ export default class CtrlManterProdutos {
 
   async alterar(codigo, nome, imagem, descricao, tipo, preco_base, situacao) {
     try {
-      let produto = await this.#daoProduto.obterProdutoPeloId(codigo);
+      let produto = await this.#daoProduto.obterProdutoPeloCodigo(codigo);
       if (!produto) {
         alert(`Produto com codigo ${codigo} não encontrado.`);
       } else {
         produto.setNome(nome);
-        produto.setPreco(preco);
         produto.setImagem(imagem);
         produto.setDescricao(descricao);
         produto.setTipo(tipo);
