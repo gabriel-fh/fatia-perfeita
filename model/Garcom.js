@@ -1,5 +1,7 @@
 import ModelError from "./ModelError.js";
 import Comanda from "./Comanda.js";
+import Usuario from "./Usuario.js";
+
 
 export default class Garcom extends Usuario {
   constructor(nome, email, matricula, horaInicio, horaFim, situacao) {

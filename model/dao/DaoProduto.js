@@ -34,16 +34,18 @@ export default class DaoProduto {
       let resultPromise = get(consulta);
 
       resultPromise.then(dataSnapshot => {
+
+        console.log(dataSnapshot);
+
         dataSnapshot.forEach(dataSnapshotObj => {
           let elem = dataSnapshotObj.val();
           let produto = new Produto(
-            elem.codigo,
-            elem.nome,
-            elem.imagem,
-            elem.descricao,
-            elem.tipo,
-            elem.preco_base,
-            elem.situacao
+            elem.nome,          // nome
+            elem.imagem,        // imagem
+            elem.descricao,     // descricao
+            elem.tipo,          // tipo
+            elem.preco_base,    // precoBase
+            elem.situacao       // situacao
           );
           conjProdutos.push(produto);
         });
