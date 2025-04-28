@@ -71,7 +71,7 @@ export default class DaoGarcom {
           const garcomSnap = dataSnapshot.val();
           
           if (garcomSnap && garcomSnap.funcao === "GARCOM") {
-            resolve(new Garcom(garcomSnap.uid, garcomSnap.nome, garcomSnap.email, garcomSnap.situacao));
+            resolve(new Garcom(uid, garcomSnap.nome, garcomSnap.email, garcomSnap.situacao));
           } else {
             resolve(null);
           }

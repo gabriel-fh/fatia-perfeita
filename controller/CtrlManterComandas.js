@@ -29,7 +29,6 @@ export default class CtrlManterComandas {
 
       let daoGarcom = new DaoGarcom();
       let garcomDB = await daoGarcom.obterGarcomPeloId(garcom);
-      console.log(garcomDB);
       
                 
       let comanda = new Comanda(codigo, subtotal, total, taxaServico, situacao, dataHora, mesaDB, garcomDB);

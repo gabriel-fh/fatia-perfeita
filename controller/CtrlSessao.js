@@ -4,8 +4,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebas
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import { getDatabase, ref } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 
-import CtrlManterProdutos from "/controller/CtrlManterProdutos.js";
-import CtrlManterGarcons from "/controller/CtrlManterGarcons.js";
+import CtrlManterProdutos from "./CtrlManterProdutos.js";
+import CtrlManterGarcons from "./CtrlManterGarcons.js";
 import CtrlManterMesas from "./CtrlManterMesas.js";
 import CtrlManterComandas from "./CtrlManterComandas.js";
 import ModelError from "../model/ModelError.js";

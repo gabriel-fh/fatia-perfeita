@@ -64,7 +64,6 @@ export default class ViewerComanda {
       const daoGarcom = new DaoGarcom();
       const mesas = await daoMesa.obterMesas();
       const garcons = await daoGarcom.obterGarcons();
-      console.log(garcons);
 
       this.cbMesa.innerHTML = '<option value="">Selecione uma mesa</option>';
       mesas.forEach((mesa) => {
