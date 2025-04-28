@@ -13,6 +13,8 @@ import DaoUsuario from "/model/dao/DaoUsuario.js";
 import Usuario from "/model/Usuario.js";
 import CtrlManterProdutos from "/controller/CtrlManterProdutos.js";
 import CtrlManterGarcons from "/controller/CtrlManterGarcons.js";
+import CtrlManterMesas from "/controller/CtrlManterMesas.js";
+
 import ModelError from "../model/ModelError.js";
 
 const firebaseConfig = {
@@ -66,6 +68,26 @@ export default class CtrlSessao {
       window.location.href = "/paginas/inicio.html";
       return;
     }
+
+    //-----------------------------------------------------------------------------------------//  
+
+    async init() {
+        try {
+            this.usuario = await this.verificandoLogin();
+            // Observe abaixo que temos um problema de ACOPLAMENTO, pois se 
+            // precisarmos acrescentar um novo controlador de caso de uso, precisaremos
+            // abrir esse arquivo para alteração. O melhor seria implementar um 
+            // mecanismo de INJEÇÃO DE DEPENDÊNCIA.     
+            if (document.URL.includes("produtos.html"))
+                this.ctrlAtual = new CtrlManterProdutos();
+            else if (document.URL.includes("garcons.html"))
+                this.ctrlAtual = new CtrlManterGarcons();
+            else if (document.URL.includes("mesas.html"))
+                this.ctrlAtual = new CtrlManterMesas();
+            // else if (document.URL.includes("index.html"))
+            //     this.ctrlAtual = new CtrlManterProdutos();
+        } catch (e) {
+            alert(e);
     document.getElementById("login-form").addEventListener("submit", async (event) => {
       event.preventDefault();
 

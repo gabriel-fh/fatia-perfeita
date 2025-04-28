@@ -32,11 +32,11 @@ export default class CtrlManterMesas {
     }
   }
 
-  async alterar(id, numero, situacao) {
+  async alterar(uid, numero, situacao) {
     try {
-      let mesa = await this.#daoMesa.obterMesaPeloId(id);
+      let mesa = await this.#daoMesa.obterMesaPeloId(uid);
       if (!mesa) {
-        alert(`Mesa com codigo ${codigo} não encontrado.`);
+        alert(`Mesa com uid ${uid} não encontrado.`);
       } else {
         mesa.setNumero(numero);
         mesa.setSituacao(situacao);
@@ -48,11 +48,11 @@ export default class CtrlManterMesas {
     }
   }
 
-  async excluir(id) {
+  async excluir(uid) {
     try {
-      let mesa = await this.#daoMesa.obterMesaPeloId(id);
+      let mesa = await this.#daoMesa.obterMesaPeloId(uid);
       if (!mesa) {
-        alert(`Mesa com codigo ${codigo} não encontrado.`);
+        alert(`Mesa com uid ${uid} não encontrado.`);
       } else {
         await this.#daoMesa.excluir(mesa);
       }
