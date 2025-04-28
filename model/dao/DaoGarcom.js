@@ -16,7 +16,6 @@ import Garcom from "/model/Garcom.js";
 import ModelError from "/model/ModelError.js";
 
 export default class DaoGarcom {
-
   static promessaConexao = null;
 
   constructor() {
@@ -39,23 +38,25 @@ export default class DaoGarcom {
 
     return new Promise((resolve) => {
       let conjGarcons = [];
-      let dbRefUsuarios = ref(connectionDB, 'usuarios');
-      let paramConsulta = orderByChild('email');
+      let dbRefUsuarios = ref(connectionDB, "usuarios");
+      let paramConsulta = orderByChild("email");
       let consulta = query(dbRefUsuarios, paramConsulta);
       let resultPromise = get(consulta);
 
-      resultPromise.then(dataSnapshot => {
-        dataSnapshot.forEach(dataSnapshotObj => {
-          let elem = dataSnapshotObj.val();
-          if (elem.funcao === "GARCOM") {
-            conjGarcons.push(new Garcom(elem.uid, elem.nome, elem.email, elem.situacao));
-          }
+      resultPromise
+        .then((dataSnapshot) => {
+          dataSnapshot.forEach((dataSnapshotObj) => {
+            let elem = dataSnapshotObj.val();
+            if (elem.funcao === "GARCOM") {
+              conjGarcons.push(new Garcom(elem.uid, elem.nome, elem.email, elem.situacao));
+            }
+          });
+          resolve(conjGarcons);
+        })
+        .catch((e) => {
+          console.error("#ERRO: " + e);
+          resolve([]);
         });
-        resolve(conjGarcons);
-      }).catch((e) => {
-        console.error("#ERRO: " + e);
-        resolve([]);
-      });
     });
   }
 
@@ -88,9 +89,10 @@ export default class DaoGarcom {
         nome: garcom.getNome(),
         email: garcom.getEmail(),
         funcao: "GARCOM",
-        situacao: garcom.getSituacao()
-      }).then(() => resolve(true))
-        .catch(error => reject(error));
+        situacao: garcom.getSituacao(),
+      })
+        .then(() => resolve(true))
+        .catch((error) => reject(error));
     });
   }
 
@@ -100,7 +102,7 @@ export default class DaoGarcom {
       const dbRefUsuario = ref(connectionDB, `usuarios/${garcom.getUid()}`);
       remove(dbRefUsuario)
         .then(() => resolve(true))
-        .catch(error => reject(error));
+        .catch((error) => reject(error));
     });
   }
 }
