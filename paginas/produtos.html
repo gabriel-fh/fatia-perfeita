@@ -12,76 +12,208 @@
   <body class="container">
     <div id="sidebar-container"></div>
 
-    <main class="flex-center" style="width: 100%">
-      <form id="formProduto">
-        <header>
-          <h2>Cadastro de Produtos</h2>
-        </header>
+    <div class="main-content">
+      <header>
+        <h2>Produtos</h2>
+      </header>
 
-        <div class="form-group">
-          <label for="tfCodigo">Código:</label>
-          <input type="text" id="tfCodigo" disabled />
+      <main class="content">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Nome</th>
+              <th>Imagem</th>
+              <th>Descrição</th>
+              <th>Tipo</th>
+              <th>Preço Base</th>
+              <th>Situação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="produtos">
+            <tr>
+              <td>001</td>
+              <td>Pizza Marguerita</td>
+              <td>pizza.jpg</td>
+              <td>Pizza com mussarela e manjericão</td>
+              <td>ALIMENTO</td>
+              <td>49.90</td>
+              <td>DISPONIVEL</td>
+              <td class="table-actions">
+                <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="add-new">
+          <button class="btn btn-primary" id="btn-adicionar">Adicionar Produto</button>
         </div>
+      </main>
 
-        <div class="form-group">
-          <label for="tfNome">Nome:</label>
-          <input type="text" id="tfNome" disabled />
+      <section class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modal-title">Adicionar Produto</h3>
+            <button id="close-cart-btn" class="close-btn">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <form id="formProduto">
+            <div class="form-group">
+              <label for="tfCodigo">Código:</label>
+              <input type="text" id="tfCodigo" required />
+            </div>
+
+            <div class="form-group">
+              <label for="tfNome">Nome:</label>
+              <input type="text" id="tfNome" required />
+            </div>
+
+            <div class="form-group">
+              <label for="tfImagem">Imagem:</label>
+              <input type="text" id="tfImagem" />
+            </div>
+
+            <div class="form-group">
+              <label for="tfDescricao">Descrição:</label>
+              <input type="text" id="tfDescricao" />
+            </div>
+
+            <div class="form-group">
+              <label for="tfTipo">Tipo:</label>
+              <select id="tfTipo" required>
+                <option value="ALIMENTO">ALIMENTO</option>
+                <option value="BEBIDA">BEBIDA</option>
+                <option value="OUTROS">OUTROS</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="tfPrecoBase">Preço Base:</label>
+              <input type="number" step="0.01" id="tfPrecoBase" required />
+            </div>
+
+            <div class="form-group">
+              <label for="cbSituacao">Situação:</label>
+              <select id="cbSituacao" required>
+                <option value="DISPONIVEL">DISPONÍVEL</option>
+                <option value="INDISPONIVEL">INDISPONÍVEL</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </form>
         </div>
-
-        <div class="form-group">
-          <label for="tfImagem">Imagem:</label>
-          <input type="text" id="tfImagem" disabled />
-        </div>
-
-        <div class="form-group">
-          <label for="tfDescricao">Descrição:</label>
-          <input type="text" id="tfDescricao" disabled />
-        </div>
-
-        <div class="form-group">
-          <label for="tfTipo">Tipo:</label>
-          <select id="tfTipo" disabled>
-            <option value="ALIMENTO">ALIMENTO</option>
-            <option value="BEBIDA">BEBIDA</option>
-            <option value="OUTROS">OUTROS</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="tfPrecoBase">Preço Base:</label>
-          <input type="number" id="tfPrecoBase" disabled />
-        </div>
-
-        <div class="form-group">
-          <label for="cbSituacao">Situação:</label>
-          <select id="cbSituacao" disabled>
-            <option value="DISPONIVEL">DISPONÍVEL</option>
-            <option value="INDISPONIVEL">INDISPONÍVEL</option>
-          </select>
-        </div>
-
-        <div id="divComandos" class="form-group">
-          <button id="btIncluir" type="button">Incluir</button>
-          <button id="btAlterar" type="button">Alterar</button>
-          <button id="btExcluir" type="button">Excluir</button>
-          <button id="btSair" type="button">Sair</button>
-        </div>
-
-        <div id="divDialogo" class="form-group hidden">
-          <button id="btOk" type="button">Ok</button>
-          <button id="btCancelar" type="button">Cancelar</button>
-        </div>
-
-        <div id="divAviso" style="padding: 1rem; font-size: 1.4rem"></div>
-      </form>
-    </main>
+      </section>
+    </div>
 
     <script type="module">
       import { renderSidebar } from "../components/Sidebar.js";
-
       renderSidebar();
     </script>
 
-    <script type="module" src="/controller/CtrlManterProdutos.js"></script>
+    <script>
+      const modal = document.querySelector(".modal");
+      const modalTitle = document.getElementById("modal-title");
+      const btnAdicionar = document.getElementById("btn-adicionar");
+      const closeModalButton = document.getElementById("close-cart-btn");
+      const formProduto = document.getElementById("formProduto");
+
+      const tfCodigo = document.getElementById("tfCodigo");
+      const tfNome = document.getElementById("tfNome");
+      const tfImagem = document.getElementById("tfImagem");
+      const tfDescricao = document.getElementById("tfDescricao");
+      const tfTipo = document.getElementById("tfTipo");
+      const tfPrecoBase = document.getElementById("tfPrecoBase");
+      const cbSituacao = document.getElementById("cbSituacao");
+
+      let modoEdicao = false;
+      let linhaSelecionada = null;
+
+      btnAdicionar.addEventListener("click", () => {
+        limparFormulario();
+        modoEdicao = false;
+        modalTitle.innerText = "Adicionar Produto";
+        modal.classList.remove("hidden");
+      });
+
+      closeModalButton.addEventListener("click", () => {
+        modal.classList.add("hidden");
+      });
+
+      function limparFormulario() {
+        tfCodigo.value = "";
+        tfNome.value = "";
+        tfImagem.value = "";
+        tfDescricao.value = "";
+        tfTipo.value = "ALIMENTO";
+        tfPrecoBase.value = "";
+        cbSituacao.value = "DISPONIVEL";
+      }
+
+      function preencherFormulario(linha) {
+        tfCodigo.value = linha.children[0].textContent;
+        tfNome.value = linha.children[1].textContent;
+        tfImagem.value = linha.children[2].textContent;
+        tfDescricao.value = linha.children[3].textContent;
+        tfTipo.value = linha.children[4].textContent;
+        tfPrecoBase.value = linha.children[5].textContent;
+        cbSituacao.value = linha.children[6].textContent;
+      }
+
+      document.addEventListener("click", (event) => {
+        if (event.target.closest(".btn-editar")) {
+          const linha = event.target.closest("tr");
+          preencherFormulario(linha);
+          linhaSelecionada = linha;
+          modoEdicao = true;
+          modalTitle.innerText = "Editar Produto";
+          modal.classList.remove("hidden");
+        }
+
+        if (event.target.closest(".btn-excluir")) {
+          const linha = event.target.closest("tr");
+          const nome = linha.children[1].textContent;
+          if (confirm(`Deseja excluir o produto ${nome}?`)) {
+            linha.remove();
+          }
+        }
+      });
+
+      formProduto.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (modoEdicao && linhaSelecionada) {
+          linhaSelecionada.children[0].textContent = tfCodigo.value;
+          linhaSelecionada.children[1].textContent = tfNome.value;
+          linhaSelecionada.children[2].textContent = tfImagem.value;
+          linhaSelecionada.children[3].textContent = tfDescricao.value;
+          linhaSelecionada.children[4].textContent = tfTipo.value;
+          linhaSelecionada.children[5].textContent = tfPrecoBase.value;
+          linhaSelecionada.children[6].textContent = cbSituacao.value;
+        } else {
+          const tbody = document.getElementById("produtos");
+          const novaLinha = document.createElement("tr");
+          novaLinha.innerHTML = `
+            <td>${tfCodigo.value}</td>
+            <td>${tfNome.value}</td>
+            <td>${tfImagem.value}</td>
+            <td>${tfDescricao.value}</td>
+            <td>${tfTipo.value}</td>
+            <td>${tfPrecoBase.value}</td>
+            <td>${cbSituacao.value}</td>
+            <td class="table-actions">
+              <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          `;
+          tbody.appendChild(novaLinha);
+        }
+        modal.classList.add("hidden");
+      });
+    </script>
   </body>
 </html>
