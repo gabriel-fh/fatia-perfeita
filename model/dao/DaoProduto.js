@@ -83,6 +83,22 @@ export default class DaoProduto {
     });
   }
 
+  async incluir(curso) {
+    let connectionDB = await this.obterConexao();    
+    let resultado = new Promise( (resolve, reject) => {
+      let dbRefCursos = ref(connectionDB,'produtos');
+      runTransaction(dbRefCursos, (cursos) => {     
+        let dbRefNovoCurso = child(dbRefCursos,curso.getCodigo());
+        let setPromise = set(dbRefNovoCurso,curso);
+        setPromise
+          .then( value => {resolve(true)})
+          .catch((e) => {console.log("#ERRO: " + e);resolve(false);});
+      });
+    });
+    return resultado;
+  }
+
+
   async alterar(produto) {
     let connectionDB = await this.obterConexao();
     return new Promise((resolve, reject) => {
