@@ -81,7 +81,7 @@
           "produtos": {
             "$uidProduto": {
               ".write": "root.child('usuarios').child(auth.uid).child('funcao').val() === 'MESA' || (root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN' || data.parent().parent().child('garcom').val() === auth.uid)",
-              ".validate": "newData.hasChildren(['quantidade', 'subtotal']) && newData.child('quantidade').isNumber() && newData.child('quantidade').val() > 0"
+              ".validate": "newData.hasChildren(['quantidade', 'preco']) && newData.child('quantidade').isNumber() && newData.child('quantidade').val() > 0"
             }
           }
         }
