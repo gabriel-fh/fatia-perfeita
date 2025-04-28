@@ -154,6 +154,7 @@ button#cart-btn:hover {
 
 #cart {
   position: fixed;
+  z-index: 100;
   top: 0;
   background-color: var(--red);
   height: 100vh;
@@ -190,6 +191,17 @@ button#cart-btn:hover {
   display: grid;
   gap: 2rem;
   font-size: 1.5rem;
+}
+
+.cart-footer button#checkout-btn {
+  background-color: #e95435;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
 }
 
 .content {
@@ -379,4 +391,137 @@ button#cart-btn:hover {
   cursor: pointer;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  padding-right: 40px;
+  border-bottom: 1px solid #393c49;
+  color: #fff;
+  font-weight: bold;
+}
+
+.order-bag {
+  border-top: 1px solid #393c49;
+  display: flex;
+  flex-direction: column;
+  padding-block: 20px;
+  gap: 20px;
+  height: 65vh;
+  overflow-y: auto;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #e95435 #2b2f3b; /* Thumb and track colors */
+}
+
+.order-bag::-webkit-scrollbar {
+  width: 8px; /* Scrollbar width */
+}
+
+.order-bag::-webkit-scrollbar-thumb {
+  background-color: #e95435; /* Thumb color */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.order-bag::-webkit-scrollbar-track {
+  background-color: #2b2f3b; /* Track color */
+}
+
+.order h3 {
+  margin-bottom: 20px;
+  color: #e95435;
+  font-size: 18px;
+}
+
+.order-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  background-color: #1b1f2b;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.order-item img {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+}
+
+.item-details {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+}
+
+.item-title {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #fff;
+}
+
+.order-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.order-controls button,
+.order-controls .quantity {
+  background-color: #2b2f3b;
+  border: 1px solid #393c49;
+  padding: 10px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+}
+
+.order-controls .quantity {
+  background-color: #e95435;
+}
+
+.note {
+  background-color: #2b2f3b;
+  border: 1px solid #393c49;
+  width: 100%;
+  height: 45px;
+  border-radius: 8px;
+  padding: 10px;
+  color: white;
+}
+
+.submit-order {
+  display: none; /* Hide the "Fazer Pedido" button */
+}
+
+@media screen and (max-width: 1024px) {
+  .order-item img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .order-item .item-title {
+    max-width: 80px;
+    font-size: 12px;
+  }
+
+  .order-controls button,
+  .order-controls .quantity {
+    width: 25px !important;
+    height: 25px !important;
+    font-size: 14px;
+    padding: 16px !important;
+  }
 }

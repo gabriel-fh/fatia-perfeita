@@ -1,161 +1,251 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="utf-8" />
-    <title>Fatia Perfeita</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/styles/global.css" />
-    <link rel="stylesheet" href="/styles/styles.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  </head>
 
-  <body class="container">
-    <div id="sidebar-container"></div>
+<head>
+  <meta charset="utf-8" />
+  <title>Fatia Perfeita</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/styles/global.css" />
+  <link rel="stylesheet" href="/styles/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
 
-    <div class="main-content">
-      <header>
+<body class="container">
+  <div id="sidebar-container"></div>
+
+  <div class="main-content">
+    <header>
+      <div>
         <div>
-          <div>
-            <h2>Fatia Perfeita</h2>
-            <p style="color: #888; font-size: 14px">Ter. 11 Set 2001</p>
-          </div>
-          <div class="cart"></div>
+          <h2>Fatia Perfeita</h2>
+          <p style="color: #888; font-size: 14px">Ter. 11 Set 2001</p>
         </div>
+        <div class="cart"></div>
+      </div>
 
-        <button id="cart-btn" class="hidden auth">
-          <i class="bi bi-basket2-fill"></i>
-        </button>
-      </header>
-      <div id="cart" class="isClosed">
+      <button id="cart-btn" class="hidden auth">
+        <i class="bi bi-basket2-fill"></i>
+      </button>
+    </header>
+    <div id="cart" class="isClosed">
+      <div >
         <div class="cart-header">
           <h2>Carrinho</h2>
           <button id="close-cart-btn" class="close-btn">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
-        <div id="cart-items"></div>
-        <div class="cart-footer">
-          <p>Total: R$<span id="total-price">0.00</span></p>
-          <button id="checkout-btn">Finalizar Pedido</button>
+
+        <div class="order">
+          <h3>Mesa 04</h3>
+          <div class="order-header">
+            <p>Item</p>
+            <p>Quantidade</p>
+          </div>
+          <div class="order-bag">
+            <div class="order-item">
+              <div class="item-details">
+                <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
+                alt="Pasta" />
+                <p class="item-title">
+                  Salted pasta with fishSalted pasta with fishSalted pasta with fish
+                </p>
+                <div class="order-controls">
+                  <button>-</button>
+                  <div class="quantity">2</div>
+                  <button>+</button>
+                </div>
+              </div>
+            </div>
+            <div class="order-item">
+              <div class="item-details">
+                <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
+                alt="Pasta" />
+                <p class="item-title">
+                  Salted pasta with fishSalted pasta with fishSalted pasta with fish
+                </p>
+                <div class="order-controls">
+                  <button>-</button>
+                  <div class="quantity">2</div>
+                  <button>+</button>
+                </div>
+              </div>
+            </div>
+            <div class="order-item">
+              <div class="item-details">
+                <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
+                alt="Pasta" />
+                <p class="item-title">
+                  Salted pasta with fishSalted pasta with fishSalted pasta with fish
+                </p>
+                <div class="order-controls">
+                  <button>-</button>
+                  <div class="quantity">2</div>
+                  <button>+</button>
+                </div>
+              </div>
+            </div>
+            <div class="order-item">
+              <div class="item-details">
+                <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
+                alt="Pasta" />
+                <p class="item-title">
+                  Salted pasta with fishSalted pasta with fishSalted pasta with fish
+                </p>
+                <div class="order-controls">
+                  <button>-</button>
+                  <div class="quantity">2</div>
+                  <button>+</button>
+                </div>
+              </div>
+            </div>
+            <div class="order-item">
+              <div class="item-details">
+                <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
+                alt="Pasta" />
+                <p class="item-title">
+                  Salted pasta with fishSalted pasta with fishSalted pasta with fish
+                </p>
+                <div class="order-controls">
+                  <button>-</button>
+                  <div class="quantity">2</div>
+                  <button>+</button>
+                </div>
+              </div>
+            </div>
+            <div class="order-item">
+              <div class="item-details">
+                <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
+                alt="Pasta" />
+                <p class="item-title">
+                  Salted pasta with fishSalted pasta with fishSalted pasta with fish
+                </p>
+                <div class="order-controls">
+                  <button>-</button>
+                  <div class="quantity">2</div>
+                  <button>+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Repeat order-item if needed -->
         </div>
       </div>
-      <main class="flex-center">
-        <form id="login-form">
-          <div class="form-group">
-            <label for="email">E-mail:</label>
-            <input type="email" id="email" placeholder="Digite seu e-mail" required />
-          </div>
-          <div class="form-group">
-            <label for="password">Senha:</label>
-            <input type="password" id="password" placeholder="Digite sua senha" required />
-          </div>
-          <button type="submit">Entrar</button>
-          <div id="error-message"></div>
-        </form>
-        <section id="home-container" class="hidden auth">
-          <div class="dishes">
-            <div class="dish">
-              <img
-                src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%201.png?v=1744044807617"
-                alt="OF THE KING THE POWER"
-              />
-              <p>Salada com Ovo de Codorna</p>
-              <button>Adicionar +</button>
-            </div>
-            <div class="dish">
-              <img
-                src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%202.png?v=1744044810390"
-                alt="Macarrão"
-              />
-              <p>Macarrão com Carne Moída</p>
-              <button>Adicionar +</button>
-            </div>
-            <div class="dish">
-              <img
-                src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%203.png?v=1744044812460"
-                alt="Suspiro"
-              />
-              <p>Suspiro Salgado</p>
-              <button>Adicionar +</button>
-            </div>
-            <div class="dish">
-              <img
-                src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%205.png?v=1744044814943"
-                alt="Suspiro"
-              />
-              <p>Suspiro Salgado</p>
-              <button>Adicionar +</button>
-            </div>
-            <div class="dish">
-              <img
-                src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%205.png?v=1744044814943"
-                alt="Suspiro"
-              />
-              <p>Suspiro Salgado</p>
-              <button>Adicionar +</button>
-            </div>
-            <div class="dish">
-              <img
-                src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
-                alt="Suspiro"
-              />
-              <p>Suspiro Salgado</p>
-              <button>Adicionar +</button>
-            </div>
-            <!-- Add more dishes as needed -->
-          </div>
-        </section>
-      </main>
-    </div>
 
-    <div id="dish-modal" class="modal hidden">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 id="modal-dish-name">Detalhes do Prato</h2>
-          <button id="close-dish-modal-btn" class="close-btn">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-        <div class="modal-body">
-          <img id="modal-dish-image" src="" alt="Dish Image" />
-        </div>
-        <p id="modal-dish-description">Este é um prato delicioso preparado com ingredientes frescos e selecionados para proporcionar a melhor experiência gastronômica.</p>
-        <p>Este é um prato delicioso preparado com ingredientes frescos e selecionados para proporcionar a melhor experiência gastronômica.</p>
+      <div class="cart-footer">
+        <p>Total: R$<span id="total-price">0.00</span></p>
+        <button id="checkout-btn">Finalizar Pedido</button>
       </div>
+
     </div>
+    <main class="flex-center">
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">E-mail:</label>
+          <input type="email" id="email" placeholder="Digite seu e-mail" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Senha:</label>
+          <input type="password" id="password" placeholder="Digite sua senha" required />
+        </div>
+        <button type="submit">Entrar</button>
+        <div id="error-message"></div>
+      </form>
+      <section id="home-container" class="hidden auth">
+        <div class="dishes">
+          <div class="dish">
+            <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%201.png?v=1744044807617"
+              alt="OF THE KING THE POWER" />
+            <p>Salada com Ovo de Codorna</p>
+            <button>Adicionar +</button>
+          </div>
+          <div class="dish">
+            <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%202.png?v=1744044810390"
+              alt="Macarrão" />
+            <p>Macarrão com Carne Moída</p>
+            <button>Adicionar +</button>
+          </div>
+          <div class="dish">
+            <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%203.png?v=1744044812460"
+              alt="Suspiro" />
+            <p>Suspiro Salgado</p>
+            <button>Adicionar +</button>
+          </div>
+          <div class="dish">
+            <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%205.png?v=1744044814943"
+              alt="Suspiro" />
+            <p>Suspiro Salgado</p>
+            <button>Adicionar +</button>
+          </div>
+          <div class="dish">
+            <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%205.png?v=1744044814943"
+              alt="Suspiro" />
+            <p>Suspiro Salgado</p>
+            <button>Adicionar +</button>
+          </div>
+          <div class="dish">
+            <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
+              alt="Suspiro" />
+            <p>Suspiro Salgado</p>
+            <button>Adicionar +</button>
+          </div>
+          <!-- Add more dishes as needed -->
+        </div>
+      </section>
+    </main>
+  </div>
 
-    <script type="module" src="./auth.js"></script>
-    <script type="module">
-      import { renderSidebar } from "../components/Sidebar.js";
+  <div id="dish-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-dish-name">Detalhes do Prato</h2>
+        <button id="close-dish-modal-btn" class="close-btn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img id="modal-dish-image" src="" alt="Dish Image" />
+      </div>
+      <p id="modal-dish-description">Este é um prato delicioso preparado com ingredientes frescos e selecionados para
+        proporcionar a melhor experiência gastronômica.</p>
+      <p>Este é um prato delicioso preparado com ingredientes frescos e selecionados para proporcionar a melhor
+        experiência gastronômica.</p>
+    </div>
+  </div>
 
-      renderSidebar();
+  <script type="module" src="./auth.js"></script>
+  <script type="module">
+    import { renderSidebar } from "../components/Sidebar.js";
 
-      // Dish modal functionality
-      const dishModal = document.getElementById('dish-modal');
-      const closeDishModalBtn = document.getElementById('close-dish-modal-btn');
-      const modalDishImage = document.getElementById('modal-dish-image');
-      const modalDishDescription = document.getElementById('modal-dish-description');
-      const modalDishName = document.getElementById('modal-dish-name');
+    renderSidebar();
 
-      document.querySelectorAll('.dish').forEach((dish) => {
-        const dishImage = dish.querySelector('img');
-        const dishName = dish.querySelector('p');
+    // Dish modal functionality
+    const dishModal = document.getElementById('dish-modal');
+    const closeDishModalBtn = document.getElementById('close-dish-modal-btn');
+    const modalDishImage = document.getElementById('modal-dish-image');
+    const modalDishDescription = document.getElementById('modal-dish-description');
+    const modalDishName = document.getElementById('modal-dish-name');
 
-        dishImage.addEventListener('click', () => {
-          modalDishImage.src = dishImage.src;
-          modalDishDescription.textContent = dishImage.alt;
-          modalDishName.textContent = dishName.textContent;
-          dishModal.classList.remove('hidden');
-        });
+    document.querySelectorAll('.dish').forEach((dish) => {
+      const dishImage = dish.querySelector('img');
+      const dishName = dish.querySelector('p');
+
+      dishImage.addEventListener('click', () => {
+        modalDishImage.src = dishImage.src;
+        modalDishDescription.textContent = dishImage.alt;
+        modalDishName.textContent = dishName.textContent;
+        dishModal.classList.remove('hidden');
       });
+    });
 
-      closeDishModalBtn.addEventListener('click', () => {
-        dishModal.classList.add('hidden');
-      });
-    </script>
-    <script type="module" src="./viewer/HomeViewer.js"></script>
-    <script type="module" src="./middleware.js"></script>
-  </body>
+    closeDishModalBtn.addEventListener('click', () => {
+      dishModal.classList.add('hidden');
+    });
+  </script>
+  <script type="module" src="./viewer/HomeViewer.js"></script>
+  <script type="module" src="./middleware.js"></script>
+</body>
+
 </html>
