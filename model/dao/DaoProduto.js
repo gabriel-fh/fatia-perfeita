@@ -101,27 +101,16 @@ export default class DaoProduto {
   }
 
   async excluir(produto) {
-    let connectionDB = await this.obterConexao();
-    return new Promise((resolve, reject) => {
-      const dbRefProduto = ref(connectionDB, `produtos/${produto.getCodigo()}`);
-      remove(dbRefProduto)
-        .then(() => resolve(true))
-        .catch((error) => reject(error));
-    });
-  }
-
-  async excluir(produto) {
     let connectionDB = await this.obterConexao();    
     return new Promise( (resolve, reject) => {
       let dbRefProdutos = ref(connectionDB,'produtos');
       runTransaction(dbRefProdutos, (produtos) => {      
-        let dbRefExcluirProduto = child(dbRefProdutos,produto.getSigla());
+        let dbRefExcluirProduto = child(dbRefProdutos,produto.getCodigo());
         let setPromise = remove(dbRefExcluirProduto,produtos);
         setPromise
           .then( value => {resolve(true)})
           .catch((e) => {console.log("#ERRO: " + e);resolve(false);});
       });
     });
-    return resultado;
   }
 }
