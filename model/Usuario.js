@@ -1,7 +1,6 @@
 import ModelError from "./ModelError.js";
 
 export default class Usuario {
-
   #email;
   #uid;
   #funcao;
@@ -10,10 +9,8 @@ export default class Usuario {
     this.setEmail(email);
     this.setNome(nome);
     this.setUid(uid);
-    if(funcao === undefined || funcao === null)
-      this.setFuncao("INABILITADO");
-    else
-      this.setFuncao(funcao)
+    if (funcao === undefined || funcao === null) this.setFuncao("INABILITADO");
+    else this.setFuncao(funcao);
   }
 
   getUid() {
@@ -33,8 +30,7 @@ export default class Usuario {
   }
 
   setUid(uid) {
-    if (!Usuario.validarUid(uid))
-      throw new ModelError("UID inválido: " + uid);
+    if (!Usuario.validarUid(uid)) throw new ModelError("UID inválido: " + uid);
     this.#uid = uid;
   }
 
@@ -51,6 +47,12 @@ export default class Usuario {
   setFuncao(funcao) {
     Usuario.isFuncaoValida(funcao);
     this.funcao = funcao;
+  }
+
+  static validarSenha(senha) {
+    if (typeof senha !== "string" || senha.length < 6) {
+      throw new ModelError("A senha deve ter pelo menos 6 caracteres.");
+    }
   }
 
   static validarNome(nome) {

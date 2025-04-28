@@ -2,147 +2,123 @@ import Status from "/model/Status.js";
 import ViewerError from "/viewer/ViewerError.js";
 
 export default class ViewerGarcom {
-
   #ctrl;
 
   constructor(ctrl) {
     this.#ctrl = ctrl;
 
-    this.divComandos = this.obterElemento('divComandos');
-    this.divAviso = this.obterElemento('divAviso');
-    this.divDialogo = this.obterElemento('divDialogo');
+    // this.matricula = document.getElementById("tfMatricula");
+    this.nome = document.getElementById("tfNome");
+    this.email = document.getElementById("tfEmail");
+    this.senha = document.getElementById("tfSenha");
+    // this.horaInicio = document.getElementById("tfHoraInicio");
+    // this.horaFim = document.getElementById("tfHoraFim");
+    this.situacao = document.getElementById("cbSituacao");
 
-    this.btPrimeiro = this.obterElemento('btPrimeiro');
-    this.btAnterior = this.obterElemento('btAnterior');
-    this.btProximo = this.obterElemento('btProximo');
-    this.btUltimo = this.obterElemento('btUltimo');
+    this.tbody = document.getElementById("garcons");
+    this.modal = document.querySelector(".modal");
+    this.modalTitle = document.getElementById("modal-title");
+    this.formGarcom = document.getElementById("form-garcom");
 
-    this.btIncluir = this.obterElemento('btIncluir');
-    this.btAlterar = this.obterElemento('btAlterar');
-    this.btExcluir = this.obterElemento('btExcluir');
-    this.btSair = this.obterElemento('btSair');
+    this.modoEdicao = false;
+    this.linhaSelecionada = null;
 
-    this.btOk = this.obterElemento('btOk');
-    this.btCancelar = this.obterElemento('btCancelar');
+    this.#adicionarEventosModal();
 
-    this.tfMatricula = this.obterElemento('tfMatricula');
-    this.tfNome = this.obterElemento('tfNome');
-    this.tfEmail = this.obterElemento('tfEmail');
-    this.tfHoraInicio = this.obterElemento('tfHoraInicio');
-    this.tfHoraFim = this.obterElemento('tfHoraFim');
-    this.cbSituacao = this.obterElemento('cbSituacao');
-
-    this.btPrimeiro.onclick = fnBtPrimeiro;
-    this.btProximo.onclick = fnBtProximo;
-    this.btAnterior.onclick = fnBtAnterior;
-    this.btUltimo.onclick = fnBtUltimo;
-
-    this.btIncluir.onclick = fnBtIncluir;
-    this.btAlterar.onclick = fnBtAlterar;
-    this.btExcluir.onclick = fnBtExcluir;
-    this.btSair.onclick = fnBtSair;
-
-    this.btOk.onclick = fnBtOk;
-    this.btCancelar.onclick = fnBtCancelar;
+    // this.btnSalvar = this.obterElemento("btnSalvar");
+    // this.btnEdit = this.obterElemento("btnEdit");
+    // this.btnDelete = this.obterElemento("btnDelete");
   }
 
-  obterElemento(idElemento) {
-    let elemento = document.getElementById(idElemento);
-    if (elemento == null)
-      throw new ViewerError("Não encontrei o elemento '" + idElemento + "'");
-    elemento.viewer = this;
-    return elemento;
+  async carregarGarcons(garcom) {
+    if (!garcom || garcom.length === 0) {
+      this.tbody.innerHTML = "<tr><td colspan='8'>Nenhum garcom encontrado</td></tr>";
+      return;
+    }
+
+    this.tbody.innerHTML = "";
+
+    garcom.forEach((garcom) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.nome}</td>
+        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.email}</td>
+        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.situacao}</td>
+        <td class="table-actions">
+          <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      `;
+      this.tbody.appendChild(tr);
+    });
+
+    this.#adicionarEventosAcoes();
   }
 
-  getCtrl() {
-    return this.#ctrl;
-  }
-
-  async apresentar(pos, qtde, garcom) {
-    this.configurarNavegacao(pos <= 1, pos === qtde);
-
-    if (garcom == null) {
-      this.tfMatricula.value = "";
-      this.tfNome.value = "";
-      this.tfEmail.value = "";
-      this.tfHoraInicio.value = "";
-      this.tfHoraFim.value = "";
-      this.cbSituacao.value = "ATIVO";
-      this.divAviso.innerHTML = "Número de Garçons: 0";
-    } else {
-      this.tfMatricula.value = garcom.getMatricula();
-      this.tfNome.value = garcom.getNome();
-      this.tfEmail.value = garcom.getEmail();
-      this.tfHoraInicio.value = garcom.getHoraInicio();
-      this.tfHoraFim.value = garcom.getHoraFim();
-      this.cbSituacao.value = garcom.getSituacao();
-      this.divAviso.innerHTML = `Posição: ${pos} | Número de Garçons: ${qtde}`;
+  async incluirGarcom() {
+    try {
+      await this.#ctrl.incluir(
+        this.nome.value,
+        this.email.value,
+        this.senha.value,
+        this.situacao.value,
+      );
+      this.limparFormulario();
+      // this.modal.classList.add("hidden");
+    } catch (error) {
+      console.error(error);
     }
   }
 
-  configurarNavegacao(flagInicio, flagFim) {
-    this.btPrimeiro.disabled = flagInicio;
-    this.btUltimo.disabled = flagFim;
-    this.btProximo.disabled = flagFim;
-    this.btAnterior.disabled = flagInicio;
+  #adicionarEventosModal() {
+    const closeModalButton = document.getElementById("close-cart-btn");
+
+    closeModalButton.addEventListener("click", () => {
+      this.modal.classList.add("hidden");
+    });
+
+    document.getElementById("btn-adicionar").addEventListener("click", () => {
+      this.limparFormulario();
+      this.modoEdicao = false;
+      this.modalTitle.innerText = "Adicionar Garçom";
+      this.modal.classList.remove("hidden");
+    });
+
+    this.formGarcom.addEventListener("submit", (e) => {
+      e.preventDefault();
+      this.incluirGarcom();
+    });
   }
 
-  statusEdicao(operacao) {
-    this.divComandos.hidden = true;
-    this.divDialogo.hidden = false;
-  
-    if (operacao !== Status.EXCLUINDO) {
-      this.tfMatricula.disabled = operacao !== Status.INCLUINDO ? true : false;
-      this.tfNome.disabled = false;
-      this.tfEmail.disabled = false;
-      this.tfHoraInicio.disabled = false;
-      this.tfHoraFim.disabled = false;
-      this.cbSituacao.disabled = false;
-      this.divAviso.innerHTML = "";
-    } else {
-      this.divAviso.innerHTML = "Deseja excluir este registro?";
-    }
-  
-    if (operacao === Status.INCLUINDO) {
-      this.tfMatricula.value = "";
-      this.tfNome.value = "";
-      this.tfEmail.value = "";
-      this.tfHoraInicio.value = "";
-      this.tfHoraFim.value = "";
-      this.cbSituacao.value = "ATIVO";
-    }
-  }
-  
+  #adicionarEventosAcoes() {
+    this.tbody.querySelectorAll(".btn-editar").forEach((btn) => {
+      btn.addEventListener("click", (event) => {
+        const linha = event.target.closest("tr");
+        this.preencherFormulario(linha);
+        this.modalTitle.innerText = "Editar Garçom";
+        this.modal.classList.remove("hidden");
+      });
+    });
 
-  statusApresentacao() {
-    this.divComandos.hidden = false;
-    this.divDialogo.hidden = true;
-    this.tfMatricula.disabled = true;
-    this.tfNome.disabled = true;
-    this.tfEmail.disabled = true;
-    this.tfHoraInicio.disabled = true;
-    this.tfHoraFim.disabled = true;
-    this.cbSituacao.disabled = true;
+    this.tbody.querySelectorAll(".btn-excluir").forEach((btn) => {
+      btn.addEventListener("click", (event) => {
+        const linha = event.target.closest("tr");
+        const nome = linha.children[1].textContent;
+        if (confirm(`Deseja excluir o garçom ${nome}?`)) {
+          linha.remove();
+          // Se quiser aqui chamar o Ctrl para excluir do BD, só chamar: this.#ctrl.excluir(codigo)
+        }
+      });
+    });
+  }
+
+  limparFormulario() {
+    this.nome.value = "";
+    this.email.value = "";
+    this.senha.value = "";
+    // this.matricula.value = "";
+    // this.horaInicio.value = "";
+    // this.horaFim.value = "";
+    this.situacao.value = "ATIVO";
   }
 }
-
-// Funções de Botão
-function fnBtPrimeiro() { this.viewer.getCtrl().apresentarPrimeiro(); }
-function fnBtProximo() { this.viewer.getCtrl().apresentarProximo(); }
-function fnBtAnterior() { this.viewer.getCtrl().apresentarAnterior(); }
-function fnBtUltimo() { this.viewer.getCtrl().apresentarUltimo(); }
-function fnBtIncluir() { this.viewer.getCtrl().iniciarIncluir(); }
-function fnBtAlterar() { this.viewer.getCtrl().iniciarAlterar(); }
-function fnBtExcluir() { this.viewer.getCtrl().iniciarExcluir(); }
-function fnBtSair() { this.viewer.getCtrl().sair(); }
-function fnBtOk() {
-  const matricula = this.viewer.tfMatricula.value;
-  const nome = this.viewer.tfNome.value;
-  const email = this.viewer.tfEmail.value;
-  const horaInicio = this.viewer.tfHoraInicio.value;
-  const horaFim = this.viewer.tfHoraFim.value;
-  const situacao = this.viewer.cbSituacao.value;
-
-  this.viewer.getCtrl().efetivar(matricula, nome, email, horaInicio, horaFim, situacao);
-}
-function fnBtCancelar() { this.viewer.getCtrl().cancelar(); }
