@@ -7,7 +7,7 @@ import { getDatabase, ref } from "https://www.gstatic.com/firebasejs/10.9.0/fire
 import CtrlManterProdutos from "/controller/CtrlManterProdutos.js";
 import CtrlManterGarcons from "/controller/CtrlManterGarcons.js";
 import CtrlManterMesas from "./CtrlManterMesas.js";
-import ModelError from "../model/ModelError.js";
+import CtrlInicio from "./CtrlInicio.js";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD83f2LeSDIuVWBFUnu_jHOzshsjDkF5iI",
@@ -43,6 +43,7 @@ export default class CtrlSessao {
       else if (document.URL.includes("mesas.html")) this.ctrlAtual = new CtrlManterMesas();
       else if (document.URL.includes("pedidos.html")) this.ctrlAtual = new CtrlPedidos();
       else if (document.URL.includes("comandas.html")) this.ctrlAtual = new CtrlComandas();
+      else if (document.URL.includes("inicio.html")) this.ctrlAtual = new CtrlInicio();
       else if (document.URL.includes("index.html") || window.location.href === "/") this.ctrlAtual = await this.login();
     } catch (e) {
       alert(e);
