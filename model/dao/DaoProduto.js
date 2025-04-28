@@ -118,7 +118,7 @@ export default class DaoProduto {
     return new Promise((resolve, reject) => {
       let dbRefProdutos = ref(connectionDB, 'produtos');
       runTransaction(dbRefProdutos, (produtos) => {
-        let dbRefProdutoAlterado = child(dbRefProdutos, produto.getSigla());
+        let dbRefProdutoAlterado = child(dbRefProdutos, produto.getCodigo());
         let setPromise = set(dbRefProdutoAlterado, produto);
         setPromise
           .then(value => { resolve(true) })

@@ -60,10 +60,10 @@ export default class DaoMesa {
     });
   }
 
-  async obterMesaPeloId(id) {
+  async obterMesaPeloId(uid) {
     let connectionDB = await this.obterConexao();
     return new Promise((resolve) => {
-      let dbRefMesa = ref(connectionDB, "usuarios/" + id);
+      let dbRefMesa = ref(connectionDB, "usuarios/" + uid);
       let consulta = query(dbRefMesa);
       let resultPromise = get(consulta);
       resultPromise.then((dataSnapshot) => {
@@ -98,14 +98,12 @@ export default class DaoMesa {
   async alterar(mesa) {
     let connectionDB = await this.obterConexao();
     return new Promise((resolve, reject) => {
-      let dbRefMesas = ref(connectionDB, "mesas");
+      let dbRefMesas = ref(connectionDB, "usuarios");
       runTransaction(dbRefMesas, (mesas) => {
-        let dbRefMesaAlterado = child(dbRefMesas, mesa.getSigla());
+        let dbRefMesaAlterado = child(dbRefMesas, mesa.getUid());
         let setPromise = set(dbRefMesaAlterado, mesa);
         setPromise
-          .then((value) => {
-            resolve(true);
-          })
+          .then((value) => resolve(true))
           .catch((e) => {
             console.log("#ERRO: " + e);
             resolve(false);

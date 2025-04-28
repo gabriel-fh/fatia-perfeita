@@ -33,12 +33,8 @@ export default class ViewerMesa {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${mesa.uid}</td>
-        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${
-          mesa.numero
-        }</td>
-        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${
-          mesa.situacao
-        }</td>
+        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${mesa.numero}</td>
+        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${mesa.situacao}</td>
         <td class="table-actions">
           <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
           <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
@@ -90,6 +86,7 @@ export default class ViewerMesa {
     document.getElementById("btn-adicionar").addEventListener("click", () => {
       this.limparFormulario();
       this.modoEdicao = false;
+      this.tfId.disabled = false; // ✅ Habilitar o campo UID para nova mesa
       this.modalTitle.innerText = "Adicionar Mesa";
       this.modal.classList.remove("hidden");
     });
@@ -107,6 +104,7 @@ export default class ViewerMesa {
         const linha = event.target.closest("tr");
         this.preencherFormulario(linha);
         this.modoEdicao = true;
+        this.tfId.disabled = true; // ✅ Desabilitar o campo UID
         this.modalTitle.innerText = "Editar Mesa";
         this.modal.classList.remove("hidden");
       });
