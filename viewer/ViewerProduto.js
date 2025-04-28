@@ -1,4 +1,3 @@
-import DaoProduto from "/model/dao/DaoProduto.js";
 import ProdutoDTO from "/model/ProdutoDTO.js";
 
 export default class ViewerProduto {
@@ -10,16 +9,20 @@ export default class ViewerProduto {
     this.tbody = document.getElementById("produtos");
     this.modal = document.querySelector(".modal");
     this.modalTitle = document.getElementById("modal-title");
+    this.formProduto = document.getElementById("formProduto");
 
-    // this.tfCodigo = this.obterElemento("tfCodigo");
-    // this.tfNome = this.obterElemento("tfNome");
-    // this.tfImagem = this.obterElemento("tfImagem");
-    // this.tfDescricao = this.obterElemento("tfDescricao");
-    // this.tfTipo = this.obterElemento("tfTipo");
-    // this.tfPrecoBase = this.obterElemento("tfPrecoBase");
-    // this.cbSituacao = this.obterElemento("cbSituacao");
+    this.tfCodigo = document.getElementById("tfCodigo");
+    this.tfNome = document.getElementById("tfNome");
+    this.tfImagem = document.getElementById("tfImagem");
+    this.tfDescricao = document.getElementById("tfDescricao");
+    this.tfTipo = document.getElementById("tfTipo");
+    this.tfPrecoBase = document.getElementById("tfPrecoBase");
+    this.cbSituacao = document.getElementById("cbSituacao");
 
-    // this.carregarProdutos(ctrl);
+    this.modoEdicao = false;
+    this.linhaSelecionada = null;
+
+    this.#adicionarEventosModal();
   }
 
   async carregarProdutos(produtos) {
@@ -27,7 +30,6 @@ export default class ViewerProduto {
       this.tbody.innerHTML = "<tr><td colspan='8'>Nenhum produto encontrado</td></tr>";
       return;
     }
-    console.log(produtos);
 
     this.tbody.innerHTML = "";
 
@@ -52,26 +54,16 @@ export default class ViewerProduto {
     this.#adicionarEventosAcoes();
   }
 
-  async #incluirProduto() {
-    const produto = new ProdutoDTO(
-      this.tfCodigo.value,
-      this.tfNome.value,
-      this.tfImagem.value,
-      this.tfDescricao.value,
-      this.tfTipo.value,
-      parseFloat(this.tfPrecoBase.value),
-      this.cbSituacao.value
-    );
-
+  async incluirProduto() {
     try {
       await this.#ctrl.incluir(
-        produto.codigo,
-        produto.nome,
-        produto.imagem,
-        produto.descricao,
-        produto.tipo,
-        produto.precoBase,
-        produto.situacao
+        this.tfCodigo.value,
+        this.tfNome.value,
+        this.tfImagem.value,
+        this.tfDescricao.value,
+        this.tfTipo.value,
+        parseFloat(this.tfPrecoBase.value),
+        this.cbSituacao.value
       );
       this.limparFormulario();
       this.modal.classList.add("hidden");
@@ -80,12 +72,31 @@ export default class ViewerProduto {
     }
   }
 
+  #adicionarEventosModal() {
+    const closeModalButton = document.getElementById("close-cart-btn");
+
+    closeModalButton.addEventListener("click", () => {
+      this.modal.classList.add("hidden");
+    });
+
+    document.getElementById("btn-adicionar").addEventListener("click", () => {
+      this.limparFormulario();
+      this.modoEdicao = false;
+      this.modalTitle.innerText = "Adicionar Produto";
+      this.modal.classList.remove("hidden");
+    });
+
+    this.formProduto.addEventListener("submit", (e) => {
+      e.preventDefault();
+      this.incluirProduto();
+    });
+  }
+
   #adicionarEventosAcoes() {
     this.tbody.querySelectorAll(".btn-editar").forEach((btn) => {
       btn.addEventListener("click", (event) => {
         const linha = event.target.closest("tr");
         this.preencherFormulario(linha);
-        this.modoEdicao = true;
         this.modalTitle.innerText = "Editar Produto";
         this.modal.classList.remove("hidden");
       });
@@ -97,7 +108,7 @@ export default class ViewerProduto {
         const nome = linha.children[1].textContent;
         if (confirm(`Deseja excluir o produto ${nome}?`)) {
           linha.remove();
-          // Aqui você poderia também chamar um método do CtrlManterProdutos para deletar no banco
+          // Se quiser aqui chamar o Ctrl para excluir do BD, só chamar: this.#ctrl.excluir(codigo)
         }
       });
     });
@@ -108,7 +119,7 @@ export default class ViewerProduto {
     this.tfNome.value = "";
     this.tfImagem.value = "";
     this.tfDescricao.value = "";
-    this.tfTipo.value = "ALIMENTO";
+    this.tfTipo.value = "DELIVERY";
     this.tfPrecoBase.value = "";
     this.cbSituacao.value = "DISPONIVEL";
   }
@@ -122,6 +133,4 @@ export default class ViewerProduto {
     this.tfPrecoBase.value = linha.children[5].textContent;
     this.cbSituacao.value = linha.children[6].textContent;
   }
-
-  // O resto das funções (statusApresentacao, statusEdicao, apresentar) continuam iguais
 }

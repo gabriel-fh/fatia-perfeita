@@ -15,6 +15,18 @@
 <body class="container">
   <div id="sidebar-container"></div>
 
+  <main class="container">
+    
+    <section id="home-container" class="hidden auth">
+      <div class="dishes">
+        <div class="dish">
+          <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
+            alt="Suspiro" />
+          <p>Suspiro Salgado</p>
+          <button>Adicionar +</button>
+        </div>
+      </div>
+    </section>
   <div class="main-content">
     <header>
       <div>
@@ -29,6 +41,23 @@
         <i class="bi bi-basket2-fill"></i>
       </button>
     </header>
+    <div id="dish-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-dish-name">Detalhes do Prato</h2>
+          <button id="close-dish-modal-btn" class="close-btn">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img id="modal-dish-image" src="" alt="Dish Image" />
+        </div>
+        <p id="modal-dish-description">Este é um prato delicioso preparado com ingredientes frescos e selecionados para
+          proporcionar a melhor experiência gastronômica.</p>
+        <p>Este é um prato delicioso preparado com ingredientes frescos e selecionados para proporcionar a melhor
+          experiência gastronômica.</p>
+      </div>
+    </div>
     <div id="cart" class="isClosed">
       <div >
         <div class="cart-header">
@@ -69,49 +98,23 @@
       </div>
 
     </div>
-    <main class="flex-center">
-      <form id="login-form">
-        <div class="form-group">
-          <label for="email">E-mail:</label>
-          <input type="email" id="email" placeholder="Digite seu e-mail" required />
-        </div>
-        <div class="form-group">
-          <label for="password">Senha:</label>
-          <input type="password" id="password" placeholder="Digite sua senha" required />
-        </div>
-        <button type="submit">Entrar</button>
-        <div id="error-message"></div>
-      </form>
-      <section id="home-container" class="hidden auth">
-        <div class="dishes">
-          <div class="dish">
-            <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
-              alt="Suspiro" />
-            <p>Suspiro Salgado</p>
-            <button>Adicionar +</button>
-          </div>
-        </div>
-      </section>
-    </main>
+    
   </div>
 
-  <div id="dish-modal" class="modal hidden">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 id="modal-dish-name">Detalhes do Prato</h2>
-        <button id="close-dish-modal-btn" class="close-btn">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <div class="modal-body">
-        <img id="modal-dish-image" src="" alt="Dish Image" />
-      </div>
-      <p id="modal-dish-description">Este é um prato delicioso preparado com ingredientes frescos e selecionados para
-        proporcionar a melhor experiência gastronômica.</p>
-      <p>Este é um prato delicioso preparado com ingredientes frescos e selecionados para proporcionar a melhor
-        experiência gastronômica.</p>
+  
+  <form id="login-form">
+    <div class="form-group">
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" placeholder="Digite seu e-mail" required />
     </div>
-  </div>
+    <div class="form-group">
+      <label for="password">Senha:</label>
+      <input type="password" id="password" placeholder="Digite sua senha" required />
+    </div>
+    <button type="submit">Entrar</button>
+    <div id="error-message"></div>
+  </form>
+</main>
 
   <script type="module" src="./auth.js"></script>
   <script type="module">
@@ -144,6 +147,6 @@
   </script>
   <script type="module" src="./viewer/HomeViewer.js"></script>
   <script type="module" src="./middleware.js"></script>
-  <script type="module" src="/controller/CtrlSessao.js"></script>
+  <!-- <script type="module" src="/controller/CtrlSessao.js"></script> -->
 </body>
 </html>

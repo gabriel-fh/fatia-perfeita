@@ -4,6 +4,7 @@ import {
   getDatabase,
   ref,
   query,
+  child,
   orderByChild,
   get,
   set,
@@ -65,22 +66,25 @@ export default class DaoProduto {
     });
   }
 
-
-  async incluir(curso) {
-    let connectionDB = await this.obterConexao();    
-    let resultado = new Promise( (resolve, reject) => {
-      let dbRefCursos = ref(connectionDB,'produtos');
-      runTransaction(dbRefCursos, (cursos) => {     
-        let dbRefNovoCurso = child(dbRefCursos,curso.getCodigo());
-        let setPromise = set(dbRefNovoCurso,curso);
+  async incluir(produto) {
+    let connectionDB = await this.obterConexao();
+    let resultado = new Promise((resolve, reject) => {
+      let dbRefProdutos = ref(connectionDB, "produtos");
+      runTransaction(dbRefProdutos, (produtos) => {
+        let dbRefNovoProduto = child(dbRefProdutos, produto.getCodigo());
+        let setPromise = set(dbRefNovoProduto, produto);
         setPromise
-          .then( value => {resolve(true)})
-          .catch((e) => {console.log("#ERRO: " + e);resolve(false);});
+          .then((value) => {
+            resolve(true);
+          })
+          .catch((e) => {
+            console.log("#ERRO: " + e);
+            resolve(false);
+          });
       });
     });
     return resultado;
   }
-
 
   async alterar(produto) {
     let connectionDB = await this.obterConexao();
