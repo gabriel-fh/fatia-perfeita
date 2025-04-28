@@ -22,3 +22,4 @@ export const criarUsuario = async (email, senha) => {
     throw new ModelError("Erro ao criar usuário: " + error.message);
   }
 };
+
