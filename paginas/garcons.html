@@ -9,34 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   </head>
-  <body class="container">
-    <aside class="sidebar hidden auth">
-      <nav>
-        <ul>
-          <li>
-            <img
-              src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/logo.png?v=1744044819325"
-              alt="Logo"
-            />
-          </li>
-          <li>
-            <a href="../index.html" class="nav-icon active">
-              <i class="fa-solid fa-house"></i>
-            </a>
-          </li>
-          <li>
-            <a href="././paginas/garcons.html" class="nav-icon">
-              <i class="fa-solid fa-pizza-slice"></i>
-            </a>
-          </li>
-          <li>
-            <a href="/pedidos" class="nav-icon">
-              <i class="fa-solid fa-list-ul"></i>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </aside>
+  <body class="container" style='overflow-y: hidden;'>
+    <div id="sidebar-container"></div>
     <div class="main-content">
       <header>
         <h2>Garçons</h2>
@@ -119,15 +93,65 @@
           </tbody>
         </table>
         <div class="add-new">
-          <button class="btn btn-primary" id="btn-adicionar">
-            Adicionar Garçom
-          </button>
+          <button class="btn btn-primary" id="btn-adicionar">Adicionar Garçom</button>
         </div>
       </main>
+      <section class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Adicionar Garçom</h3>
+            <button id="close-cart-btn" class="close-btn">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <form>
+            <div class="form-group">
+              <label for="tfMatricula">Matrícula:</label>
+              <input type="number" id="tfMatricula" placeholder="Matricula"  />
+            </div>
+
+            <div class="form-group">
+              <label for="tfNome">Nome:</label>
+              <input type="text" id="tfNome"  placeholder="Nome"/>
+            </div>
+
+            <div class="form-group">
+              <label for="tfEmail">Email:</label>
+              <input type="email" id="tfEmail" placeholder="E-mail" />
+            </div>
+
+            <div class="form-group">
+              <label for="tfHoraInicio">Hora Início:</label>
+              <input type="time" id="tfHoraInicio"  />
+            </div>
+
+            <div class="form-group">
+              <label for="tfHoraFim">Hora Fim:</label>
+              <input type="time" id="tfHoraFim"  />
+            </div>
+
+            <div class="form-group">
+              <label for="cbSituacao">Situação:</label>
+              <select id="cbSituacao" >
+                <option value="ATIVO">ATIVO</option>
+                <option value="INATIVO">INATIVO</option>
+                <option value="ATENDENDO">ATENDENDO</option>
+              </select>
+            </div>
+            <button>
+              Cadastrar
+            </button>
+          </form>
+        </div>
+      </section>
     </div>
 
     <script type="module" src="/controller/CtrlManterGarcons.js"></script>
     <script type="module" src="../viewer/ViewerGarcom.js"></script>
     <script type="module" src="../middleware.js"></script>
+    <script type="module">
+      import { renderSidebar } from "../components/sidebar.js";
+      renderSidebar();
+    </script>
   </body>
 </html>
