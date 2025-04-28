@@ -150,6 +150,11 @@ button#cart-btn:hover {
 #home-container {
   padding-left: 2rem;
   padding-right: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: space-between; */
+  gap: 5rem;
+  padding-bottom: 5rem;
 }
 
 #cart {
@@ -362,22 +367,24 @@ button#cart-btn:hover {
   text-align: center;
   position: relative;
   height: 200px;
-  display: flex;
+  width: 160px;
+display: flex;
   flex-direction: column;
   justify-content: flex-end;
 }
 
 .dish img {
-  width: 120px;
-  height: 120px;
+  width: 180px;
+  height: 180px;
   position: absolute;
-  top: -20px;
+  top: -50px;
   left: 50%;
   transform: translateX(-50%);
   /* object-fit: cover; */
 }
 
 .dish p {
+  font-size: 1.1rem;
   padding: 10px;
 }
 

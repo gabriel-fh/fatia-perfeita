@@ -29,7 +29,8 @@
       </header>
       <main class="container">
         <section id="home-container" class="auth">
-          <div class="dishes">
+          <!-- 
+            <div class="dishes">
             <div class="dish">
               <img
                 src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
@@ -39,6 +40,7 @@
               <button>Adicionar +</button>
             </div>
           </div>
+           -->
         </section>
       </main>
 
@@ -103,11 +105,15 @@
         </div>
       </div>
     </div>
-
+    
+    <script type="module" src="/controller/CtrlSessao.js"></script>
     <script type="module">
       import { renderSidebar } from "../components/Sidebar.js";
-
       renderSidebar();
+
+    </script>
+    <!-- <script type="module">
+
 
       // Dish modal functionality
       const dishModal = document.getElementById("dish-modal");
@@ -131,8 +137,7 @@
       closeDishModalBtn.addEventListener("click", () => {
         dishModal.classList.add("");
       });
-    </script>
-    <script type="module" src="/controller/CtrlSessao.js"></script>
+    </script> -->
     <script>
       (() => {
         const navbarItems = document.querySelectorAll(".nav-bar ul li");
