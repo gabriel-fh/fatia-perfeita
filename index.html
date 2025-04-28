@@ -15,19 +15,7 @@
 <body class="container">
   <div id="sidebar-container"></div>
 
-  <main class="container">
-    
-    <section id="home-container" class="hidden auth">
-      <div class="dishes">
-        <div class="dish">
-          <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
-            alt="Suspiro" />
-          <p>Suspiro Salgado</p>
-          <button>Adicionar +</button>
-        </div>
-      </div>
-    </section>
-  <div class="main-content">
+  <main class="main-content">
     <header>
       <div>
         <div>
@@ -41,6 +29,17 @@
         <i class="bi bi-basket2-fill"></i>
       </button>
     </header>
+    <section id="home-container" class="hidden auth">
+      <div class="dishes">
+        <div class="dish">
+          <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
+            alt="Suspiro" />
+          <p>Suspiro Salgado</p>
+          <button>Adicionar +</button>
+        </div>
+      </div>
+    </section>
+    
     <div id="dish-modal" class="modal hidden">
       <div class="modal-content">
         <div class="modal-header">
@@ -99,22 +98,21 @@
 
     </div>
     
-  </div>
 
   
-  <form id="login-form">
-    <div class="form-group">
-      <label for="email">E-mail:</label>
-      <input type="email" id="email" placeholder="Digite seu e-mail" required />
-    </div>
-    <div class="form-group">
-      <label for="password">Senha:</label>
-      <input type="password" id="password" placeholder="Digite sua senha" required />
-    </div>
-    <button type="submit">Entrar</button>
-    <div id="error-message"></div>
-  </form>
-</main>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" placeholder="Digite seu e-mail" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Senha:</label>
+        <input type="password" id="password" placeholder="Digite sua senha" required />
+      </div>
+      <button type="submit">Entrar</button>
+      <div id="error-message"></div>
+    </form>
+  </main>
 
   <script type="module" src="./auth.js"></script>
   <script type="module">
@@ -147,6 +145,5 @@
   </script>
   <script type="module" src="./viewer/HomeViewer.js"></script>
   <script type="module" src="./middleware.js"></script>
-  <!-- <script type="module" src="/controller/CtrlSessao.js"></script> -->
 </body>
 </html>

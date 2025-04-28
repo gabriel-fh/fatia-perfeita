@@ -72,6 +72,34 @@ export default class ViewerProduto {
     }
   }
 
+  async alterarProduto() {
+    try {
+      await this.#ctrl.alterar(
+        this.tfCodigo.value,
+        this.tfNome.value,
+        this.tfImagem.value,
+        this.tfDescricao.value,
+        this.tfTipo.value,
+        this.tfpreco_base.value,
+        this.cbSituacao.value
+      );
+      this.limparFormulario();
+      this.modal.classList.add("hidden");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async excluirProduto() {
+    try {
+      await this.#ctrl.excluir(this.tfCodigo.value);
+      this.limparFormulario();
+      this.modal.classList.add("hidden");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   #adicionarEventosModal() {
     const closeModalButton = document.getElementById("close-cart-btn");
 
@@ -88,7 +116,8 @@ export default class ViewerProduto {
 
     this.formProduto.addEventListener("submit", (e) => {
       e.preventDefault();
-      this.incluirProduto();
+      if (this.modoEdicao) this.alterarProduto();
+      else this.incluirProduto();
     });
   }
 
@@ -103,12 +132,17 @@ export default class ViewerProduto {
     });
 
     this.tbody.querySelectorAll(".btn-excluir").forEach((btn) => {
-      btn.addEventListener("click", (event) => {
+      btn.addEventListener("click", async (event) => {
         const linha = event.target.closest("tr");
+        const codigo = linha.children[0].textContent;
         const nome = linha.children[1].textContent;
+
         if (confirm(`Deseja excluir o produto ${nome}?`)) {
-          linha.remove();
-          // Se quiser aqui chamar o Ctrl para excluir do BD, só chamar: this.#ctrl.excluir(codigo)
+          try {
+            await this.#ctrl.excluir(codigo);
+          } catch (error) {
+            console.error("Erro ao excluir:", error);
+          }
         }
       });
     });
