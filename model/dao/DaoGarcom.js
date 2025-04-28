@@ -97,13 +97,31 @@ export default class DaoGarcom {
     });
   }
 
-  async excluir(garcom) {
-    let connectionDB = await this.obterConexao();
+async excluir(emailGarcom) {
+  let connectionDB = await this.obterConexao();
+  
+  const dbRefUsuarios = ref(connectionDB, 'usuarios');
+  const snapshot = await get(dbRefUsuarios);
+  
+  let uidGarcom = null;
+  if (snapshot.exists()) {
+    snapshot.forEach((childSnapshot) => {
+      const userData = childSnapshot.val();
+      if (userData.email === emailGarcom) {
+        uidGarcom = childSnapshot.key; 
+      }
+    });
+  }
+
+  if (uidGarcom) {
+    const dbRefUsuario = ref(connectionDB, `usuarios/${uidGarcom}`);
     return new Promise((resolve, reject) => {
-      const dbRefUsuario = ref(connectionDB, `usuarios/${garcom.getUid()}`);
       remove(dbRefUsuario)
         .then(() => resolve(true))
         .catch((error) => reject(error));
     });
+  } else {
+    return Promise.reject("Usuário não encontrado.");
   }
+}
 }

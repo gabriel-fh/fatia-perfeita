@@ -53,10 +53,9 @@ export default class CtrlManterGarcons {
     }
   }
 
-  async excluir(uid, nome, email, situacao) {
+  async excluir(email) {
     try {
-      const garcom = new Garcom(uid, nome, email, situacao);
-      let res = await this.#daoGarcom.excluir(garcom);
+      let res = await this.#daoGarcom.excluir(email);
       if (res === false) {
         alert("Erro ao excluir o garçom.");
       } else {

@@ -57,12 +57,7 @@ export default class ViewerGarcom {
 
   async incluirGarcom() {
     try {
-      await this.#ctrl.incluir(
-        this.nome.value,
-        this.email.value,
-        this.senha.value,
-        this.situacao.value,
-      );
+      await this.#ctrl.incluir(this.nome.value, this.email.value, this.senha.value, this.situacao.value);
       this.limparFormulario();
       this.modal.classList.add("hidden");
     } catch (error) {
@@ -101,12 +96,16 @@ export default class ViewerGarcom {
     });
 
     this.tbody.querySelectorAll(".btn-excluir").forEach((btn) => {
-      btn.addEventListener("click", (event) => {
+      btn.addEventListener("click", async (event) => {
         const linha = event.target.closest("tr");
-        const nome = linha.children[1].textContent;
+        const email = linha.children[1].textContent;
+        const nome = linha.children[0].textContent;
         if (confirm(`Deseja excluir o garçom ${nome}?`)) {
-          linha.remove();
-          // Se quiser aqui chamar o Ctrl para excluir do BD, só chamar: this.#ctrl.excluir(codigo)
+          try {
+            await this.#ctrl.excluir(email);
+          } catch (error) {
+            console.error("Erro ao excluir:", error);
+          }
         }
       });
     });
