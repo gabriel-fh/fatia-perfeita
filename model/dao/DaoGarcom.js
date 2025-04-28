@@ -81,47 +81,59 @@ export default class DaoGarcom {
     return resultado;
   }
 
-  async alterar(garcom) {
+  async alterar(email, dados) {
     let connectionDB = await this.obterConexao();
+    const uid = await this.getUid(email)
     return new Promise((resolve, reject) => {
-      const dbRefUsuario = ref(connectionDB, `usuarios/${garcom.getUid()}`);
+      const dbRefUsuario = ref(connectionDB, `usuarios/${uid}`);
       set(dbRefUsuario, {
-        uid: garcom.getUid(),
-        nome: garcom.getNome(),
-        email: garcom.getEmail(),
+        nome: dados.nome,
+        email: email,
         funcao: "GARCOM",
-        situacao: garcom.getSituacao(),
+        situacao: dados.situacao,
       })
         .then(() => resolve(true))
         .catch((error) => reject(error));
     });
   }
 
-async excluir(emailGarcom) {
-  let connectionDB = await this.obterConexao();
-  
-  const dbRefUsuarios = ref(connectionDB, 'usuarios');
-  const snapshot = await get(dbRefUsuarios);
-  
-  let uidGarcom = null;
-  if (snapshot.exists()) {
-    snapshot.forEach((childSnapshot) => {
-      const userData = childSnapshot.val();
-      if (userData.email === emailGarcom) {
-        uidGarcom = childSnapshot.key; 
-      }
-    });
+  async getUid(emailGarcom) {
+    let connectionDB = await this.obterConexao();
+
+    const dbRefUsuarios = ref(connectionDB, "usuarios");
+    const snapshot = await get(dbRefUsuarios);
+
+    let uidGarcom = null;
+    if (snapshot.exists()) {
+      snapshot.forEach((childSnapshot) => {
+        const userData = childSnapshot.val();
+        if (userData.email === emailGarcom) {
+          uidGarcom = childSnapshot.key;
+        }
+      });
+    }
+
+    return uidGarcom;
   }
 
-  if (uidGarcom) {
-    const dbRefUsuario = ref(connectionDB, `usuarios/${uidGarcom}`);
-    return new Promise((resolve, reject) => {
-      remove(dbRefUsuario)
-        .then(() => resolve(true))
-        .catch((error) => reject(error));
-    });
-  } else {
-    return Promise.reject("Usuário não encontrado.");
+  async excluir(emailGarcom) {
+    let connectionDB = await this.obterConexao();
+
+    const uidGarcom = await this.getUid(emailGarcom);
+
+    if (!uidGarcom) {
+      return Promise.reject("Usuário não encontrado.");
+    }
+
+    if (uidGarcom) {
+      const dbRefUsuario = ref(connectionDB, `usuarios/${uidGarcom}`);
+      return new Promise((resolve, reject) => {
+        remove(dbRefUsuario)
+          .then(() => resolve(true))
+          .catch((error) => reject(error));
+      });
+    } else {
+      return Promise.reject("Usuário não encontrado.");
+    }
   }
-}
 }

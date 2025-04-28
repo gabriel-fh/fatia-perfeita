@@ -326,12 +326,12 @@ button#cart-btn:hover {
 #cbSituacao {
   width: 100%;
   padding: 10px 1rem;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   background-color: var(--bg-secondary);
   font-size: 16px;
-  appearance: none; 
-  -webkit-appearance: none; 
-  -moz-appearance: none; 
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   cursor: pointer;
   outline: none;
   border: none;
@@ -524,4 +524,10 @@ button#cart-btn:hover {
     font-size: 14px;
     padding: 16px !important;
   }
+}
+
+#tfEmail:disabled {
+  background-color: #f0f0f0;
+  color: #888;
+  cursor: not-allowed;
 }

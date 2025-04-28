@@ -38,10 +38,11 @@ export default class CtrlManterGarcons {
     }
   }
 
-  async alterar(uid, nome, email, situacao) {
+  async alterar(email, dados) {
+
     try {
-      const garcom = new Garcom(uid, nome, email, situacao);
-      let res = await this.#daoGarcom.alterar(garcom);
+      let res = await this.#daoGarcom.alterar(email, dados);
+      Usuario.validarEmail(email);
       if (res === false) {
         alert("Erro ao alterar o garçom.");
       } else {

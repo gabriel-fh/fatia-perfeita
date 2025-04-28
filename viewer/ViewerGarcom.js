@@ -65,6 +65,22 @@ export default class ViewerGarcom {
     }
   }
 
+  async alterarGarcom() {
+    try {
+      const dados = {
+        nome: this.nome.value,
+        situacao: this.situacao.value,
+      };
+      const currentEmail = this.email.value;
+      await this.#ctrl.alterar(currentEmail, dados);
+      this.linhaSelecionada = null;
+      this.limparFormulario();
+      this.modal.classList.add("hidden");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   #adicionarEventosModal() {
     const closeModalButton = document.getElementById("close-cart-btn");
 
@@ -81,7 +97,7 @@ export default class ViewerGarcom {
 
     this.formGarcom.addEventListener("submit", (e) => {
       e.preventDefault();
-      this.incluirGarcom();
+      this.modoEdicao ? this.alterarGarcom() : this.incluirGarcom();
     });
   }
 
@@ -90,7 +106,9 @@ export default class ViewerGarcom {
       btn.addEventListener("click", (event) => {
         const linha = event.target.closest("tr");
         this.preencherFormulario(linha);
+        this.linhaSelecionada = linha.children[1].textContent;
         this.modalTitle.innerText = "Editar Garçom";
+        this.modoEdicao = true;
         this.modal.classList.remove("hidden");
       });
     });
@@ -119,5 +137,13 @@ export default class ViewerGarcom {
     // this.horaInicio.value = "";
     // this.horaFim.value = "";
     this.situacao.value = "ATIVO";
+  }
+
+  preencherFormulario(linha) {
+    this.senha.parentElement.classList.add("hidden");
+    this.email.value = linha.children[1].textContent;
+    this.email.disabled = true;
+    this.nome.value = linha.children[0].textContent;
+    this.situacao.value = linha.children[2].textContent;
   }
 }
