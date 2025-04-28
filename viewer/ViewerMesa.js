@@ -48,7 +48,7 @@ export default class ViewerMesa {
 
   async incluirMesa() {
     try {
-      await this.#ctrl.incluir(this.tfId.value, Number(this.tfNumero.value), this.cbSituacao.value);
+      await this.#ctrl.incluir(Number(this.tfNumero.value), this.cbSituacao.value);
       this.limparFormulario();
       this.modal.classList.add("hidden");
     } catch (error) {
@@ -86,7 +86,7 @@ export default class ViewerMesa {
     document.getElementById("btn-adicionar").addEventListener("click", () => {
       this.limparFormulario();
       this.modoEdicao = false;
-      this.tfId.disabled = false; // ✅ Habilitar o campo UID para nova mesa
+      this.tfId.parentElement.style.display = "none";
       this.modalTitle.innerText = "Adicionar Mesa";
       this.modal.classList.remove("hidden");
     });
@@ -104,7 +104,7 @@ export default class ViewerMesa {
         const linha = event.target.closest("tr");
         this.preencherFormulario(linha);
         this.modoEdicao = true;
-        this.tfId.disabled = true; // ✅ Desabilitar o campo UID
+        this.tfId.parentElement.style.display = "block";
         this.modalTitle.innerText = "Editar Mesa";
         this.modal.classList.remove("hidden");
       });

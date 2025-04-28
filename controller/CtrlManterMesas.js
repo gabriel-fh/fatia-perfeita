@@ -1,8 +1,9 @@
 "use strict";
 
-import Mesa from "/model/Mesa.js"; 
-import DaoMesa from "/model/dao/DaoMesa.js"; 
+import Mesa from "/model/Mesa.js";
+import DaoMesa from "/model/dao/DaoMesa.js";
 import ViewerMesa from "/viewer/ViewerMesa.js"; // Viewer que mostra na tela
+import { criarUsuario } from "/util/CriarUsuario.js"; // Função para criar usuário
 
 export default class CtrlManterMesas {
   #daoMesa;
@@ -20,14 +21,15 @@ export default class CtrlManterMesas {
     this.#viewer.carregarMesas(mesas);
   }
 
-  async incluir(id, numero, situacao) {
+  async incluir(numero, situacao) {
     try {
-      let mesa = new Mesa(id, numero, situacao);
+      const user = await criarUsuario(`mesafatiaperfeita${numero}@email.com`, "123456");
+      let mesa = new Mesa(user.uid, numero, situacao);
       await this.#daoMesa.incluir(mesa);
       this.#atualizarContextoNavegacao();
     } catch (e) {
       console.log(e);
-      
+
       alert(e);
     }
   }
