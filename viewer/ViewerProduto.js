@@ -16,7 +16,7 @@ export default class ViewerProduto {
     this.tfImagem = document.getElementById("tfImagem");
     this.tfDescricao = document.getElementById("tfDescricao");
     this.tfTipo = document.getElementById("tfTipo");
-    this.tfPrecoBase = document.getElementById("tfPrecoBase");
+    this.tfpreco_base = document.getElementById("tfpreco_base");
     this.cbSituacao = document.getElementById("cbSituacao");
 
     this.modoEdicao = false;
@@ -41,7 +41,7 @@ export default class ViewerProduto {
         <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${produto.imagem}</td>
         <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${produto.descricao}</td>
         <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${produto.tipo}</td>
-        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${produto.precoBase}</td>
+        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${produto.preco_base}</td>
         <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${produto.situacao}</td>
         <td class="table-actions">
           <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
@@ -62,7 +62,7 @@ export default class ViewerProduto {
         this.tfImagem.value,
         this.tfDescricao.value,
         this.tfTipo.value,
-        parseFloat(this.tfPrecoBase.value),
+        this.tfpreco_base.value,
         this.cbSituacao.value
       );
       this.limparFormulario();
@@ -120,7 +120,7 @@ export default class ViewerProduto {
     this.tfImagem.value = "";
     this.tfDescricao.value = "";
     this.tfTipo.value = "DELIVERY";
-    this.tfPrecoBase.value = "";
+    this.tfpreco_base.value = "";
     this.cbSituacao.value = "DISPONIVEL";
   }
 
@@ -130,7 +130,7 @@ export default class ViewerProduto {
     this.tfImagem.value = linha.children[2].textContent;
     this.tfDescricao.value = linha.children[3].textContent;
     this.tfTipo.value = linha.children[4].textContent;
-    this.tfPrecoBase.value = linha.children[5].textContent;
+    this.tfpreco_base.value = linha.children[5].textContent;
     this.cbSituacao.value = linha.children[6].textContent;
   }
 }

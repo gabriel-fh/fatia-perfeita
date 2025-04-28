@@ -6,7 +6,7 @@ export default class ProdutoDTO {
     this.imagem = produto.getImagem();
     this.descricao = produto.getDescricao();
     this.tipo = produto.getTipo();
-    this.precoBase = produto.getPrecoBase();
+    this.preco_base = produto.getPrecoBase();
     this.situacao = produto.getSituacao();
   }
 
@@ -31,7 +31,7 @@ export default class ProdutoDTO {
   }
 
   getPrecoBase() {
-    return this.precoBase;
+    return this.preco_base;
   }
 
   getSituacao() {

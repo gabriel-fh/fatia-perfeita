@@ -50,22 +50,24 @@ export default class DaoGarcom {
     });
   }
 
-  async incluir(garcom) {
+  async incluir(produto) {
     let connectionDB = await this.obterConexao();
-    return new Promise((resolve, reject) => {
-      const dbRefUsuario = ref(connectionDB, `usuarios/${garcom.getUid()}`);
-      set(dbRefUsuario, {
-        uid: garcom.getUid(),
-        nome: garcom.getNome(),
-        email: garcom.getEmail(),
-        funcao: "GARCOM",
-        matricula: garcom.getMatricula(),
-        horaInicio: garcom.getHoraInicio(),
-        horaFim: garcom.getHoraFim(),
-        situacao: garcom.getSituacao()
-      }).then(() => resolve(true))
-        .catch(error => reject(error));
+    let resultado = new Promise((resolve, reject) => {
+      let dbRefProdutos = ref(connectionDB, "usuarios");
+      runTransaction(dbRefProdutos, (produtos) => {
+        let dbRefNovoProduto = child(dbRefProdutos, produto.getCodigo());
+        let setPromise = set(dbRefNovoProduto, produto);
+        setPromise
+          .then((value) => {
+            resolve(true);
+          })
+          .catch((e) => {
+            console.log("#ERRO: " + e);
+            resolve(false);
+          });
+      });
     });
+    return resultado;
   }
 
   async alterar(garcom) {
