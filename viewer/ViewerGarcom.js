@@ -7,26 +7,26 @@ export default class ViewerGarcom {
   constructor(ctrl) {
     this.#ctrl = ctrl;
 
-    this.matricula = this.obterElemento("tfMatricula");
-    this.nome = this.obterElemento("tfNome");
-    this.email = this.obterElemento("tfEmail");
-    this.horaInicio = this.obterElemento("tfHoraInicio");
-    this.horaFim = this.obterElemento("tfHoraFim");
-    this.situacao = this.obterElemento("cbSituacao");
+    // this.matricula = document.getElementById("tfMatricula");
+    this.nome = document.getElementById("tfNome");
+    this.email = document.getElementById("tfEmail");
+    // this.horaInicio = document.getElementById("tfHoraInicio");
+    // this.horaFim = document.getElementById("tfHoraFim");
+    this.situacao = document.getElementById("cbSituacao");
 
     this.tbody = document.getElementById("garcons");
     this.modal = document.querySelector(".modal");
     this.modalTitle = document.getElementById("modal-title");
-    this.formProduto = document.getElementById("form-garcom");
+    this.formGarcom = document.getElementById("form-garcom");
 
     this.modoEdicao = false;
     this.linhaSelecionada = null;
 
     this.#adicionarEventosModal();
 
-    this.btnSalvar = this.obterElemento("btnSalvar");
-    this.btnEdit = this.obterElemento("btnEdit");
-    this.btnDelete = this.obterElemento("btnDelete");
+    // this.btnSalvar = this.obterElemento("btnSalvar");
+    // this.btnEdit = this.obterElemento("btnEdit");
+    // this.btnDelete = this.obterElemento("btnDelete");
   }
 
   async carregarGarcons(garcom) {
@@ -42,9 +42,6 @@ export default class ViewerGarcom {
       tr.innerHTML = `
         <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.nome}</td>
         <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.email}</td>
-        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.matricula}</td>
-        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.horaInicio}</td>
-        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.horaFim}</td>
         <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.situacao}</td>
         <td class="table-actions">
           <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
@@ -55,6 +52,24 @@ export default class ViewerGarcom {
     });
 
     this.#adicionarEventosAcoes();
+  }
+
+  async incluirGarcom() {
+    try {
+      await this.#ctrl.incluir(
+        this.tfCodigo.value,
+        this.tfNome.value,
+        this.tfImagem.value,
+        this.tfDescricao.value,
+        this.tfTipo.value,
+        this.tfpreco_base.value,
+        this.cbSituacao.value
+      );
+      this.limparFormulario();
+      this.modal.classList.add("hidden");
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   #adicionarEventosModal() {
@@ -71,9 +86,9 @@ export default class ViewerGarcom {
       this.modal.classList.remove("hidden");
     });
 
-    this.formProduto.addEventListener("submit", (e) => {
+    this.formGarcom.addEventListener("submit", (e) => {
       e.preventDefault();
-      this.incluirProduto();
+      this.incluirGarcom();
     });
   }
 
@@ -98,13 +113,13 @@ export default class ViewerGarcom {
       });
     });
   }
-  
+
   limparFormulario() {
     this.nome.value = "";
     this.email.value = "";
-    this.matricula.value = "";
-    this.horaInicio.value = "";
-    this.horaFim.value = "";
+    // this.matricula.value = "";
+    // this.horaInicio.value = "";
+    // this.horaFim.value = "";
     this.situacao.value = "ATIVO";
   }
 }
