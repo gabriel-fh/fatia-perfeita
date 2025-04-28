@@ -1,9 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js"; // Importe get também
 
 const firebaseConfig = {
   apiKey: "AIzaSyD83f2LeSDIuVWBFUnu_jHOzshsjDkF5iI",
@@ -16,13 +13,35 @@ const firebaseConfig = {
   measurementId: "G-57F0MG0EYV",
 };
 
-// Initialize Firebase
+// Inicialize o Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getDatabase(app); // Obtém a referência ao banco de dados
 
-// Função para fazer login
+const getLoggedUser = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user) {
+    const uid = user.uid;
+    const userRef = ref(db, `usuarios/${uid}`);
+
+    get(userRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          return snapshot.val();
+        } else {
+          console.log("Nenhum dado encontrado para o usuário.");
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar dados:", error);
+      });
+  } else {
+    console.log("Nenhum usuário logado encontrado.");
+  }
+}
+
+
 const signInUser = (email, password) => {
-
   const form = document.getElementById("login-form");
   const hiddenElements = document.querySelectorAll(".hidden");
   const main = document.getElementsByTagName("main")[0];
@@ -32,9 +51,9 @@ const signInUser = (email, password) => {
       console.log("Usuário logado: ", user);
       hiddenElements.forEach((element) => {
         element.classList.remove("hidden");
-      })
-      form.classList.add("hidden")
-      main.classList.remove("flex-center")
+      });
+      form.classList.add("hidden");
+      main.classList.remove("flex-center");
       localStorage.setItem("user", JSON.stringify(user));
     })
     .catch((error) => {
@@ -47,7 +66,7 @@ const signInUser = (email, password) => {
 };
 
 document.getElementById("login-form").addEventListener("submit", function (event) {
-  event.preventDefault(); 
+  event.preventDefault();
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
