@@ -33,18 +33,6 @@
           </thead>
           <tbody id="garcons">
             <!-- Conteúdo carregado via HTML -->
-            <tr>
-              <td>Jorge Amado</td>
-              <td>jorge@email.com</td>
-              <td>192884</td>
-              <td>12:00</td>
-              <td>18:00</td>
-              <td>Atendendo</td>
-              <td class="table-actions">
-                <button class="btn btn-primary btn-editar" id="btnEdit"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash" id="btnDelete"></i></button>
-              </td>
-            </tr>
           </tbody>
         </table>
 
@@ -98,15 +86,16 @@
 
     <!-- SCRIPTS -->
     <script type="module" src="/controller/CtrlManterGarcons.js"></script>
-    <script type="module" src="../viewer/ViewerGarcom.js"></script>
     <script type="module" src="../middleware.js"></script>
+    <script type="module" src="/controller/CtrlSessao.js"></script>
+
 
     <script type="module">
       import { renderSidebar } from "../components/Sidebar.js";
       renderSidebar();
     </script>
 
-    <script>
+    <!-- <script>
       const modal = document.querySelector(".modal");
       const modalTitle = document.getElementById("modal-title");
       const btnAdicionar = document.getElementById("btn-adicionar");
@@ -199,7 +188,7 @@
         }
         modal.classList.add("hidden");
       });
-    </script>
+    </script> -->
     <script type="module" src="../middleware.js"></script>
     <script type="module" src="/controller/CtrlSessao.js"></script>
   </body>

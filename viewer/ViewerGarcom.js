@@ -14,17 +14,97 @@ export default class ViewerGarcom {
     this.horaFim = this.obterElemento("tfHoraFim");
     this.situacao = this.obterElemento("cbSituacao");
 
+    this.tbody = document.getElementById("garcons");
+    this.modal = document.querySelector(".modal");
+    this.modalTitle = document.getElementById("modal-title");
+    this.formProduto = document.getElementById("form-garcom");
+
+    this.modoEdicao = false;
+    this.linhaSelecionada = null;
+
+    this.#adicionarEventosModal();
+
     this.btnSalvar = this.obterElemento("btnSalvar");
     this.btnEdit = this.obterElemento("btnEdit");
     this.btnDelete = this.obterElemento("btnDelete");
   }
 
-  obterElemento(idElemento) {
-    let elemento = document.getElementById(idElemento);
-    if (elemento == null) throw new ViewerError("Não foi encontrado um elemento com id '" + idElemento + "'");
-    elemento.viewer = this;
-    return elemento;
+  async carregarGarcons(garcom) {
+    if (!garcom || garcom.length === 0) {
+      this.tbody.innerHTML = "<tr><td colspan='8'>Nenhum garcom encontrado</td></tr>";
+      return;
+    }
+
+    this.tbody.innerHTML = "";
+
+    garcom.forEach((garcom) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.nome}</td>
+        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.email}</td>
+        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.matricula}</td>
+        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.horaInicio}</td>
+        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.horaFim}</td>
+        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">${garcom.situacao}</td>
+        <td class="table-actions">
+          <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      `;
+      this.tbody.appendChild(tr);
+    });
+
+    this.#adicionarEventosAcoes();
+  }
+
+  #adicionarEventosModal() {
+    const closeModalButton = document.getElementById("close-cart-btn");
+
+    closeModalButton.addEventListener("click", () => {
+      this.modal.classList.add("hidden");
+    });
+
+    document.getElementById("btn-adicionar").addEventListener("click", () => {
+      this.limparFormulario();
+      this.modoEdicao = false;
+      this.modalTitle.innerText = "Adicionar Garçom";
+      this.modal.classList.remove("hidden");
+    });
+
+    this.formProduto.addEventListener("submit", (e) => {
+      e.preventDefault();
+      this.incluirProduto();
+    });
+  }
+
+  #adicionarEventosAcoes() {
+    this.tbody.querySelectorAll(".btn-editar").forEach((btn) => {
+      btn.addEventListener("click", (event) => {
+        const linha = event.target.closest("tr");
+        this.preencherFormulario(linha);
+        this.modalTitle.innerText = "Editar Garçom";
+        this.modal.classList.remove("hidden");
+      });
+    });
+
+    this.tbody.querySelectorAll(".btn-excluir").forEach((btn) => {
+      btn.addEventListener("click", (event) => {
+        const linha = event.target.closest("tr");
+        const nome = linha.children[1].textContent;
+        if (confirm(`Deseja excluir o garçom ${nome}?`)) {
+          linha.remove();
+          // Se quiser aqui chamar o Ctrl para excluir do BD, só chamar: this.#ctrl.excluir(codigo)
+        }
+      });
+    });
+  }
+  
+  limparFormulario() {
+    this.nome.value = "";
+    this.email.value = "";
+    this.matricula.value = "";
+    this.horaInicio.value = "";
+    this.horaFim.value = "";
+    this.situacao.value = "ATIVO";
   }
 }
-
-  
