@@ -39,13 +39,9 @@ export default class CtrlManterPedidos {
             if (!pedido) {
                 alert(`Pedido com codigo ${codigo} não encontrado.`);
             } else {
-                pedido.setSubtotal(subtotal);
-                pedido.setTotal(total);
-                pedido.setTaxaServico(taxaServico);
-                pedido.setSituacao(situacao);
-                pedido.setDataHora(dataHora);
-                pedido.setMesa(mesa);
-                pedido.setGarcom(garcom);
+                this.setDataHora(dataHora);
+                this.setSituacao(situacao);
+                this.setComanda(comanda);
                 await this.#daoPedido.alterar(pedido);
             }
             this.#atualizarContextoNavegacao();

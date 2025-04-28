@@ -79,15 +79,13 @@ export default class DaoComanda {
 
           resolve(
             new Comanda(
-              new Comanda(
-                comandaSnap.codigo,
-                comandaSnap.subtotal,
-                comandaSnap.total,
-                comandaSnap.taxaServico,
-                comandaSnap.dataHora,
-                mesa,
-                garcom
-              )
+              comandaSnap.codigo,
+              comandaSnap.subtotal,
+              comandaSnap.total,
+              comandaSnap.taxaServico,
+              comandaSnap.dataHora,
+              mesa,
+              garcom
             )
           );
         }
