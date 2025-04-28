@@ -59,7 +59,7 @@
             <div class="dish">
               <img
                 src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%201.png?v=1744044807617"
-                alt="Salada"
+                alt="OF THE KING THE POWER"
               />
               <p>Salada com Ovo de Codorna</p>
               <button>Adicionar +</button>
@@ -109,13 +109,52 @@
         </section>
       </main>
     </div>
+
+    <div id="dish-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-dish-name">Detalhes do Prato</h2>
+          <button id="close-dish-modal-btn" class="close-btn">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img id="modal-dish-image" src="" alt="Dish Image" />
+        </div>
+        <p id="modal-dish-description">Este é um prato delicioso preparado com ingredientes frescos e selecionados para proporcionar a melhor experiência gastronômica.</p>
+        <p>Este é um prato delicioso preparado com ingredientes frescos e selecionados para proporcionar a melhor experiência gastronômica.</p>
+      </div>
+    </div>
+
     <script type="module" src="./auth.js"></script>
     <script type="module">
       import { renderSidebar } from "../components/Sidebar.js";
 
       renderSidebar();
-    </script>
 
+      // Dish modal functionality
+      const dishModal = document.getElementById('dish-modal');
+      const closeDishModalBtn = document.getElementById('close-dish-modal-btn');
+      const modalDishImage = document.getElementById('modal-dish-image');
+      const modalDishDescription = document.getElementById('modal-dish-description');
+      const modalDishName = document.getElementById('modal-dish-name');
+
+      document.querySelectorAll('.dish').forEach((dish) => {
+        const dishImage = dish.querySelector('img');
+        const dishName = dish.querySelector('p');
+
+        dishImage.addEventListener('click', () => {
+          modalDishImage.src = dishImage.src;
+          modalDishDescription.textContent = dishImage.alt;
+          modalDishName.textContent = dishName.textContent;
+          dishModal.classList.remove('hidden');
+        });
+      });
+
+      closeDishModalBtn.addEventListener('click', () => {
+        dishModal.classList.add('hidden');
+      });
+    </script>
     <script type="module" src="./viewer/HomeViewer.js"></script>
     <script type="module" src="./middleware.js"></script>
   </body>

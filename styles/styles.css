@@ -275,6 +275,10 @@ button#cart-btn:hover {
   z-index: 9999;
 }
 
+.modal.hidden {
+  display: none;
+}
+
 .modal-content {
   background-color: var(--bg-tertiary);
   padding: 2rem;
@@ -297,6 +301,15 @@ button#cart-btn:hover {
   margin-top: 1rem;
 }
 
+.modal-body {
+  text-align: center;
+}
+
+.modal-body img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
 
 #cbSituacao {
   width: 100%;
@@ -322,8 +335,6 @@ button#cart-btn:hover {
   font-size: 12px;
   pointer-events: none;
 }
-
-
 
 .dishes {
   display: grid;
