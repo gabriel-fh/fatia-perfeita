@@ -32,19 +32,7 @@
             </tr>
           </thead>
           <tbody id="produtos">
-            <tr>
-              <td>001</td>
-              <td>Pizza Marguerita</td>
-              <td>pizza.jpg</td>
-              <td>Pizza com mussarela e manjericão</td>
-              <td>ALIMENTO</td>
-              <td>49.90</td>
-              <td>DISPONIVEL</td>
-              <td class="table-actions">
-                <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
-              </td>
-            </tr>
+            <!-- aqui o ViewerProduto vai montar as linhas -->
           </tbody>
         </table>
 
@@ -53,6 +41,7 @@
         </div>
       </main>
 
+      <!-- Modal -->
       <section class="modal hidden">
         <div class="modal-content">
           <div class="modal-header">
@@ -86,7 +75,7 @@
             <div class="form-group">
               <label for="tfTipo">Tipo:</label>
               <select id="tfTipo" required>
-                <option value="ALIMENTO">ALIMENTO</option>
+                <option value="DELIVERY">DELIVERY</option>
                 <option value="BEBIDA">BEBIDA</option>
                 <option value="OUTROS">OUTROS</option>
               </select>
@@ -111,110 +100,12 @@
       </section>
     </div>
 
+    <!-- Importações -->
     <script type="module">
       import { renderSidebar } from "../components/Sidebar.js";
       renderSidebar();
     </script>
 
-    <script>
-      const modal = document.querySelector(".modal");
-      const modalTitle = document.getElementById("modal-title");
-      const btnAdicionar = document.getElementById("btn-adicionar");
-      const closeModalButton = document.getElementById("close-cart-btn");
-      const formProduto = document.getElementById("formProduto");
-
-      const tfCodigo = document.getElementById("tfCodigo");
-      const tfNome = document.getElementById("tfNome");
-      const tfImagem = document.getElementById("tfImagem");
-      const tfDescricao = document.getElementById("tfDescricao");
-      const tfTipo = document.getElementById("tfTipo");
-      const tfPrecoBase = document.getElementById("tfPrecoBase");
-      const cbSituacao = document.getElementById("cbSituacao");
-
-      let modoEdicao = false;
-      let linhaSelecionada = null;
-
-      btnAdicionar.addEventListener("click", () => {
-        limparFormulario();
-        modoEdicao = false;
-        modalTitle.innerText = "Adicionar Produto";
-        modal.classList.remove("hidden");
-      });
-
-      closeModalButton.addEventListener("click", () => {
-        modal.classList.add("hidden");
-      });
-
-      function limparFormulario() {
-        tfCodigo.value = "";
-        tfNome.value = "";
-        tfImagem.value = "";
-        tfDescricao.value = "";
-        tfTipo.value = "ALIMENTO";
-        tfPrecoBase.value = "";
-        cbSituacao.value = "DISPONIVEL";
-      }
-
-      function preencherFormulario(linha) {
-        tfCodigo.value = linha.children[0].textContent;
-        tfNome.value = linha.children[1].textContent;
-        tfImagem.value = linha.children[2].textContent;
-        tfDescricao.value = linha.children[3].textContent;
-        tfTipo.value = linha.children[4].textContent;
-        tfPrecoBase.value = linha.children[5].textContent;
-        cbSituacao.value = linha.children[6].textContent;
-      }
-
-      document.addEventListener("click", (event) => {
-        if (event.target.closest(".btn-editar")) {
-          const linha = event.target.closest("tr");
-          preencherFormulario(linha);
-          linhaSelecionada = linha;
-          modoEdicao = true;
-          modalTitle.innerText = "Editar Produto";
-          modal.classList.remove("hidden");
-        }
-
-        if (event.target.closest(".btn-excluir")) {
-          const linha = event.target.closest("tr");
-          const nome = linha.children[1].textContent;
-          if (confirm(`Deseja excluir o produto ${nome}?`)) {
-            linha.remove();
-          }
-        }
-      });
-
-      formProduto.addEventListener("submit", (e) => {
-        e.preventDefault();
-        if (modoEdicao && linhaSelecionada) {
-          linhaSelecionada.children[0].textContent = tfCodigo.value;
-          linhaSelecionada.children[1].textContent = tfNome.value;
-          linhaSelecionada.children[2].textContent = tfImagem.value;
-          linhaSelecionada.children[3].textContent = tfDescricao.value;
-          linhaSelecionada.children[4].textContent = tfTipo.value;
-          linhaSelecionada.children[5].textContent = tfPrecoBase.value;
-          linhaSelecionada.children[6].textContent = cbSituacao.value;
-        } else {
-          const tbody = document.getElementById("produtos");
-          const novaLinha = document.createElement("tr");
-          novaLinha.innerHTML = `
-            <td>${tfCodigo.value}</td>
-            <td>${tfNome.value}</td>
-            <td>${tfImagem.value}</td>
-            <td>${tfDescricao.value}</td>
-            <td>${tfTipo.value}</td>
-            <td>${tfPrecoBase.value}</td>
-            <td>${cbSituacao.value}</td>
-            <td class="table-actions">
-              <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
-              <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
-            </td>
-          `;
-          tbody.appendChild(novaLinha);
-        }
-        modal.classList.add("hidden");
-      });
-    </script>
     <script type="module" src="../middleware.js"></script>
     <script type="module" src="/controller/CtrlSessao.js"></script>
   </body>

@@ -2,7 +2,8 @@ import ModelError from "./ModelError.js";
 import Pedido from "./Pedido.js";
 
 export default class Produto {
-  constructor(nome, imagem, descricao, tipo, precoBase, situacao) {
+  constructor(codigo, nome, imagem, descricao, tipo, precoBase, situacao) {
+    this.setCodigo(codigo);
     this.setNome(nome);
     this.setImagem(imagem);
     this.setDescricao(descricao);
@@ -10,6 +11,10 @@ export default class Produto {
     this.setPrecoBase(precoBase);
     this.setSituacao(situacao);
     this.pedidos = [];
+  }
+
+  getCodigo() {
+    return this.codigo;
   }
 
   getNome() {
@@ -38,6 +43,11 @@ export default class Produto {
 
   getPedidos() {
     return this.pedidos;
+  }
+
+  setCodigo(codigo) {
+    Produto.validarCodigo(codigo);
+    this.codigo = codigo;
   }
 
   setNome(nome) {
@@ -78,6 +88,12 @@ export default class Produto {
     }
   }
 
+  static validarCodigo(codigo) {
+    if (typeof codigo !== "string" || codigo.trim().length === 0) {
+      throw new ModelError("Código inválido. O código não pode ser vazio.");
+    }
+  }
+
   static validarNome(nome) {
     if (typeof nome !== "string" || nome.trim().length === 0) {
       throw new ModelError("Nome inválido. O nome não pode ser vazio.");
@@ -112,9 +128,7 @@ export default class Produto {
   static validarSituacao(situacao) {
     const situacoesValidas = ["DISPONIVEL", "INDISPONIVEL"];
     if (!situacoesValidas.includes(situacao)) {
-      throw new ModelError(
-        "Situação inválida. A situação deve ser uma das seguintes: DISPONIVEL, INDISPONIVEL."
-      );
+      throw new ModelError("Situação inválida. A situação deve ser uma das seguintes: DISPONIVEL, INDISPONIVEL.");
     }
   }
 }
