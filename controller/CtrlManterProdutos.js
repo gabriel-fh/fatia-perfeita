@@ -1,12 +1,11 @@
 "use strict";
 
-import Produto from "/model/Produto.js";  // Um model Produto
+import Produto from "/model/Produto.js"; // Um model Produto
 import ProdutoDTO from "/model/ProdutoDTO.js"; // Um DTO se precisar
 import DaoProduto from "/model/dao/DaoProduto.js"; // DAO para produtos
 import ViewerProduto from "/viewer/ViewerProduto.js"; // Viewer que mostra na tela
 
 export default class CtrlManterProdutos {
-
   #daoProduto;
   #viewer;
   #status;
@@ -17,53 +16,26 @@ export default class CtrlManterProdutos {
     this.#viewer = new ViewerProduto(this);
     this.#posAtual = 1;
     this.#atualizarContextoNavegacao();
-
-
-
+    // this.#viewer.carregarProdutos();
   }
+
+  // async apresentarProdutos() {
+  //   let produtos = await this.#daoProduto.obterProdutos();
+  //   console.log(produtos);
+
+  //   this.#viewer.carregarProdutos(produtos);
+  // }
 
   async #atualizarContextoNavegacao() {
     this.#status = "NAVEGANDO";
-    this.#viewer.statusApresentacao();
+    // this.#viewer.statusApresentacao();
 
     let produtos = await this.#daoProduto.obterProdutos();
+    
 
-    if (produtos.length === 0) {
-      this.#posAtual = 0;
-      this.#viewer.apresentar(0, 0, null);
-    } else {
-      if (this.#posAtual == 0 || this.#posAtual > produtos.length)
-        this.#posAtual = 1;
-
-      this.#viewer.apresentar(this.#posAtual, produtos.length, new ProdutoDTO(produtos[this.#posAtual - 1]));
+    if (produtos.length > 0) {
+      this.#viewer.carregarProdutos(produtos);
     }
-  }
-
-  async apresentarPrimeiro() {
-    let produtos = await this.#daoProduto.obterProdutos();
-    if (produtos.length > 0)
-      this.#posAtual = 1;
-    this.#atualizarContextoNavegacao();
-  }
-
-  async apresentarProximo() {
-    let produtos = await this.#daoProduto.obterProdutos();
-    if (this.#posAtual < produtos.length)
-      this.#posAtual++;
-    this.#atualizarContextoNavegacao();
-  }
-
-  async apresentarAnterior() {
-    let produtos = await this.#daoProduto.obterProdutos();
-    if (this.#posAtual > 1)
-      this.#posAtual--;
-    this.#atualizarContextoNavegacao();
-  }
-
-  async apresentarUltimo() {
-    let produtos = await this.#daoProduto.obterProdutos();
-    this.#posAtual = produtos.length;
-    this.#atualizarContextoNavegacao();
   }
 
   iniciarIncluir() {
