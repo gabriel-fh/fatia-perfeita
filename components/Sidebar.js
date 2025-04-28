@@ -1,6 +1,6 @@
 export function renderSidebar() {
   const sidebarHTML = `
-      <aside class="sidebar">
+      <aside class="sidebar hidden auth">
         <nav>
           <ul>
             <li>

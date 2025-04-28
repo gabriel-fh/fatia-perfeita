@@ -324,3 +324,48 @@ button#cart-btn:hover {
 }
 
 
+
+.dishes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 40px 20px;
+  padding-top: 40px;
+}
+
+.dish {
+  background-color: #13161f;
+  border-radius: 10px;
+  /* overflow: hidden; */
+  text-align: center;
+  position: relative;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.dish img {
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* object-fit: cover; */
+}
+
+.dish p {
+  padding: 10px;
+}
+
+.dish button {
+  background-color: #e95435;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
