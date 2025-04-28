@@ -63,7 +63,7 @@ export default class DaoGarcom {
   async incluir(garcom) {
     let connectionDB = await this.obterConexao();
     let resultado = new Promise((resolve, reject) => {
-      let dbRefGarcons = ref(connectionDB, "garcons");
+      let dbRefGarcons = ref(connectionDB, "usuarios");
       runTransaction(dbRefGarcons, (produtos) => {
         let dbRefNovoGarcom = child(dbRefGarcons, garcom.getUid());
         let setPromise = set(dbRefNovoGarcom, garcom);

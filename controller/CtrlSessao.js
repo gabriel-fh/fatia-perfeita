@@ -52,7 +52,7 @@ export default class CtrlSessao {
       else if (document.URL.includes("mesas.html")) this.ctrlAtual = new CtrlManterMesas();
       else if (document.URL.includes("pedidos.html")) this.ctrlAtual = new CtrlPedidos();
       else if (document.URL.includes("comandas.html")) this.ctrlAtual = new CtrlComandas();
-      else if (document.URL.includes("index.html")) this.ctrlAtual = await this.login();
+      else if (document.URL.includes("index.html") || (window.location.href === '/')) this.ctrlAtual = await this.login();
     } catch (e) {
       alert(e);
     }
@@ -62,10 +62,7 @@ export default class CtrlSessao {
 
   async login() {
     this.usuario = await this.verificandoLogin();
-    if (this.usuario) {
-      window.location.href = "/paginas/inicio.html";
-      return;
-    }
+
     document.getElementById("login-form").addEventListener("submit", async (event) => {
       event.preventDefault();
 
@@ -92,18 +89,18 @@ export default class CtrlSessao {
       const userRef = ref(db, `usuarios/${uid}`);
 
       try {
-        const snapshot = await get(userRef);
-        if (snapshot.exists()) {
-          return snapshot.val();
-        } else {
-          window.location.href = "index.html";
-          alert("Erro ao buscar dados do usuário: " + error.message);
-          localStorage.removeItem("user");
-        }
+        // const snapshot = await get(userRef);
+        // if (snapshot.exists()) {
+        //   return snapshot.val();
+        // } else {
+        //   window.location.href = "/index.html";
+        //   alert("Erro ao buscar dados do usuário: " + error.message);
+        //   // localStorage.removeItem("user");
+        // }
       } catch (error) {
-        window.location.href = "index.html";
+        window.location.href = "/index.html";
         alert("Erro ao buscar dados do usuário: " + error.message);
-        localStorage.removeItem("user");
+        // localStorage.removeItem("user");
       }
     } else {
       window.location.href = "/index.html";
