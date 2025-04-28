@@ -18,23 +18,29 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app); // Obtém a referência ao banco de dados
 
-const uid = "lO5TUYCUvyZap0C10XDwEda5mx22"; // UID do usuário, pode ser o auth.uid se for o usuário autenticado
-const userRef = ref(db, `usuarios/${uid}`); // Acessa a referência do usuário diretamente
+const getLoggedUser = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user) {
+    const uid = user.uid;
+    const userRef = ref(db, `usuarios/${uid}`);
 
-get(userRef)
-  .then((snapshot) => {
-    if (snapshot.exists()) {
-      console.log("Usuário encontrado:", snapshot.val());
-    } else {
-      console.log("Usuário não encontrado com o UID:", uid);
-    }
-  })
-  .catch((error) => {
-    console.error("Erro ao buscar dados:", error);
-  });
+    get(userRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          return snapshot.val();
+        } else {
+          console.log("Nenhum dado encontrado para o usuário.");
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar dados:", error);
+      });
+  } else {
+    console.log("Nenhum usuário logado encontrado.");
+  }
+}
 
 
-// Função para fazer login
 const signInUser = (email, password) => {
   const form = document.getElementById("login-form");
   const hiddenElements = document.querySelectorAll(".hidden");
