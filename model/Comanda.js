@@ -4,13 +4,13 @@ import Garcom from "./Garcom.js";
 import Pedido from "./Pedido.js";
 
 export default class Comanda {
-  constructor(codigo, subtotal, total, taxa_servico, situacao, data_hora, mesa, garcom) {
+  constructor(codigo, subtotal, total, taxaServico, situacao, dataHora, mesa, garcom) {
     this.setCodigo(codigo);
     this.setSubtotal(subtotal);
     this.setTotal(total);
-    this.setTaxaServico(taxa_servico);
+    this.setTaxaServico(taxaServico);
     this.setSituacao(situacao);
-    this.setDataHora(data_hora);
+    this.setDataHora(dataHora);
     this.setMesa(mesa);
     this.setGarcom(garcom);
     this.pedidos = [];
@@ -29,7 +29,7 @@ export default class Comanda {
   }
 
   getTaxaServico() {
-    return this.taxa_servico;
+    return this.taxaServico;
   }
 
   getSituacao() {
@@ -37,7 +37,7 @@ export default class Comanda {
   }
 
   getDataHora() {
-    return this.data_hora;
+    return this.dataHora;
   }
 
   getMesa() {
@@ -77,9 +77,9 @@ export default class Comanda {
     this.situacao = situacao;
   }
 
-  setDataHora(data_hora) {
-    Comanda.validarDataHora(data_hora);
-    this.data_hora = data_hora;
+  setDataHora(dataHora) {
+    Comanda.validarDataHora(dataHora);
+    this.dataHora = dataHora;
   }
 
   setMesa(mesa) {
@@ -118,8 +118,8 @@ export default class Comanda {
     }
   }
 
-  static validarTaxaServico(taxa_servico) {
-    if (typeof taxa_servico !== "number" || taxa_servico < 0) {
+  static validarTaxaServico(taxaServico) {
+    if (typeof taxaServico !== "number" || taxaServico < 0) {
       throw new ModelError("Taxa de serviço deve ser um número positivo.");
     }
   }

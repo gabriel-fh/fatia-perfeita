@@ -95,8 +95,8 @@ export default class DaoComanda {
               comandaSnap.codigo,
               comandaSnap.subtotal,
               comandaSnap.total,
-              comandaSnap.taxa_servico,
-              comandaSnap.data_hora,
+              comandaSnap.taxaServico,
+              comandaSnap.dataHora,
               mesa,
               garcom
             )
@@ -125,9 +125,9 @@ export default class DaoComanda {
           codigo: comanda.codigo,
           subtotal: comanda.subtotal,
           total: comanda.total,
-          taxa_servico: comanda.taxa_servico,
+          taxa_servico: comanda.taxaServico,
           situacao: comanda.situacao,
-          data_hora: comanda.data_hora,
+          data_hora: comanda.dataHora,
           mesa: mesaUid,
           garcom: garcomUid,
         };
