@@ -1,7 +1,7 @@
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import ModelError from "../model/ModelError.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-import { firebaseConfig } from './../controller/CtrlSessao.js';
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+import { firebaseConfig } from "./../controller/CtrlSessao.js";
 
 export const criarUsuario = async (email, senha) => {
   // Cria uma segunda instância do app
@@ -21,4 +21,5 @@ export const criarUsuario = async (email, senha) => {
     console.error(error);
     throw new ModelError("Erro ao criar usuário: " + error.message);
   }
-}
+};
+

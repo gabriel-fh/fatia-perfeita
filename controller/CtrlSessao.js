@@ -1,16 +1,9 @@
 "use strict";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  browserSessionPersistence,
-  onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+import { getDatabase, ref } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 
-import DaoUsuario from "/model/dao/DaoUsuario.js";
-import Usuario from "/model/Usuario.js";
 import CtrlManterProdutos from "/controller/CtrlManterProdutos.js";
 import CtrlManterGarcons from "/controller/CtrlManterGarcons.js";
 import CtrlManterMesas from "./CtrlManterMesas.js";
@@ -36,9 +29,6 @@ const db = getDatabase(app); // Obtém a referência ao banco de dados
 })()
 
 export default class CtrlSessao {
-  #daoUsuario;
-
-  //-----------------------------------------------------------------------------------------//
   constructor() {
     this.init();
   }
@@ -53,7 +43,7 @@ export default class CtrlSessao {
       else if (document.URL.includes("mesas.html")) this.ctrlAtual = new CtrlManterMesas();
       else if (document.URL.includes("pedidos.html")) this.ctrlAtual = new CtrlPedidos();
       else if (document.URL.includes("comandas.html")) this.ctrlAtual = new CtrlComandas();
-      else if (document.URL.includes("index.html") || (window.location.href === '/')) this.ctrlAtual = await this.login();
+      else if (document.URL.includes("index.html") || window.location.href === "/") this.ctrlAtual = await this.login();
     } catch (e) {
       alert(e);
     }
