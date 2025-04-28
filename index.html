@@ -12,33 +12,8 @@
   </head>
 
   <body class="container">
-    <aside class="sidebar hidden auth">
-      <nav>
-        <ul>
-          <li>
-            <img
-              src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/logo.png?v=1744044819325"
-              alt="Logo"
-            />
-          </li>
-          <li>
-            <a href="./index.html" class="nav-icon active">
-              <i class="fa-solid fa-house"></i>
-            </a>
-          </li>
-          <li>
-            <a href="././paginas/garcons.html" class="nav-icon">
-              <i class="fa-solid fa-pizza-slice"></i>
-            </a>
-          </li>
-          <li>
-            <a href="/pedidos" class="nav-icon">
-              <i class="fa-solid fa-list-ul"></i>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </aside>
+    <div id="sidebar-container"></div>
+
     <div class="main-content">
       <header>
         <div>
@@ -105,6 +80,12 @@
       </main>
     </div>
     <script type="module" src="./auth.js"></script>
+    <script type="module">
+      import { renderSidebar } from "../components/sidebar.js";
+
+      renderSidebar();
+    </script>
+
     <script type="module" src="./viewer/HomeViewer.js"></script>
     <script type="module" src="./middleware.js"></script>
   </body>

@@ -3,31 +3,52 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="https://prjpwa-unilasalle.glitch.me/favicon.ico" />
-    <title>Cadastro de Mesas</title>
+    <title>Cadastro de Comandas</title>
     <link rel="stylesheet" href="../styles/global.css" />
     <link rel="stylesheet" href="../styles/styles.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
   </head>
   <body class="container">
     <div id="sidebar-container"></div>
     <main class="flex-center" style="width: 100%">
-      <form id="formMesa">
+      <form id="formComanda">
         <header>
-          <h2>Cadastro de Mesas</h2>
+          <h2>Cadastro de Comandas</h2>
         </header>
 
         <div class="form-group">
-          <label for="tfNumero">Número:</label>
-          <input type="number" id="tfNumero" disabled />
+          <label for="tfCodigo">Código:</label>
+          <input type="number" id="tfCodigo" disabled />
         </div>
 
         <div class="form-group">
-          <label for="cbSituacaoMesa">Situação:</label>
-          <select id="cbSituacaoMesa" disabled>
-            <option value="LIVRE">LIVRE</option>
-            <option value="OCUPADA">OCUPADA</option>
-            <option value="DESATIVADA">DESATIVADA</option>
+          <label for="tfSubtotal">Subtotal:</label>
+          <input type="number" id="tfSubtotal" step="0.01" disabled />
+        </div>
+
+        <div class="form-group">
+          <label for="tfTotal">Total:</label>
+          <input type="number" id="tfTotal" step="0.01" disabled />
+        </div>
+
+        <div class="form-group">
+          <label for="tfTaxaServico">Taxa de Serviço:</label>
+          <input type="number" id="tfTaxaServico" step="0.01" disabled />
+        </div>
+
+        <div class="form-group">
+          <label for="cbSituacaoComanda">Situação:</label>
+          <select id="cbSituacaoComanda" disabled>
+            <option value="ABERTA">ABERTA</option>
+            <option value="FECHADA">FECHADA</option>
+            <option value="CANCELADA">CANCELADA</option>
           </select>
+        </div>
+
+        <div class="form-group">
+          <label for="tfDataHora">Data e Hora:</label>
+          <input type="datetime-local" id="tfDataHora" disabled />
         </div>
 
         <div id="divComandos" class="form-group">
@@ -37,7 +58,7 @@
           <button id="btSair" type="button">Sair</button>
         </div>
 
-        <div id="divDialogo" class="form-group hidden">
+        <div id="divDialogo" class="form-group hidden" style="display: flex; gap: 1rem">
           <button id="btOk" type="button">Ok</button>
           <button id="btCancelar" type="button">Cancelar</button>
         </div>
@@ -52,6 +73,6 @@
       renderSidebar();
     </script>
 
-    <script type="module" src="/controller/CtrlManterMesas.js"></script>
+    <script type="module" src="/controller/CtrlManterComandas.js"></script>
   </body>
 </html>

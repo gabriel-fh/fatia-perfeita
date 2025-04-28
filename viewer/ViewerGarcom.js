@@ -8,7 +8,6 @@ export default class ViewerGarcom {
   constructor(ctrl) {
     this.#ctrl = ctrl;
 
-    this.divNavegar = this.obterElemento('divNavegar');
     this.divComandos = this.obterElemento('divComandos');
     this.divAviso = this.obterElemento('divAviso');
     this.divDialogo = this.obterElemento('divDialogo');
@@ -89,7 +88,6 @@ export default class ViewerGarcom {
   }
 
   statusEdicao(operacao) {
-    this.divNavegar.hidden = true;
     this.divComandos.hidden = true;
     this.divDialogo.hidden = false;
   
@@ -117,7 +115,6 @@ export default class ViewerGarcom {
   
 
   statusApresentacao() {
-    this.divNavegar.hidden = false;
     this.divComandos.hidden = false;
     this.divDialogo.hidden = true;
     this.tfMatricula.disabled = true;
