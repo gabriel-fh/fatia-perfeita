@@ -66,6 +66,33 @@ export default class DaoProduto {
     });
   }
 
+  async obterProdutoPeloCodigo(codigo) {
+    let connectionDB = await this.obterConexao();
+    return new Promise((resolve) => {
+      let dbRefCurso = ref(connectionDB, 'produtos/' + codigo);
+      let consulta = query(dbRefCurso);
+      let resultPromise = get(consulta);
+      resultPromise.then(dataSnapshot => {
+        let produtoSnap = dataSnapshot.val();
+        if (produtoSnap != null) {
+          resolve(
+            new Produto(
+              produtoSnap.codigo,
+              produtoSnap.nome, 
+              produtoSnap.imagem,
+              produtoSnap.descricao, 
+              produtoSnap.tipo,
+              produtoSnap.preco_base,
+              produtoSnap.situacao,
+            )
+          );
+        }
+        else
+          resolve(null);
+      });
+    });
+  }
+
   async incluir(produto) {
     let connectionDB = await this.obterConexao();
     let resultado = new Promise((resolve, reject) => {
@@ -87,29 +114,29 @@ export default class DaoProduto {
   }
 
   async alterar(produto) {
-    let connectionDB = await this.obterConexao();    
-    return new Promise( (resolve, reject) => {
-      let dbRefProdutos = ref(connectionDB,'produtos');
-      runTransaction(dbRefProdutos, (produtos) => {  
-        let dbRefProdutoAlterado = child(dbRefProdutos,produto.getSigla());
-        let setPromise = set(dbRefProdutoAlterado,produto);
+    let connectionDB = await this.obterConexao();
+    return new Promise((resolve, reject) => {
+      let dbRefProdutos = ref(connectionDB, 'produtos');
+      runTransaction(dbRefProdutos, (produtos) => {
+        let dbRefProdutoAlterado = child(dbRefProdutos, produto.getSigla());
+        let setPromise = set(dbRefProdutoAlterado, produto);
         setPromise
-          .then( value => {resolve(true)})
-          .catch((e) => {console.log("#ERRO: " + e);resolve(false);});
+          .then(value => { resolve(true) })
+          .catch((e) => { console.log("#ERRO: " + e); resolve(false); });
       });
     });
   }
 
   async excluir(produto) {
-    let connectionDB = await this.obterConexao();    
-    return new Promise( (resolve, reject) => {
-      let dbRefProdutos = ref(connectionDB,'produtos');
-      runTransaction(dbRefProdutos, (produtos) => {      
-        let dbRefExcluirProduto = child(dbRefProdutos,produto.getCodigo());
-        let setPromise = remove(dbRefExcluirProduto,produtos);
+    let connectionDB = await this.obterConexao();
+    return new Promise((resolve, reject) => {
+      let dbRefProdutos = ref(connectionDB, 'produtos');
+      runTransaction(dbRefProdutos, (produtos) => {
+        let dbRefExcluirProduto = child(dbRefProdutos, produto.getCodigo());
+        let setPromise = remove(dbRefExcluirProduto, produtos);
         setPromise
-          .then( value => {resolve(true)})
-          .catch((e) => {console.log("#ERRO: " + e);resolve(false);});
+          .then(value => { resolve(true) })
+          .catch((e) => { console.log("#ERRO: " + e); resolve(false); });
       });
     });
   }

@@ -33,11 +33,11 @@ export default class CtrlManterProdutos {
     }
   }
 
-  async alterar(id, nome, preco, imagemURL) {
+  async alterar(codigo, nome, preco, imagemURL) {
     try {
-      let produto = await this.#daoProduto.obterProdutoPeloId(id);
+      let produto = await this.#daoProduto.obterProdutoPeloId(codigo);
       if (!produto) {
-        alert(`Produto com ID ${id} não encontrado.`);
+        alert(`Produto com codigo ${codigo} não encontrado.`);
       } else {
         produto.setNome(nome);
         produto.setPreco(preco);
@@ -50,11 +50,11 @@ export default class CtrlManterProdutos {
     }
   }
 
-  async excluir(id) {
+  async excluir(codigo) {
     try {
-      let produto = await this.#daoProduto.obterProdutoPeloId(id);
+      let produto = await this.#daoProduto.obterProdutoPeloCodigo(codigo);
       if (!produto) {
-        alert(`Produto com ID ${id} não encontrado.`);
+        alert(`Produto com codigo ${codigo} não encontrado.`);
       } else {
         await this.#daoProduto.excluir(produto);
       }
