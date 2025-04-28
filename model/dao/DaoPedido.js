@@ -38,6 +38,7 @@ export default class DaoPedido {
           let pedidoSnap = dataSnapshotObj.val();
           let daoComanda = new DaoComanda();
           let comanda = daoComanda.obterComandaPeloCodigo(pedidoSnap.comanda);
+          let produtos = this.obterProdutosDoPedido(codigo);
 
 
           conjPedidos.push(
@@ -45,7 +46,8 @@ export default class DaoPedido {
               pedidoSnap.codigo,
               pedidoSnap.dataHora,
               pedidoSnap.situacao,
-              comanda
+              comanda,
+              produtos
             )
           );
         });
@@ -66,13 +68,15 @@ export default class DaoPedido {
         if (pedidoSnap != null) {
           let daoComanda = new DaoComanda();
           let comanda = daoComanda.obterComandaPeloCodigo(pedidoSnap.comanda);
+          let produtos = this.obterProdutosDoPedido(codigo);
 
           resolve(
             new Pedido(
               pedidoSnap.codigo,
               pedidoSnap.dataHora,
               pedidoSnap.situacao,
-              comanda
+              comanda,
+              produtos
             )
           );
         }
@@ -82,15 +86,76 @@ export default class DaoPedido {
     });
   }
 
+  async obterProdutosDoPedido(codigoPedido) {
+    let connectionDB = await this.obterConexao();
+    return new Promise((resolve, reject) => {
+      let dbRefProdutosPedidos = ref(connectionDB, 'produtos_pedidos');
+      let consulta = query(dbRefProdutosPedidos, orderByChild('pedido'), equalTo(codigoPedido));
+      let resultPromise = get(consulta);
+
+      resultPromise.then(dataSnapshot => {
+        let produtosPedido = [];
+
+        if (dataSnapshot.exists()) {
+          dataSnapshot.forEach(snapshot => {
+            let produtoPedidoSnap = snapshot.val();
+
+            // Instancia corretamente ProdutoPedido
+            let produtoPedido = new ProdutoPedido(
+              produtoPedidoSnap.pedido,
+              produtoPedidoSnap.produto,
+              produtoPedidoSnap.quantidade,
+              produtoPedidoSnap.preco
+            );
+
+            produtosPedido.push(produtoPedido);
+          });
+        }
+
+        resolve(produtosPedido);
+      }).catch((erro) => {
+        console.log("#ERRO ao obter produtos do pedido: " + erro);
+        reject([]);
+      });
+    });
+  }
+
+
   async incluir(pedido) {
     let connectionDB = await this.obterConexao();
     let resultado = new Promise((resolve, reject) => {
       let dbRefPedidos = ref(connectionDB, 'pedidos');
+
       runTransaction(dbRefPedidos, async (pedidos) => {
-        let dbRefNovaPedido;
-        pedido.comanda = pedido.comanda.getCodigo();
-        let setPromise = set(dbRefNovaPedido, pedido);
-        setPromise.then(value => { resolve(true) }, erro => { reject(erro) });
+        try {
+          let dbRefNovaPedido = push(dbRefPedidos);
+
+          let pedidoParaSalvar = {
+            ...pedido,
+            comanda: pedido.comanda.getCodigo ? pedido.comanda.getCodigo() : pedido.comanda,
+            produtos: undefined
+          };
+
+          await set(dbRefNovaPedido, pedidoParaSalvar);
+
+          let dbRefProdutosPedidos = ref(connectionDB, 'produtos_pedidos');
+          for (let produto of pedido.getProdutos()) {
+            let produtoPedido = {
+              pedido: produto.getPedido(),
+              produto: produto.getCodigo(),
+              quantidade: produto.quantidade || 1,
+              preco: produto.preco || 0
+            };
+
+            let dbRefNovoProdutoPedido = push(dbRefProdutosPedidos);
+            await set(dbRefNovoProdutoPedido, produtoPedido);
+          }
+
+          resolve(true);
+
+        } catch (erro) {
+          reject(erro);
+        }
       });
     });
     return resultado;
