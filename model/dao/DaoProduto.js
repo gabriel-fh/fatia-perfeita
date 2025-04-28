@@ -65,23 +65,6 @@ export default class DaoProduto {
     });
   }
 
-  async incluir(produto) {
-    let connectionDB = await this.obterConexao();
-    return new Promise((resolve, reject) => {
-      const dbRefProduto = ref(connectionDB, `produtos/${produto.getCodigo()}`);
-      set(dbRefProduto, {
-        codigo: produto.getCodigo(),
-        nome: produto.getNome(),
-        imagem: produto.getImagem(),
-        descricao: produto.getDescricao(),
-        tipo: produto.getTipo(),
-        preco_base: produto.getPrecoBase(),
-        situacao: produto.getSituacao(),
-      })
-        .then(() => resolve(true))
-        .catch((error) => reject(error));
-    });
-  }
 
   async incluir(curso) {
     let connectionDB = await this.obterConexao();    
