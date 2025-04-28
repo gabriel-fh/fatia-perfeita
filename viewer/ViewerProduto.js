@@ -52,6 +52,34 @@ export default class ViewerProduto {
     this.#adicionarEventosAcoes();
   }
 
+  async #incluirProduto() {
+    const produto = new ProdutoDTO(
+      this.tfCodigo.value,
+      this.tfNome.value,
+      this.tfImagem.value,
+      this.tfDescricao.value,
+      this.tfTipo.value,
+      parseFloat(this.tfPrecoBase.value),
+      this.cbSituacao.value
+    );
+
+    try {
+      await this.#ctrl.incluir(
+        produto.codigo,
+        produto.nome,
+        produto.imagem,
+        produto.descricao,
+        produto.tipo,
+        produto.precoBase,
+        produto.situacao
+      );
+      this.limparFormulario();
+      this.modal.classList.add("hidden");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   #adicionarEventosAcoes() {
     this.tbody.querySelectorAll(".btn-editar").forEach((btn) => {
       btn.addEventListener("click", (event) => {
