@@ -1,9 +1,10 @@
 import ModelError from "./ModelError.js";
 import Comanda from "./Comanda.js";
+import Usuario from "./Usuario.js";
 
 export default class Mesa extends Usuario {
-  constructor(numero, situacao) {
-    super("Mesa", `mesafatiaperfeita${numero}@email.com`, "MESA");
+  constructor(uid, numero, situacao) {
+    super("Mesa", `mesafatiaperfeita${numero}@email.com`, uid, "MESA");
     this.setNumero(numero);
     this.setSituacao(situacao);
     this.comandas = [];

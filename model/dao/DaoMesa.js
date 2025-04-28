@@ -27,34 +27,39 @@ export default class DaoMesa {
 
   async obterMesas() {
     let connectionDB = await this.obterConexao();
+
     return new Promise((resolve) => {
       let conjMesas = [];
-      let dbRefMesas = ref(connectionDB, "mesas");
-      let consulta = query(dbRefMesas, orderByChild("numero"));
+      let dbRefUsuarios = ref(connectionDB, 'usuarios');
+      let paramConsulta = orderByChild('funcao');
+      let consulta = query(dbRefUsuarios, paramConsulta);
       let resultPromise = get(consulta);
 
       resultPromise.then(dataSnapshot => {
         dataSnapshot.forEach(dataSnapshotObj => {
           let elem = dataSnapshotObj.val();
-          let mesa = new Mesa(
-            elem.numero,
-            elem.situacao
-          );
-          conjMesas.push(mesa);
+          if (elem.funcao === "MESA") {
+            conjMesas.push(new Mesa(elem.uid, elem.numero, elem.situacao));
+          }
         });
         resolve(conjMesas);
-      }).catch(e => {
+      }).catch((e) => {
         console.error("#ERRO: " + e);
         resolve([]);
       });
     });
   }
 
+
   async incluir(mesa) {
     let connectionDB = await this.obterConexao();
     return new Promise((resolve, reject) => {
-      const dbRefMesa = ref(connectionDB, `mesas/${mesa.getNumero()}`);
-      set(dbRefMesa, {
+      const dbRefUsuario = ref(connectionDB, `usuarios/${mesa.getUid()}`);
+      set(dbRefUsuario, {
+        uid: mesa.getUid(),
+        nome: `Mesa ${mesa.getNumero()}`,
+        email: `mesa${mesa.getNumero()}@email.com`,
+        funcao: "MESA",
         numero: mesa.getNumero(),
         situacao: mesa.getSituacao()
       }).then(() => resolve(true))
@@ -65,8 +70,12 @@ export default class DaoMesa {
   async alterar(mesa) {
     let connectionDB = await this.obterConexao();
     return new Promise((resolve, reject) => {
-      const dbRefMesa = ref(connectionDB, `mesas/${mesa.getNumero()}`);
-      set(dbRefMesa, {
+      const dbRefUsuario = ref(connectionDB, `usuarios/${mesa.getUid()}`);
+      set(dbRefUsuario, {
+        uid: mesa.getUid(),
+        nome: `Mesa ${mesa.getNumero()}`,
+        email: `mesa${mesa.getNumero()}@email.com`,
+        funcao: "MESA",
         numero: mesa.getNumero(),
         situacao: mesa.getSituacao()
       }).then(() => resolve(true))
@@ -77,8 +86,8 @@ export default class DaoMesa {
   async excluir(mesa) {
     let connectionDB = await this.obterConexao();
     return new Promise((resolve, reject) => {
-      const dbRefMesa = ref(connectionDB, `mesas/${mesa.getNumero()}`);
-      remove(dbRefMesa)
+      const dbRefUsuario = ref(connectionDB, `usuarios/${mesa.getUid()}`);
+      remove(dbRefUsuario)
         .then(() => resolve(true))
         .catch(error => reject(error));
     });

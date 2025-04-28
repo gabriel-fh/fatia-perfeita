@@ -97,9 +97,9 @@ export default class Produto {
   }
 
   static validarTipo(tipo) {
-    const tiposValidos = ["ALIMENTO", "BEBIDA", "OUTROS"];
+    const tiposValidos = ["DELIVERY", "BEBIDA", "OUTROS"];
     if (!tiposValidos.includes(tipo)) {
-      throw new ModelError("Tipo inválido. O tipo deve ser um dos seguintes: ALIMENTO, BEBIDA, OUTROS.");
+      throw new ModelError("Tipo inválido. O tipo deve ser um dos seguintes: DELIVERY, BEBIDA, OUTROS.");
     }
   }
 

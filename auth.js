@@ -18,29 +18,28 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app); // Obtém a referência ao banco de dados
 
-const getLoggedUser = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (user) {
-    const uid = user.uid;
-    const userRef = ref(db, `usuarios/${uid}`);
+const user = JSON.parse(localStorage.getItem("user"));
+if (user) {
+  const uid = user.uid;
+  const userRef = ref(db, `usuarios/${uid}`);
+  // const userRef = ref(db, `usuarios/lO5TUYCUvyZap0C10XDwEda5mx22`);
 
-    get(userRef)
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          return snapshot.val();
-        } else {
-          console.log("Nenhum dado encontrado para o usuário.");
-        }
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar dados:", error);
-      });
-  } else {
-    console.log("Nenhum usuário logado encontrado.");
-  }
+  get(userRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log("Dados do usuário:", snapshot.val());
+      } else {
+        console.log("Nenhum dado encontrado para o usuário.");
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados:", error);
+    });
+} else {
+  console.log("Nenhum usuário logado encontrado.");
 }
 
-
+// Função para fazer login
 const signInUser = (email, password) => {
   const form = document.getElementById("login-form");
   const hiddenElements = document.querySelectorAll(".hidden");
