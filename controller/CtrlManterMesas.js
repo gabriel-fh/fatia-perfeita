@@ -1,10 +1,8 @@
 "use strict";
 
-import Produto from "/model/Produto.js"; // Um model Produto
-import Mesa from "/model/Mesa.js"; // Um model Produto
-import ProdutoDTO from "/model/ProdutoDTO.js"; // Um DTO se precisar
-import daoMesa from "/model/dao/daoMesa.js"; // DAO para produtos
-import ViewerProduto from "/viewer/ViewerProduto.js"; // Viewer que mostra na tela
+import Mesa from "/model/Mesa.js"; 
+import daoMesa from "/model/dao/daoMesa.js"; 
+import ViewerMesa from "/viewer/ViewerMesa.js"; // Viewer que mostra na tela
 
 export default class CtrlManterMesas {
   #daoMesa;
@@ -12,7 +10,7 @@ export default class CtrlManterMesas {
 
   constructor() {
     this.#daoMesa = new daoMesa();
-    this.#viewer = new ViewerProduto(this);
+    this.#viewer = new ViewerMesa(this);
     this.#atualizarContextoNavegacao();
   }
 
