@@ -43,7 +43,6 @@ export default class DaoProduto {
 
       resultPromise
         .then((dataSnapshot) => {
-          console.log(dataSnapshot);
           dataSnapshot.forEach((dataSnapshotObj) => {
             let elem = dataSnapshotObj.val();
             let produto = new Produto(
