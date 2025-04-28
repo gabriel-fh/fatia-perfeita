@@ -4,25 +4,26 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebas
 import {
   getAuth,
   signInWithEmailAndPassword,
-  browserSessionPersistence,
-  onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 
 import DaoUsuario from "/model/dao/DaoUsuario.js";
 import Usuario from "/model/Usuario.js";
+
 import CtrlManterProdutos from "/controller/CtrlManterProdutos.js";
 import CtrlManterGarcons from "/controller/CtrlManterGarcons.js";
 import CtrlManterMesas from "/controller/CtrlManterMesas.js";
+// import CtrlPedidos from "/controller/CtrlPedidos.js";
+// import CtrlComandas from "/controller/CtrlComandas.js";
 
-import ModelError from "../model/ModelError.js";
+import ModelError from "/model/ModelError.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD83f2LeSDIuVWBFUnu_jHOzshsjDkF5iI",
   authDomain: "fatia-perfeita.firebaseapp.com",
   databaseURL: "https://fatia-perfeita-default-rtdb.firebaseio.com",
   projectId: "fatia-perfeita",
-  storageBucket: "fatia-perfeita.firebasestorage.app",
+  storageBucket: "fatia-perfeita.appspot.com",
   messagingSenderId: "470134118547",
   appId: "1:470134118547:web:57d1e244064470e9079566",
   measurementId: "G-57F0MG0EYV",
@@ -30,65 +31,42 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getDatabase(app); // Obtém a referência ao banco de dados
+const db = getDatabase(app);
 
 export default class CtrlSessao {
   #daoUsuario;
 
-  //-----------------------------------------------------------------------------------------//
   constructor() {
     this.init();
   }
 
-  //-----------------------------------------------------------------------------------------//
-
   async init() {
     try {
       this.usuario = await this.verificandoLogin();
-      // Observe abaixo que temos um problema de ACOPLAMENTO, pois se
-      // precisarmos acrescentar um novo controlador de caso de uso, precisaremos
-      // abrir esse arquivo para alteração. O melhor seria implementar um
-      // mecanismo de INJEÇÃO DE DEPENDÊNCIA.
-      if (document.URL.includes("produtos.html")) this.ctrlAtual = new CtrlManterProdutos();
-      else if (document.URL.includes("garcons.html")) this.ctrlAtual = new CtrlManterGarcons();
-      else if (document.URL.includes("mesas.html")) this.ctrlAtual = new CtrlManterMesas();
-      else if (document.URL.includes("pedidos.html")) this.ctrlAtual = new CtrlPedidos();
-      else if (document.URL.includes("comandas.html")) this.ctrlAtual = new CtrlComandas();
-      else if (document.URL.includes("index.html")) this.ctrlAtual = await this.login();
+
+      // Mapeamento das telas e seus controladores
+      if (document.URL.includes("produtos.html"))
+        this.ctrlAtual = new CtrlManterProdutos();
+      else if (document.URL.includes("garcons.html"))
+        this.ctrlAtual = new CtrlManterGarcons();
+      else if (document.URL.includes("mesas.html"))
+        this.ctrlAtual = new CtrlManterMesas();
+    //   else if (document.URL.includes("pedidos.html"))
+    //     this.ctrlAtual = new CtrlPedidos();
+    //   else if (document.URL.includes("comandas.html"))
+    //     this.ctrlAtual = new CtrlComandas();
+      else if (document.URL.includes("index.html"))
+        this.configurarLogin();
     } catch (e) {
       alert(e);
     }
   }
 
-  //-----------------------------------------------------------------------------------------//
+  async configurarLogin() {
+    const formLogin = document.getElementById("login-form");
+    if (!formLogin) return; // se não estiver na tela de login, não faz nada
 
-  async login() {
-    this.usuario = await this.verificandoLogin();
-    if (this.usuario) {
-      window.location.href = "/paginas/inicio.html";
-      return;
-    }
-
-    //-----------------------------------------------------------------------------------------//  
-
-    async init() {
-        try {
-            this.usuario = await this.verificandoLogin();
-            // Observe abaixo que temos um problema de ACOPLAMENTO, pois se 
-            // precisarmos acrescentar um novo controlador de caso de uso, precisaremos
-            // abrir esse arquivo para alteração. O melhor seria implementar um 
-            // mecanismo de INJEÇÃO DE DEPENDÊNCIA.     
-            if (document.URL.includes("produtos.html"))
-                this.ctrlAtual = new CtrlManterProdutos();
-            else if (document.URL.includes("garcons.html"))
-                this.ctrlAtual = new CtrlManterGarcons();
-            else if (document.URL.includes("mesas.html"))
-                this.ctrlAtual = new CtrlManterMesas();
-            // else if (document.URL.includes("index.html"))
-            //     this.ctrlAtual = new CtrlManterProdutos();
-        } catch (e) {
-            alert(e);
-    document.getElementById("login-form").addEventListener("submit", async (event) => {
+    formLogin.addEventListener("submit", async (event) => {
       event.preventDefault();
 
       const email = document.getElementById("email").value;
@@ -98,7 +76,7 @@ export default class CtrlSessao {
         const userCredential = await signInWithEmailAndPassword(auth, email, senha);
         const user = userCredential.user;
         localStorage.setItem("user", JSON.stringify(user));
-        console.log("Usuário logado: ", user);
+        console.log("Usuário logado:", user);
         window.location.href = "/paginas/inicio.html";
       } catch (error) {
         console.error("Erro ao fazer login:", error);
@@ -118,61 +96,22 @@ export default class CtrlSessao {
         if (snapshot.exists()) {
           return snapshot.val();
         } else {
-          window.location.href = "index.html";
-          alert("Erro ao buscar dados do usuário: " + error.message);
+          alert("Usuário não encontrado no banco.");
           localStorage.removeItem("user");
+          window.location.href = "/index.html";
         }
       } catch (error) {
-        window.location.href = "index.html";
         alert("Erro ao buscar dados do usuário: " + error.message);
         localStorage.removeItem("user");
+        window.location.href = "/index.html";
       }
     } else {
-      window.location.href = "/index.html";
+      if (!document.URL.includes("index.html")) {
+        window.location.href = "/index.html";
+      }
     }
-
-    // return new Promise((resolve, reject) => {
-    //   onAuthStateChanged(auth, async (user) => {
-    //     if (user) {
-    //       this.#daoUsuario = new DaoUsuario();
-    //       let usrSistema = await this.#daoUsuario.obterUsuarioPeloUID(user.uid);
-
-    //       if (usrSistema) {
-    //         resolve(user);
-    //       } else {
-    //         reject("Usuário inexistente.");
-    //       }
-    //     } else {
-    //       reject("Você não realizou a autenticação!");
-    //     }
-    //   });
-    // });
   }
-
-  // async getLoggedUser() {
-  //     return new Promise(async (resolve, reject) => {
-  //         const user = JSON.parse(localStorage.getItem("user"));
-
-  //         if (user) {
-  //             const uid = user.uid;
-  //             const userRef = ref(db, `usuarios/${uid}`);
-
-  //             try {
-  //                 const snapshot = await get(userRef);
-  //                 if (snapshot.exists()) {
-  //                     resolve(snapshot.val());
-  //                 } else {
-  //                     reject('Nenhum dado encontrado para o usuário.');
-  //                 }
-  //             } catch (error) {
-  //                 reject(error);
-  //             }
-  //         } else {
-  //             reject('Nenhum usuário logado encontrado');
-  //         }
-  //     });
-  // };
 }
 
-//------------------------------------------------------------------------//
+// Instancia a sessão ao carregar a página
 new CtrlSessao();
