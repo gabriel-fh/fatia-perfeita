@@ -1,13 +1,20 @@
 "use strict";
 
-import { getDatabase, ref, query, orderByChild, get, set, remove, runTransaction }
-  from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  query,
+  orderByChild,
+  get,
+  set,
+  remove,
+  runTransaction,
+} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 
 import Produto from "/model/Produto.js";
 import ModelError from "/model/ModelError.js";
 
 export default class DaoProduto {
-
   static promessaConexao = null;
 
   constructor() {
@@ -33,24 +40,28 @@ export default class DaoProduto {
       let consulta = query(dbRefProdutos, orderByChild("codigo"));
       let resultPromise = get(consulta);
 
-      resultPromise.then(dataSnapshot => {
-        dataSnapshot.forEach(dataSnapshotObj => {
-          let elem = dataSnapshotObj.val();
-          let produto = new Produto(
-            elem.nome,          // nome
-            elem.imagem,        // imagem
-            elem.descricao,     // descricao
-            elem.tipo,          // tipo
-            elem.preco_base,    // precoBase
-            elem.situacao       // situacao
-          );
-          conjProdutos.push(produto);
+      resultPromise
+        .then((dataSnapshot) => {
+          console.log(dataSnapshot);
+          dataSnapshot.forEach((dataSnapshotObj) => {
+            let elem = dataSnapshotObj.val();
+            let produto = new Produto(
+              elem.codigo, // codigo
+              elem.nome, // nome
+              elem.imagem, // imagem
+              elem.descricao, // descricao
+              elem.tipo, // tipo
+              elem.preco_base, // precoBase
+              elem.situacao // situacao
+            );
+            conjProdutos.push(produto);
+          });
+          resolve(conjProdutos);
+        })
+        .catch((e) => {
+          console.error("#ERRO: " + e);
+          resolve([]);
         });
-        resolve(conjProdutos);
-      }).catch(e => {
-        console.error("#ERRO: " + e);
-        resolve([]);
-      });
     });
   }
 
@@ -65,9 +76,10 @@ export default class DaoProduto {
         descricao: produto.getDescricao(),
         tipo: produto.getTipo(),
         preco_base: produto.getPrecoBase(),
-        situacao: produto.getSituacao()
-      }).then(() => resolve(true))
-        .catch(error => reject(error));
+        situacao: produto.getSituacao(),
+      })
+        .then(() => resolve(true))
+        .catch((error) => reject(error));
     });
   }
 
@@ -82,9 +94,10 @@ export default class DaoProduto {
         descricao: produto.getDescricao(),
         tipo: produto.getTipo(),
         preco_base: produto.getPrecoBase(),
-        situacao: produto.getSituacao()
-      }).then(() => resolve(true))
-        .catch(error => reject(error));
+        situacao: produto.getSituacao(),
+      })
+        .then(() => resolve(true))
+        .catch((error) => reject(error));
     });
   }
 
@@ -94,7 +107,7 @@ export default class DaoProduto {
       const dbRefProduto = ref(connectionDB, `produtos/${produto.getCodigo()}`);
       remove(dbRefProduto)
         .then(() => resolve(true))
-        .catch(error => reject(error));
+        .catch((error) => reject(error));
     });
   }
 }
