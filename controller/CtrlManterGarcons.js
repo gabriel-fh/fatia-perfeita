@@ -3,6 +3,8 @@
 import DaoGarcom from "../model/dao/DaoGarcom.js";
 import ViewerGarcom from "../viewer/ViewerGarcom.js";
 import Garcom from "../model/Garcom.js";
+import { criarUsuario } from "../util/CriarUsuario.js";
+import Usuario from "../model/Usuario.js";
 
 export default class CtrlManterGarcons {
   #daoGarcom;
@@ -20,10 +22,13 @@ export default class CtrlManterGarcons {
     this.#viewer.carregarGarcons(garcons);
   }
 
-  async incluir(uid, nome, email, situacao) {
+  async incluir(nome, email, senha, situacao) {
     try {
-      let produto = new Garcom(uid, nome, email, situacao);
-      await this.#daoGarcom.incluir(produto);
+      Usuario.validarEmail(email);
+      Usuario.validarSenha(senha);
+      const user = await criarUsuario(email, senha);
+      let garcom = new Garcom(user.uid, nome, email, situacao);
+      await this.#daoGarcom.incluir(garcom);
       this.#atualizarContextoNavegacao();
     } catch (e) {
       console.log(e);

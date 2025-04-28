@@ -10,6 +10,7 @@ export default class ViewerGarcom {
     // this.matricula = document.getElementById("tfMatricula");
     this.nome = document.getElementById("tfNome");
     this.email = document.getElementById("tfEmail");
+    this.senha = document.getElementById("tfSenha");
     // this.horaInicio = document.getElementById("tfHoraInicio");
     // this.horaFim = document.getElementById("tfHoraFim");
     this.situacao = document.getElementById("cbSituacao");
@@ -57,16 +58,13 @@ export default class ViewerGarcom {
   async incluirGarcom() {
     try {
       await this.#ctrl.incluir(
-        this.tfCodigo.value,
-        this.tfNome.value,
-        this.tfImagem.value,
-        this.tfDescricao.value,
-        this.tfTipo.value,
-        this.tfpreco_base.value,
-        this.cbSituacao.value
+        this.nome.value,
+        this.email.value,
+        this.senha.value,
+        this.situacao.value,
       );
       this.limparFormulario();
-      this.modal.classList.add("hidden");
+      // this.modal.classList.add("hidden");
     } catch (error) {
       console.error(error);
     }
@@ -117,6 +115,7 @@ export default class ViewerGarcom {
   limparFormulario() {
     this.nome.value = "";
     this.email.value = "";
+    this.senha.value = "";
     // this.matricula.value = "";
     // this.horaInicio.value = "";
     // this.horaFim.value = "";

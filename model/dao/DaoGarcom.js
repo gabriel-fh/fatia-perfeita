@@ -1,7 +1,16 @@
 "use strict";
 
-import { getDatabase, ref, query, orderByChild, get, set, remove }
-  from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  query,
+  child,
+  orderByChild,
+  get,
+  set,
+  remove,
+  runTransaction,
+} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 
 import Garcom from "/model/Garcom.js";
 import ModelError from "/model/ModelError.js";
@@ -50,13 +59,13 @@ export default class DaoGarcom {
     });
   }
 
-  async incluir(produto) {
+  async incluir(garcom) {
     let connectionDB = await this.obterConexao();
     let resultado = new Promise((resolve, reject) => {
-      let dbRefProdutos = ref(connectionDB, "usuarios");
-      runTransaction(dbRefProdutos, (produtos) => {
-        let dbRefNovoProduto = child(dbRefProdutos, produto.getCodigo());
-        let setPromise = set(dbRefNovoProduto, produto);
+      let dbRefGarcons = ref(connectionDB, "garcons");
+      runTransaction(dbRefGarcons, (produtos) => {
+        let dbRefNovoGarcom = child(dbRefGarcons, garcom.getUid());
+        let setPromise = set(dbRefNovoGarcom, garcom);
         setPromise
           .then((value) => {
             resolve(true);
@@ -79,9 +88,6 @@ export default class DaoGarcom {
         nome: garcom.getNome(),
         email: garcom.getEmail(),
         funcao: "GARCOM",
-        matricula: garcom.getMatricula(),
-        horaInicio: garcom.getHoraInicio(),
-        horaFim: garcom.getHoraFim(),
         situacao: garcom.getSituacao()
       }).then(() => resolve(true))
         .catch(error => reject(error));
