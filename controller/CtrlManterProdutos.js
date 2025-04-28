@@ -28,20 +28,23 @@ export default class CtrlManterProdutos {
       this.#atualizarContextoNavegacao();
     } catch (e) {
       console.log(e);
-      
+
       alert(e);
     }
   }
 
-  async alterar(id, nome, preco, imagemURL) {
+  async alterar(codigo, nome, imagem, descricao, tipo, preco_base, situacao) {
     try {
-      let produto = await this.#daoProduto.obterProdutoPeloId(id);
+      let produto = await this.#daoProduto.obterProdutoPeloCodigo(codigo);
       if (!produto) {
-        alert(`Produto com ID ${id} não encontrado.`);
+        alert(`Produto com codigo ${codigo} não encontrado.`);
       } else {
         produto.setNome(nome);
-        produto.setPreco(preco);
-        produto.setImagemURL(imagemURL);
+        produto.setImagem(imagem);
+        produto.setDescricao(descricao);
+        produto.setTipo(tipo);
+        produto.setPrecoBase(Number(preco_base));
+        produto.setSituacao(situacao);
         await this.#daoProduto.alterar(produto);
       }
       this.#atualizarContextoNavegacao();
@@ -50,11 +53,11 @@ export default class CtrlManterProdutos {
     }
   }
 
-  async excluir(id) {
+  async excluir(codigo) {
     try {
-      let produto = await this.#daoProduto.obterProdutoPeloId(id);
+      let produto = await this.#daoProduto.obterProdutoPeloCodigo(codigo);
       if (!produto) {
-        alert(`Produto com ID ${id} não encontrado.`);
+        alert(`Produto com codigo ${codigo} não encontrado.`);
       } else {
         await this.#daoProduto.excluir(produto);
       }

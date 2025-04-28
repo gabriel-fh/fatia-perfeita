@@ -5,6 +5,8 @@ import { getDatabase, ref, query, orderByChild, get, set, remove, runTransaction
 
 import Comanda from "/model/Comanda.js";
 import ModelError from "/model/ModelError.js";
+import DaoMesa from "./DaoMesa";
+import DaoGarcom from "./DaoGarcom";
 
 export default class DaoComanda {
 
@@ -29,70 +31,120 @@ export default class DaoComanda {
     let connectionDB = await this.obterConexao();
     return new Promise((resolve) => {
       let conjComandas = [];
-      let dbRefComandas = ref(connectionDB, "comandas");
-      let consulta = query(dbRefComandas, orderByChild("codigo"));
+      let dbRefComandas = ref(connectionDB, 'comandas');
+      let consulta = query(dbRefComandas);
       let resultPromise = get(consulta);
-
       resultPromise.then(dataSnapshot => {
         dataSnapshot.forEach(dataSnapshotObj => {
-          let elem = dataSnapshotObj.val();
-          let comanda = new Comanda(
-            elem.codigo,
-            elem.subtotal,
-            elem.total,
-            elem.taxa_servico,
-            elem.situacao,
-            elem.data_hora
+          let comandaSnap = dataSnapshotObj.val();
+          let daoMesa = new DaoMesa();
+          let mesa = daoMesa.obterMesaPeloId(comandaSnap.mesa);
+
+          let daoGarcom = new DaoGarcom();
+          let garcom = daoGarcom.obterGarcomPeloId(comandaSnap.garcom);
+
+
+          conjComandas.push(
+            new Comanda(
+              comandaSnap.codigo,
+              comandaSnap.subtotal,
+              comandaSnap.total,
+              comandaSnap.taxaServico,
+              comandaSnap.dataHora,
+              mesa,
+              garcom
+            )
           );
-          conjComandas.push(comanda);
         });
         resolve(conjComandas);
-      }).catch(e => {
-        console.error("#ERRO: " + e);
-        resolve([]);
+      }).catch((e) => { console.log("#ERRO: " + e); resolve([]) });
+    });
+  }
+
+  async obterComandaPeloCodigo(codigo) {
+    let connectionDB = await this.obterConexao();
+    return new Promise((resolve) => {
+      let dbRefComandas = ref(connectionDB, 'comandas');
+      let paramConsulta = orderByChild('codigo').equalTo(codigo);
+      let consulta = query(dbRefComandas, paramConsulta);
+      let resultPromise = get(consulta);
+      resultPromise.then(dataSnapshot => {
+        let comandaSnap = dataSnapshot.val();
+        if (comandaSnap != null) {
+          let daoMesa = new DaoMesa();
+          let mesa = daoMesa.obterMesaPeloId(comandaSnap.mesa);
+
+          let daoGarcom = new DaoGarcom();
+          let garcom = daoGarcom.obterGarcomPeloId(comandaSnap.garcom);
+
+          resolve(
+            new Comanda(
+              new Comanda(
+                comandaSnap.codigo,
+                comandaSnap.subtotal,
+                comandaSnap.total,
+                comandaSnap.taxaServico,
+                comandaSnap.dataHora,
+                mesa,
+                garcom
+              )
+            )
+          );
+        }
+        else
+          resolve(null);
       });
     });
   }
 
   async incluir(comanda) {
     let connectionDB = await this.obterConexao();
-    return new Promise((resolve, reject) => {
-      const dbRefComanda = ref(connectionDB, `comandas/${comanda.getCodigo()}`);
-      set(dbRefComanda, {
-        codigo: comanda.getCodigo(),
-        subtotal: comanda.getSubtotal(),
-        total: comanda.getTotal(),
-        taxa_servico: comanda.getTaxaServico(),
-        situacao: comanda.getSituacao(),
-        data_hora: comanda.getDataHora()
-      }).then(() => resolve(true))
-        .catch(error => reject(error));
+    let resultado = new Promise((resolve, reject) => {
+      let dbRefComandas = ref(connectionDB, 'comandas');
+      runTransaction(dbRefComandas, async (comandas) => {
+        let dbRefNovaComanda;
+        comanda.mesa = comanda.mesa.getUid();
+        comanda.garcom = comanda.garcom.getUid();
+        let setPromise = set(dbRefNovaComanda, comanda);
+        setPromise.then(value => { resolve(true) }, erro => { reject(erro) });
+      });
     });
+    return resultado;
   }
+
+  //-----------------------------------------------------------------------------------------//
 
   async alterar(comanda) {
     let connectionDB = await this.obterConexao();
-    return new Promise((resolve, reject) => {
-      const dbRefComanda = ref(connectionDB, `comandas/${comanda.getCodigo()}`);
-      set(dbRefComanda, {
-        codigo: comanda.getCodigo(),
-        subtotal: comanda.getSubtotal(),
-        total: comanda.getTotal(),
-        taxa_servico: comanda.getTaxaServico(),
-        situacao: comanda.getSituacao(),
-        data_hora: comanda.getDataHora()
-      }).then(() => resolve(true))
-        .catch(error => reject(error));
+    //--------- PROMISE --------------//
+    let resultado = new Promise((resolve, reject) => {
+      let dbRefComandas = ref(connectionDB, 'comandas');
+      runTransaction(dbRefComandas, (comandas) => {
+        let dbRefAlterarComanda = child(dbRefComandas, comanda.getCodigo());
+
+        comanda.mesa = comanda.mesa.getUid();
+        comanda.garcom = comanda.garcom.getUid();
+
+        let setPromise = set(dbRefAlterarComanda, comanda);
+        setPromise.then(value => { resolve(true) }, erro => { reject(erro) });
+      });
     });
+    return resultado;
   }
+
+  //-----------------------------------------------------------------------------------------//
 
   async excluir(comanda) {
     let connectionDB = await this.obterConexao();
-    return new Promise((resolve, reject) => {
-      const dbRefComanda = ref(connectionDB, `comandas/${comanda.getCodigo()}`);
-      remove(dbRefComanda)
-        .then(() => resolve(true))
-        .catch(error => reject(error));
+    //--------- PROMISE --------------//
+    let resultado = new Promise((resolve, reject) => {
+      let dbRefComanda = ref(connectionDB, 'comandas');
+      runTransaction(dbRefComanda, (comandas) => {
+        let dbRefExcluirComanda = child(dbRefComanda, comanda.getCodigo());
+        let setPromise = remove(dbRefExcluirComanda, comanda);
+        setPromise.then(value => { resolve(true) }, erro => { reject(erro) });
+      });
     });
+    return resultado;
   }
 }
