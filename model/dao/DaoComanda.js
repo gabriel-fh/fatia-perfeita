@@ -95,8 +95,8 @@ export default class DaoComanda {
               comandaSnap.codigo,
               comandaSnap.subtotal,
               comandaSnap.total,
-              comandaSnap.taxaServico,
-              comandaSnap.dataHora,
+              comandaSnap.taxa_servico,
+              comandaSnap.data_hora,
               mesa,
               garcom
             )
@@ -108,24 +108,37 @@ export default class DaoComanda {
 
   async incluir(comanda) {
     let connectionDB = await this.obterConexao();
-    let resultado = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let dbRefComandas = ref(connectionDB, "comandas");
       runTransaction(dbRefComandas, async (comandas) => {
         let dbRefNovaComanda = child(dbRefComandas, comanda.getCodigo());
-        comanda.mesa = comanda.mesa.uid;
-        comanda.garcom = comanda.garcom.uid;
-        let setPromise = set(dbRefNovaComanda, comanda);
+
+        const mesaUid = typeof comanda.mesa === "object" ? comanda.mesa.getUid() : comanda.mesa;
+        const garcomUid = typeof comanda.garcom === "object" ? comanda.garcom.getUid() : comanda.garcom;
+
+        if (!mesaUid || !garcomUid) {
+          reject(new Error("Mesa ou Garçom inválidos."));
+          return;
+        }
+
+        const comandaData = {
+          codigo: comanda.codigo,
+          subtotal: comanda.subtotal,
+          total: comanda.total,
+          taxa_servico: comanda.taxa_servico,
+          situacao: comanda.situacao,
+          data_hora: comanda.data_hora,
+          mesa: mesaUid,
+          garcom: garcomUid,
+        };
+
+        let setPromise = set(dbRefNovaComanda, comandaData);
         setPromise.then(
-          (value) => {
-            resolve(true);
-          },
-          (erro) => {
-            reject(erro);
-          }
+          () => resolve(true),
+          (erro) => reject(erro)
         );
       });
     });
-    return resultado;
   }
 
   //-----------------------------------------------------------------------------------------//

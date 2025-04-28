@@ -22,16 +22,15 @@ export default class CtrlManterComandas {
     this.#viewer.carregarComandas(comandas);
   }
 
-  async incluir(codigo, subtotal, total, taxaServico, situacao, dataHora, mesa, garcom) {
+  async incluir(codigo, subtotal, total, taxa_servico, situacao, data_hora, mesa, garcom) {
     try {
       let daoMesa = new DaoMesa();
       let mesaDB = await daoMesa.obterMesaPeloId(mesa);
 
       let daoGarcom = new DaoGarcom();
       let garcomDB = await daoGarcom.obterGarcomPeloId(garcom);
-      
-                
-      let comanda = new Comanda(codigo, subtotal, total, taxaServico, situacao, dataHora, mesaDB, garcomDB);
+
+      let comanda = new Comanda(codigo, subtotal, total, taxa_servico, situacao, data_hora, mesaDB, garcomDB);
       await this.#daoComanda.incluir(comanda);
       this.#atualizarContextoNavegacao();
     } catch (e) {
@@ -41,7 +40,7 @@ export default class CtrlManterComandas {
     }
   }
 
-  async alterar(codigo, subtotal, total, taxaServico, situacao, dataHora, mesa, garcom) {
+  async alterar(codigo, subtotal, total, taxa_servico, situacao, data_hora, mesa, garcom) {
     try {
       let comanda = await this.#daoComanda.obterComandaPeloCodigo(codigo);
       if (!comanda) {
@@ -49,9 +48,9 @@ export default class CtrlManterComandas {
       } else {
         comanda.setSubtotal(subtotal);
         comanda.setTotal(total);
-        comanda.setTaxaServico(taxaServico);
+        comanda.setTaxaServico(taxa_servico);
         comanda.setSituacao(situacao);
-        comanda.setDataHora(dataHora);
+        comanda.setDataHora(data_hora);
         comanda.setMesa(mesa);
         comanda.setGarcom(garcom);
         await this.#daoComanda.alterar(comanda);
