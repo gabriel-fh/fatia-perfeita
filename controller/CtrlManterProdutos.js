@@ -18,9 +18,7 @@ export default class CtrlManterProdutos {
   async #atualizarContextoNavegacao() {
     let produtos = await this.#daoProduto.obterProdutos();
 
-    if (produtos.length > 0) {
-      this.#viewer.carregarProdutos(produtos);
-    }
+    this.#viewer.carregarProdutos(produtos);
   }
 
   async incluir(codigo, nome, imagem, descricao, tipo, precoBase, situacao) {
@@ -29,6 +27,8 @@ export default class CtrlManterProdutos {
       await this.#daoProduto.incluir(produto);
       this.#atualizarContextoNavegacao();
     } catch (e) {
+      console.log(e);
+      
       alert(e);
     }
   }
