@@ -2,7 +2,7 @@ import DaoProduto from "../model/dao/DaoProduto.js";
 import ViewerInicio from "../viewer/ViewerInicio.js";
 import DaoPedido from "../model/dao/DaoPedido.js";
 import ModelError from "../model/ModelError.js";
-import { Pedido } from "../model/Pedido.js";
+import Pedido from "../model/Pedido.js";
 import Comanda from "../model/Comanda.js";
 import Mesa from "../model/Mesa.js";
 import Garcom from "../model/Garcom.js";

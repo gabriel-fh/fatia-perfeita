@@ -5,7 +5,7 @@ import { getDatabase, ref, query, orderByChild, get, set, remove, runTransaction
 
 import Pedido from "/model/Pedido.js";
 import ModelError from "/model/ModelError.js";
-import DaoComanda from "./DaoGarcom";
+import DaoComanda from "./DaoGarcom.js";
 
 export default class DaoPedido {
 
