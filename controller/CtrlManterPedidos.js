@@ -1,9 +1,9 @@
 "use strict";
 
-import Pedido from "/model/Pedido.js"; // Um model Pedido
-import PedidoDTO from "/model/PedidoDTO.js"; // Um DTO se precisar
-import DaoPedido from "/model/dao/DaoPedido.js"; // DAO para pedidos
-import ViewerPedido from "/viewer/ViewerPedido.js"; // Viewer que mostra na tela
+import Pedido from "../model/Pedido.js";
+// import PedidoDTO from "../model/PedidoDTO.js";
+import DaoPedido from "../model/dao/DaoPedido.js"; 
+import ViewerPedido from "../viewer/ViewerPedido.js";
 
 export default class CtrlManterPedidos {
     #daoPedido;

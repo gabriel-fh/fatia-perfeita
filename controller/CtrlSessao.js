@@ -10,6 +10,7 @@ import CtrlManterMesas from "./CtrlManterMesas.js";
 import CtrlManterComandas from "./CtrlManterComandas.js";
 import ModelError from "../model/ModelError.js";
 import CtrlInicio from "./CtrlInicio.js";
+import CtrlManterPedidos from "./CtrlManterPedidos.js";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD83f2LeSDIuVWBFUnu_jHOzshsjDkF5iI",
@@ -35,11 +36,11 @@ export default class CtrlSessao {
 
   async init() {
     try {
-      this.usuario = await this.verificandoLogin();
+      // this.usuario = await this.verificandoLogin();
       if (document.URL.includes("produtos.html")) this.ctrlAtual = new CtrlManterProdutos();
       else if (document.URL.includes("garcons.html")) this.ctrlAtual = new CtrlManterGarcons();
       else if (document.URL.includes("mesas.html")) this.ctrlAtual = new CtrlManterMesas();
-      else if (document.URL.includes("pedidos.html")) this.ctrlAtual = new CtrlPedidos();
+      else if (document.URL.includes("pedidos.html")) this.ctrlAtual = new CtrlManterPedidos();
       else if (document.URL.includes("comandas.html")) this.ctrlAtual = new CtrlManterComandas();
       else if (document.URL.includes("inicio.html")) this.ctrlAtual = new CtrlInicio();
       else if (document.URL.includes("index.html") || window.location.href === "/") this.ctrlAtual = await this.login();
@@ -51,7 +52,7 @@ export default class CtrlSessao {
   //-----------------------------------------------------------------------------------------//
 
   async login() {
-    this.usuario = await this.verificandoLogin();
+    // this.usuario = await this.verificandoLogin();
 
     document.getElementById("login-form").addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -72,47 +73,31 @@ export default class CtrlSessao {
     });
   }
 
-  async verificandoLogin() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      const uid = user.uid;
-      const userRef = ref(db, `usuarios/${uid}`);
+  // async verificandoLogin() {
+  //   const user = JSON.parse(localStorage.getItem("user"));
+  //   if (user) {
+  //     const uid = user.uid;
+  //     const userRef = ref(db, `usuarios/${uid}`);
 
-      try {
-        // const snapshot = await get(userRef);
-        // if (snapshot.exists()) {
-        //   return snapshot.val();
-        // } else {
-        //   window.location.href = "/index.html";
-        //   alert("Erro ao buscar dados do usuário: " + error.message);
-        //   // localStorage.removeItem("user");
-        // }
-      } catch (error) {
-        window.location.href = "/index.html";
-        alert("Erro ao buscar dados do usuário: " + error.message);
-        // localStorage.removeItem("user");
-      }
-    } else {
-      window.location.href = "/index.html";
-    }
-
-    // return new Promise((resolve, reject) => {
-    //   onAuthStateChanged(auth, async (user) => {
-    //     if (user) {
-    //       this.#daoUsuario = new DaoUsuario();
-    //       let usrSistema = await this.#daoUsuario.obterUsuarioPeloUID(user.uid);
-
-    //       if (usrSistema) {
-    //         resolve(user);
-    //       } else {
-    //         reject("Usuário inexistente.");
-    //       }
-    //     } else {
-    //       reject("Você não realizou a autenticação!");
-    //     }
-    //   });
-    // });
-  }
+  //     try {
+  //       const snapshot = await get(userRef);
+  //       if (snapshot.exists()) {
+  //         return snapshot.val();
+  //       } else {
+  //         alert("Erro ao buscar dados do usuário.");
+  //         window.location.href = "/index.html";
+  //         return; // <<<<<<<<<< ADICIONE ISSO
+  //       }
+  //     } catch (error) {
+  //       alert("Erro ao buscar dados do usuário: " + error.message);
+  //       window.location.href = "/index.html";
+  //       return; // <<<<<<<<<< ADICIONE ISSO
+  //     }
+  //   } else {
+  //     window.location.href = "/index.html";
+  //     return; // <<<<<<<<<< ADICIONE ISSO
+  //   }
+  // }
 
   // async getLoggedUser() {
   //     return new Promise(async (resolve, reject) => {
