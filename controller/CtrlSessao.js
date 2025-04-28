@@ -43,7 +43,7 @@ export default class CtrlSessao {
       else if (document.URL.includes("pedidos.html")) this.ctrlAtual = new CtrlManterPedidos();
       else if (document.URL.includes("comandas.html")) this.ctrlAtual = new CtrlManterComandas();
       else if (document.URL.includes("inicio.html")) this.ctrlAtual = new CtrlInicio();
-      else if (document.URL.includes("index.html") || window.location.href === "/") this.ctrlAtual = await this.login();
+      else if (document.URL.includes("index.html") || window.location.pathname === "/") this.ctrlAtual = await this.login();
     } catch (e) {
       alert(e);
     }
