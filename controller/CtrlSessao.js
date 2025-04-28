@@ -6,6 +6,7 @@ import { getAuth, signInWithRedirect, signInWithPopup, browserSessionPersistence
 import DaoUsuario from "/model/dao/DaoUsuario.js";
 import Usuario from "/model/Usuario.js";
 import CtrlManterProdutos from "/controller/CtrlManterProdutos.js";
+import CtrlManterGarcons from "/controller/CtrlManterGarcons.js";
 
 
 const firebaseConfig = {

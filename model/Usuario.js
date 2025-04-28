@@ -1,3 +1,5 @@
+import ModelError from "./ModelError.js";
+
 export default class Usuario {
 
   #email;
@@ -69,13 +71,13 @@ export default class Usuario {
   }
 
   static validarFuncao(funcao) {
-    const funcoesValidas = ["ADMIN", "GARCON", "MESA"];
+    const funcoesValidas = ["ADMIN", "GARCOM", "MESA"];
     if (typeof funcao !== "string" || !funcoesValidas.includes(funcao)) {
       throw new ModelError("Função inválida. As opções válidas são: ADMIN, GARCON ou MESA.");
     }
   }
 
   static isFuncaoValida(funcao) {
-    return funcao === "ADMIN" || funcao === "GARCON" || funcao === "MESA";
+    return funcao === "ADMIN" || funcao === "GARCOM" || funcao === "MESA";
   }
 }
