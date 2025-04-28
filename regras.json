@@ -10,7 +10,7 @@
         ".write": "$uid === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
         ".validate": "newData.hasChildren(['nome', 'email', 'funcao'])",
         "funcao": {
-          ".validate": "newData.val() === 'ADMIN' || newData.val() === 'GARCON' || newData.val() === 'MESA'"
+          ".validate": "newData.val() === 'ADMIN' || newData.val() === 'GARCOM' || newData.val() === 'MESA'"
         }
       }
     },
@@ -24,12 +24,12 @@
         "situacao": {
           ".validate": "newData.val() === 'OCUPADA' || newData.val() === 'LIVRE' || newData.val() === 'DESATIVADA'"
         },
-        ".write": "root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN' || (root.child('usuarios').child(auth.uid).child('funcao').val() === 'GARCON' && data.exists() && data.child('numero').val() === newData.child('numero').val())"
+        ".write": "root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN' || (root.child('usuarios').child(auth.uid).child('funcao').val() === 'GARCOM' && data.exists() && data.child('numero').val() === newData.child('numero').val())"
       }
     },
 
     "garcons": {
-      ".read": "auth.token !== null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON')",
+      ".read": "auth.token !== null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCOM')",
       ".write": "auth != null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN')",
       ".indexOn": ["matricula"],
       "$uid": {
@@ -46,17 +46,17 @@
     },
 
     "comandas": {
-      ".read": "auth.token !== null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'MESA')",
-      ".write": "auth.token !== null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON')",
+      ".read": "auth.token !== null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCOM' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'MESA')",
+      ".write": "auth.token !== null && (root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCOM')",
       ".indexOn": ["codigo", "mesa", "garcom"],
       "$uidMesa": {
         ".read": "$uidMesa === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN'",
-        ".write": "$uidMesa === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || (root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON' && newData.child('garcom').val() === auth.uid)",
+        ".write": "$uidMesa === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || (root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCOM' && newData.child('garcom').val() === auth.uid)",
 
         "$uid": {
           ".validate": "newData.hasChildren(['codigo','subtotal', 'total', 'data_hora', 'taxa_servico','situacao', 'mesa', 'garcom', 'pedidos'])",
           "garcom": {
-            ".validate": "root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || newData.val() === data.val() || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCON'"
+            ".validate": "root.child('usuarios').child(auth.uid).child('funcao').val() == 'ADMIN' || newData.val() === data.val() || root.child('usuarios').child(auth.uid).child('funcao').val() == 'GARCOM'"
           },
           "pedidos": {
             "$uidPedido": {
