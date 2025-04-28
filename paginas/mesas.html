@@ -2,56 +2,156 @@
 <html lang="pt-br">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="https://prjpwa-unilasalle.glitch.me/favicon.ico" />
+    <link rel="icon" href="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/logo.png?v=1744044819325" />
     <title>Cadastro de Mesas</title>
     <link rel="stylesheet" href="../styles/global.css" />
     <link rel="stylesheet" href="../styles/styles.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   </head>
+
   <body class="container">
     <div id="sidebar-container"></div>
-    <main class="flex-center" style="width: 100%">
-      <form id="formMesa">
-        <header>
-          <h2>Cadastro de Mesas</h2>
-        </header>
 
-        <div class="form-group">
-          <label for="tfNumero">Número:</label>
-          <input type="number" id="tfNumero" disabled />
+    <div class="main-content">
+      <header>
+        <h2>Mesas</h2>
+      </header>
+
+      <main class="content">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Número</th>
+              <th>Situação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="mesas">
+            <tr>
+              <td>1</td>
+              <td>LIVRE</td>
+              <td class="table-actions">
+                <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="add-new">
+          <button class="btn btn-primary" id="btn-adicionar">Adicionar Mesa</button>
         </div>
+      </main>
 
-        <div class="form-group">
-          <label for="cbSituacaoMesa">Situação:</label>
-          <select id="cbSituacaoMesa" disabled>
-            <option value="LIVRE">LIVRE</option>
-            <option value="OCUPADA">OCUPADA</option>
-            <option value="DESATIVADA">DESATIVADA</option>
-          </select>
+      <section class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modal-title">Adicionar Mesa</h3>
+            <button id="close-cart-btn" class="close-btn">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <form id="formMesa">
+            <div class="form-group">
+              <label for="tfNumero">Número:</label>
+              <input type="number" id="tfNumero" required />
+            </div>
+
+            <div class="form-group">
+              <label for="cbSituacaoMesa">Situação:</label>
+              <select id="cbSituacaoMesa" required>
+                <option value="LIVRE">LIVRE</option>
+                <option value="OCUPADA">OCUPADA</option>
+                <option value="DESATIVADA">DESATIVADA</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </form>
         </div>
+      </section>
+    </div>
 
-        <div id="divComandos" class="form-group">
-          <button id="btIncluir" type="button">Incluir</button>
-          <button id="btAlterar" type="button">Alterar</button>
-          <button id="btExcluir" type="button">Excluir</button>
-          <button id="btSair" type="button">Sair</button>
-        </div>
-
-        <div id="divDialogo" class="form-group hidden">
-          <button id="btOk" type="button">Ok</button>
-          <button id="btCancelar" type="button">Cancelar</button>
-        </div>
-
-        <div id="divAviso" style="padding: 1rem; font-size: 1.4rem"></div>
-      </form>
-    </main>
-
+    <!-- SCRIPTS -->
     <script type="module">
-      import { renderSidebar } from "../components/sidebar.js";
-
+      import { renderSidebar } from "../components/Sidebar.js";
       renderSidebar();
     </script>
 
-    <script type="module" src="/controller/CtrlManterMesas.js"></script>
+    <script>
+      const modal = document.querySelector(".modal");
+      const modalTitle = document.getElementById("modal-title");
+      const btnAdicionar = document.getElementById("btn-adicionar");
+      const closeModalButton = document.getElementById("close-cart-btn");
+      const formMesa = document.getElementById("formMesa");
+
+      const tfNumero = document.getElementById("tfNumero");
+      const cbSituacaoMesa = document.getElementById("cbSituacaoMesa");
+
+      let modoEdicao = false;
+      let linhaSelecionada = null;
+
+      btnAdicionar.addEventListener("click", () => {
+        limparFormulario();
+        modoEdicao = false;
+        modalTitle.innerText = "Adicionar Mesa";
+        modal.classList.remove("hidden");
+      });
+
+      closeModalButton.addEventListener("click", () => {
+        modal.classList.add("hidden");
+      });
+
+      function limparFormulario() {
+        tfNumero.value = "";
+        cbSituacaoMesa.value = "LIVRE";
+      }
+
+      function preencherFormulario(linha) {
+        tfNumero.value = linha.children[0].textContent;
+        cbSituacaoMesa.value = linha.children[1].textContent.toUpperCase();
+      }
+
+      document.addEventListener("click", (event) => {
+        if (event.target.closest(".btn-editar")) {
+          const linha = event.target.closest("tr");
+          preencherFormulario(linha);
+          linhaSelecionada = linha;
+          modoEdicao = true;
+          modalTitle.innerText = "Editar Mesa";
+          modal.classList.remove("hidden");
+        }
+
+        if (event.target.closest(".btn-excluir")) {
+          const linha = event.target.closest("tr");
+          const numero = linha.children[0].textContent;
+          if (confirm(`Deseja excluir a mesa número ${numero}?`)) {
+            linha.remove();
+          }
+        }
+      });
+
+      formMesa.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (modoEdicao && linhaSelecionada) {
+          linhaSelecionada.children[0].textContent = tfNumero.value;
+          linhaSelecionada.children[1].textContent = cbSituacaoMesa.options[cbSituacaoMesa.selectedIndex].text;
+        } else {
+          const tbody = document.getElementById("mesas");
+          const novaLinha = document.createElement("tr");
+          novaLinha.innerHTML = `
+            <td>${tfNumero.value}</td>
+            <td>${cbSituacaoMesa.options[cbSituacaoMesa.selectedIndex].text}</td>
+            <td class="table-actions">
+              <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          `;
+          tbody.appendChild(novaLinha);
+        }
+        modal.classList.add("hidden");
+      });
+    </script>
+    <script type="module" src="../middleware.js"></script>
   </body>
 </html>

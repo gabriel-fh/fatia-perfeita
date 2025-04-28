@@ -2,76 +2,204 @@
 <html lang="pt-br">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="https://prjpwa-unilasalle.glitch.me/favicon.ico" />
+    <link rel="icon" href="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/logo.png?v=1744044819325" />
     <title>Cadastro de Garçons</title>
     <link rel="stylesheet" href="../styles/styles.css" />
     <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   </head>
-  <body class="container">
+
+  <body class="container" style="overflow-y: hidden">
     <div id="sidebar-container"></div>
-    <main class="flex-center" style="width: 100%">
-      <form id="formGarcom">
-        <header>
-          <h2>Cadastro de Garçons</h2>
-        </header>
 
-        <div class="form-group">
-          <label for="tfMatricula">Matrícula:</label>
-          <input type="number" id="tfMatricula" disabled />
+    <div class="main-content">
+      <header>
+        <h2>Garçons</h2>
+      </header>
+
+      <main class="content">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Matrícula</th>
+              <th>Início</th>
+              <th>Fim</th>
+              <th>Situação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="garcons">
+            <!-- Conteúdo carregado via HTML -->
+            <tr>
+              <td>Jorge Amado</td>
+              <td>jorge@email.com</td>
+              <td>192884</td>
+              <td>12:00</td>
+              <td>18:00</td>
+              <td>Atendendo</td>
+              <td class="table-actions">
+                <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="add-new">
+          <button class="btn btn-primary" id="btn-adicionar">Adicionar Garçom</button>
         </div>
+      </main>
 
-        <div class="form-group">
-          <label for="tfNome">Nome:</label>
-          <input type="text" id="tfNome" disabled />
+      <section class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modal-title">Adicionar Garçom</h3>
+            <button id="close-cart-btn" class="close-btn">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <form id="form-garcom">
+            <div class="form-group">
+              <label for="tfMatricula">Matrícula:</label>
+              <input type="number" id="tfMatricula" placeholder="Matrícula" />
+            </div>
+            <div class="form-group">
+              <label for="tfNome">Nome:</label>
+              <input type="text" id="tfNome" placeholder="Nome" />
+            </div>
+            <div class="form-group">
+              <label for="tfEmail">Email:</label>
+              <input type="email" id="tfEmail" placeholder="E-mail" />
+            </div>
+            <div class="form-group">
+              <label for="tfHoraInicio">Hora Início:</label>
+              <input type="time" id="tfHoraInicio" />
+            </div>
+            <div class="form-group">
+              <label for="tfHoraFim">Hora Fim:</label>
+              <input type="time" id="tfHoraFim" />
+            </div>
+            <div class="form-group">
+              <label for="cbSituacao">Situação:</label>
+              <select id="cbSituacao">
+                <option value="ATIVO">ATIVO</option>
+                <option value="INATIVO">INATIVO</option>
+                <option value="ATENDENDO">ATENDENDO</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </form>
         </div>
+      </section>
+    </div>
 
-        <div class="form-group">
-          <label for="tfEmail">Email:</label>
-          <input type="email" id="tfEmail" disabled />
-        </div>
-
-        <div class="form-group">
-          <label for="tfHoraInicio">Hora Início:</label>
-          <input type="time" id="tfHoraInicio" disabled />
-        </div>
-
-        <div class="form-group">
-          <label for="tfHoraFim">Hora Fim:</label>
-          <input type="time" id="tfHoraFim" disabled />
-        </div>
-
-        <div class="form-group">
-          <label for="cbSituacao">Situação:</label>
-          <select id="cbSituacao" disabled>
-            <option value="ATIVO">ATIVO</option>
-            <option value="INATIVO">INATIVO</option>
-            <option value="ATENDENDO">ATENDENDO</option>
-          </select>
-        </div>
-
-        <div id="divComandos" class="form-group">
-          <button id="btIncluir" type="button">Incluir</button>
-          <button id="btAlterar" type="button">Alterar</button>
-          <button id="btExcluir" type="button">Excluir</button>
-          <button id="btSair" type="button">Sair</button>
-        </div>
-
-        <div id="divDialogo" class="form-group hidden">
-          <button id="btOk" type="button">Ok</button>
-          <button id="btCancelar" type="button">Cancelar</button>
-        </div>
-
-        <div id="divAviso" style="padding: 1rem; font-size: 1.4rem"></div>
-      </form>
-    </main>
+    <!-- SCRIPTS -->
+    <script type="module" src="/controller/CtrlManterGarcons.js"></script>
+    <script type="module" src="../viewer/ViewerGarcom.js"></script>
+    <script type="module" src="../middleware.js"></script>
 
     <script type="module">
-      import { renderSidebar } from "../components/sidebar.js";
-
+      import { renderSidebar } from "../components/Sidebar.js";
       renderSidebar();
     </script>
 
-    <script type="module" src="/controller/CtrlManterGarcons.js"></script>
+    <script>
+      const modal = document.querySelector(".modal");
+      const modalTitle = document.getElementById("modal-title");
+      const btnAdicionar = document.getElementById("btn-adicionar");
+      const closeModalButton = document.getElementById("close-cart-btn");
+      const formGarcom = document.getElementById("form-garcom");
+
+      const tfMatricula = document.getElementById("tfMatricula");
+      const tfNome = document.getElementById("tfNome");
+      const tfEmail = document.getElementById("tfEmail");
+      const tfHoraInicio = document.getElementById("tfHoraInicio");
+      const tfHoraFim = document.getElementById("tfHoraFim");
+      const cbSituacao = document.getElementById("cbSituacao");
+
+      let modoEdicao = false;
+      let linhaSelecionada = null;
+
+      btnAdicionar.addEventListener("click", () => {
+        limparFormulario();
+        modoEdicao = false;
+        modalTitle.innerText = "Adicionar Garçom";
+        modal.classList.remove("hidden");
+      });
+
+      closeModalButton.addEventListener("click", () => {
+        modal.classList.add("hidden");
+      });
+
+      function limparFormulario() {
+        tfMatricula.value = "";
+        tfNome.value = "";
+        tfEmail.value = "";
+        tfHoraInicio.value = "";
+        tfHoraFim.value = "";
+        cbSituacao.value = "ATIVO";
+      }
+
+      function preencherFormulario(linha) {
+        tfNome.value = linha.children[0].textContent;
+        tfEmail.value = linha.children[1].textContent;
+        tfMatricula.value = linha.children[2].textContent;
+        tfHoraInicio.value = linha.children[3].textContent;
+        tfHoraFim.value = linha.children[4].textContent;
+        cbSituacao.value = linha.children[5].textContent.toUpperCase();
+      }
+
+      document.addEventListener("click", (event) => {
+        if (event.target.closest(".btn-editar")) {
+          const linha = event.target.closest("tr");
+          preencherFormulario(linha);
+          linhaSelecionada = linha;
+          modoEdicao = true;
+          modalTitle.innerText = "Editar Garçom";
+          modal.classList.remove("hidden");
+        }
+
+        if (event.target.closest(".btn-excluir")) {
+          const linha = event.target.closest("tr");
+          const nome = linha.children[0].textContent;
+          if (confirm(`Deseja realmente excluir o garçom ${nome}?`)) {
+            linha.remove();
+          }
+        }
+      });
+
+      formGarcom.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (modoEdicao && linhaSelecionada) {
+          linhaSelecionada.children[0].textContent = tfNome.value;
+          linhaSelecionada.children[1].textContent = tfEmail.value;
+          linhaSelecionada.children[2].textContent = tfMatricula.value;
+          linhaSelecionada.children[3].textContent = tfHoraInicio.value;
+          linhaSelecionada.children[4].textContent = tfHoraFim.value;
+          linhaSelecionada.children[5].textContent = cbSituacao.options[cbSituacao.selectedIndex].text;
+        } else {
+          const tbody = document.getElementById("garcons");
+          const novaLinha = document.createElement("tr");
+          novaLinha.innerHTML = `
+            <td>${tfNome.value}</td>
+            <td>${tfEmail.value}</td>
+            <td>${tfMatricula.value}</td>
+            <td>${tfHoraInicio.value}</td>
+            <td>${tfHoraFim.value}</td>
+            <td>${cbSituacao.options[cbSituacao.selectedIndex].text}</td>
+            <td class="table-actions">
+              <button class="btn btn-primary btn-editar"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-danger btn-excluir"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          `;
+          tbody.appendChild(novaLinha);
+        }
+        modal.classList.add("hidden");
+      });
+    </script>
+    <script type="module" src="../middleware.js"></script>
   </body>
 </html>
