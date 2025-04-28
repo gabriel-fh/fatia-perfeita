@@ -17,9 +17,6 @@ export default class CtrlManterProdutos {
     this.#viewer = new ViewerProduto(this);
     this.#posAtual = 1;
     this.#atualizarContextoNavegacao();
-
-
-
   }
 
   async #atualizarContextoNavegacao() {
