@@ -27,7 +27,9 @@ export default class CtrlManterGarcons {
       Usuario.validarEmail(email);
       Usuario.validarSenha(senha);
       const user = await criarUsuario(email, senha);
+      console.log(user.uid);
       let garcom = new Garcom(user.uid, nome, email, situacao);
+      console.log(garcom);
       await this.#daoGarcom.incluir(garcom);
       this.#atualizarContextoNavegacao();
     } catch (e) {
@@ -36,10 +38,11 @@ export default class CtrlManterGarcons {
     }
   }
 
-  async alterar(uid, nome, email, situacao) {
+  async alterar(email, dados) {
+
     try {
-      const garcom = new Garcom(uid, nome, email, situacao);
-      let res = await this.#daoGarcom.alterar(garcom);
+      let res = await this.#daoGarcom.alterar(email, dados);
+      Usuario.validarEmail(email);
       if (res === false) {
         alert("Erro ao alterar o garçom.");
       } else {
@@ -51,10 +54,9 @@ export default class CtrlManterGarcons {
     }
   }
 
-  async excluir(uid, nome, email, situacao) {
+  async excluir(email) {
     try {
-      const garcom = new Garcom(uid, nome, email, situacao);
-      let res = await this.#daoGarcom.excluir(garcom);
+      let res = await this.#daoGarcom.excluir(email);
       if (res === false) {
         alert("Erro ao excluir o garçom.");
       } else {
