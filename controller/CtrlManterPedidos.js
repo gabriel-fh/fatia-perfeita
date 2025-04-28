@@ -21,9 +21,9 @@ export default class CtrlManterPedidos {
         this.#viewer.carregarPedidos(pedidos);
     }
 
-    async incluir(codigo, dataHora, situacao, comanda) {
+    async incluir(codigo, dataHora, situacao, comanda, produtos) {
         try {
-            let pedido = new Pedido(codigo, dataHora, situacao, comanda);
+            let pedido = new Pedido(codigo, dataHora, situacao, comanda, produtos);
             await this.#daoPedido.incluir(pedido);
             this.#atualizarContextoNavegacao();
         } catch (e) {
