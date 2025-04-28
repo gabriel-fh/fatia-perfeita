@@ -21,9 +21,9 @@ export default class CtrlManterProdutos {
     this.#viewer.carregarProdutos(produtos);
   }
 
-  async incluir(codigo, nome, imagem, descricao, tipo, precoBase, situacao) {
+  async incluir(codigo, nome, imagem, descricao, tipo, preco_base, situacao) {
     try {
-      let produto = new Produto(codigo, nome, imagem, descricao, tipo, precoBase, situacao);
+      let produto = new Produto(codigo, nome, imagem, descricao, tipo, Number(preco_base), situacao);
       await this.#daoProduto.incluir(produto);
       this.#atualizarContextoNavegacao();
     } catch (e) {

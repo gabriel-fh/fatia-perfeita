@@ -52,7 +52,7 @@ export default class DaoProduto {
               elem.imagem, // imagem
               elem.descricao, // descricao
               elem.tipo, // tipo
-              elem.preco_base, // precoBase
+              elem.preco_base, // preco_base
               elem.situacao // situacao
             );
             conjProdutos.push(produto);
@@ -87,20 +87,16 @@ export default class DaoProduto {
   }
 
   async alterar(produto) {
-    let connectionDB = await this.obterConexao();
-    return new Promise((resolve, reject) => {
-      const dbRefProduto = ref(connectionDB, `produtos/${produto.getCodigo()}`);
-      set(dbRefProduto, {
-        codigo: produto.getCodigo(),
-        nome: produto.getNome(),
-        imagem: produto.getImagem(),
-        descricao: produto.getDescricao(),
-        tipo: produto.getTipo(),
-        preco_base: produto.getPrecoBase(),
-        situacao: produto.getSituacao(),
-      })
-        .then(() => resolve(true))
-        .catch((error) => reject(error));
+    let connectionDB = await this.obterConexao();    
+    return new Promise( (resolve, reject) => {
+      let dbRefProdutos = ref(connectionDB,'produtos');
+      runTransaction(dbRefProdutos, (produtos) => {  
+        let dbRefProdutoAlterado = child(dbRefProdutos,produto.getSigla());
+        let setPromise = set(dbRefProdutoAlterado,produto);
+        setPromise
+          .then( value => {resolve(true)})
+          .catch((e) => {console.log("#ERRO: " + e);resolve(false);});
+      });
     });
   }
 
@@ -112,5 +108,20 @@ export default class DaoProduto {
         .then(() => resolve(true))
         .catch((error) => reject(error));
     });
+  }
+
+  async excluir(produto) {
+    let connectionDB = await this.obterConexao();    
+    return new Promise( (resolve, reject) => {
+      let dbRefProdutos = ref(connectionDB,'produtos');
+      runTransaction(dbRefProdutos, (produtos) => {      
+        let dbRefExcluirProduto = child(dbRefProdutos,produto.getSigla());
+        let setPromise = remove(dbRefExcluirProduto,produtos);
+        setPromise
+          .then( value => {resolve(true)})
+          .catch((e) => {console.log("#ERRO: " + e);resolve(false);});
+      });
+    });
+    return resultado;
   }
 }

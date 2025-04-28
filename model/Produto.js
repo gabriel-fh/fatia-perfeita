@@ -2,13 +2,13 @@ import ModelError from "./ModelError.js";
 import Pedido from "./Pedido.js";
 
 export default class Produto {
-  constructor(codigo, nome, imagem, descricao, tipo, precoBase, situacao) {
+  constructor(codigo, nome, imagem, descricao, tipo, preco_base, situacao) {
     this.setCodigo(codigo);
     this.setNome(nome);
     this.setImagem(imagem);
     this.setDescricao(descricao);
     this.setTipo(tipo);
-    this.setPrecoBase(precoBase);
+    this.setPrecoBase(Number(preco_base));
     this.setSituacao(situacao);
     this.pedidos = [];
   }
@@ -34,7 +34,7 @@ export default class Produto {
   }
 
   getPrecoBase() {
-    return this.precoBase;
+    return this.preco_base;
   }
 
   getSituacao() {
@@ -70,9 +70,9 @@ export default class Produto {
     this.tipo = tipo;
   }
 
-  setPrecoBase(precoBase) {
-    Produto.validarPrecoBase(precoBase);
-    this.precoBase = precoBase;
+  setPrecoBase(preco_base) {
+    Produto.validarPrecoBase(Number(preco_base));
+    this.preco_base = Number(preco_base);
   }
 
   setSituacao(situacao) {
@@ -119,8 +119,9 @@ export default class Produto {
     }
   }
 
-  static validarPrecoBase(precoBase) {
-    if (typeof precoBase !== "number" || precoBase < 0) {
+  static validarPrecoBase(preco_base) {
+    
+    if (typeof preco_base !== "number" || preco_base < 0) {
       throw new ModelError("Preço base inválido. O preço base deve ser um número positivo.");
     }
   }
