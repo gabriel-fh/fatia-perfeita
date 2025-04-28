@@ -31,7 +31,7 @@ export default class DaoMesa {
     return new Promise((resolve) => {
       let conjMesas = [];
       let dbRefUsuarios = ref(connectionDB, 'usuarios');
-      let paramConsulta = orderByChild('funcao');
+      let paramConsulta = orderByChild('email');
       let consulta = query(dbRefUsuarios, paramConsulta);
       let resultPromise = get(consulta);
 
