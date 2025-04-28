@@ -29,42 +29,9 @@
       </header>
       <main class="container">
         <section id="home-container" class="auth">
-          <!-- 
-            <div class="dishes">
-            <div class="dish">
-              <img
-                src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/Image%206.png?v=1744044817339"
-                alt="Suspiro"
-              />
-              <p>Suspiro Salgado</p>
-              <button>Adicionar +</button>
-            </div>
-          </div>
-           -->
+
         </section>
       </main>
-
-      <!-- <div id="dish-modal" class="modal ">
-        <div class="modal-content">
-          <div class="modal-header">
-              <h2 id="modal-dish-name">Detalhes do Prato</h2>
-              <button id="close-dish-modal-btn" class="close-btn">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
-            </div>
-            <div class="modal-body">
-              <img id="modal-dish-image" src="" alt="Dish Image" />
-            </div>
-            <p id="modal-dish-description">
-              Este é um prato delicioso preparado com ingredientes frescos e selecionados para proporcionar a melhor
-              experiência gastronômica.
-            </p>
-            <p>
-              Este é um prato delicioso preparado com ingredientes frescos e selecionados para proporcionar a melhor
-              experiência gastronômica.
-            </p>
-          </div>
-        </div> -->
       <div id="cart" class="isClosed">
         <div>
           <div class="cart-header">
@@ -98,67 +65,6 @@
       import { renderSidebar } from "../components/Sidebar.js";
       renderSidebar();
 
-    </script>
-    <!-- <script type="module">
-
-
-      // Dish modal functionality
-      const dishModal = document.getElementById("dish-modal");
-      const closeDishModalBtn = document.getElementById("close-dish-modal-btn");
-      const modalDishImage = document.getElementById("modal-dish-image");
-      const modalDishDescription = document.getElementById("modal-dish-description");
-      const modalDishName = document.getElementById("modal-dish-name");
-
-      document.querySelectorAll(".dish").forEach((dish) => {
-        const dishImage = dish.querySelector("img");
-        const dishName = dish.querySelector("p");
-
-        dishImage.addEventListener("click", () => {
-          modalDishImage.src = dishImage.src;
-          modalDishDescription.textContent = dishImage.alt;
-          modalDishName.textContent = dishName.textContent;
-          dishModal.classList.remove("");
-        });
-      });
-
-      closeDishModalBtn.addEventListener("click", () => {
-        dishModal.classList.add("");
-      });
-    </script> -->
-    <script>
-      (() => {
-        const navbarItems = document.querySelectorAll(".nav-bar ul li");
-        const homeContentItems = document.querySelectorAll("#home-container > div");
-
-        const setActiveSection = (selectedId) => {
-          homeContentItems.forEach((contentItem) => {
-            contentItem.classList.toggle("", contentItem.id !== selectedId);
-          });
-
-          navbarItems.forEach((navItem) => {
-            navItem.classList.toggle("active", navItem.id === selectedId);
-          });
-        };
-
-        navbarItems.forEach((navItem) => {
-          navItem.addEventListener("click", () => setActiveSection(navItem.id));
-        });
-
-        const cart = document.getElementById("cart");
-        const closeCartBtn = document.getElementById("close-cart-btn");
-        const cartBtn = document.getElementById("cart-btn");
-        cartBtn.addEventListener("click", () => {
-          console.log();
-          if (cart.classList.contains("isClosed")) {
-            cart.classList.remove("isClosed");
-            cart.style.right = "0px";
-          }
-        });
-        closeCartBtn.addEventListener("click", () => {
-          cart.classList.add("isClosed");
-          cart.style.right = "-100%";
-        });
-      })();
     </script>
   </body>
 </html>

@@ -91,4 +91,19 @@ export default class ViewerInicio {
       content.appendChild(div);
     });
   }
+
+  toggleCarrinho() {
+    const closeCartBtn = document.getElementById("close-cart-btn");
+    const cartBtn = document.getElementById("cart-btn");
+    cartBtn.addEventListener("click", () => {
+      if (this.carrinho.classList.contains("isClosed")) {
+        this.carrinho.classList.remove("isClosed");
+        this.carrinho.style.right = "0px";
+      }
+    });
+    closeCartBtn.addEventListener("click", () => {
+      this.carrinho.classList.add("isClosed");
+      this.carrinho.style.right = "-100%";
+    });
+  }
 }

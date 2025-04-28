@@ -17,10 +17,10 @@ export default class CtrlInicio {
     let produtos = await this.#daoProduto.obterProdutos();
     this.#viewer.carregarProdutos(produtos);
     this.#viewer.carregarCarrinho(this.#carrinho);
+    this.#viewer.toggleCarrinho();
   }
 
   adicionarAoCarrinho(produto) {
-    console.log("Produto adicionado ao carrinho:", produto);
 
     const itemExistente = this.#carrinho.find((item) => item.codigo === produto.codigo);
 
@@ -31,8 +31,6 @@ export default class CtrlInicio {
     }
 
     localStorage.setItem("carrinho", JSON.stringify(this.#carrinho));
-
-    console.log("Carrinho atualizado:", this.#carrinho);
 
     this.#viewer.carregarCarrinho(this.#carrinho);
   }
