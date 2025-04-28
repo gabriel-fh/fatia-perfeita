@@ -11,101 +11,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   </head>
 
-  <body class="container">
-    <aside class="sidebar hidden auth">
-      <nav>
-        <ul>
-          <li>
-            <img
-              src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/logo.png?v=1744044819325"
-              alt="Logo"
-            />
-          </li>
-          <li>
-            <a href="/home" class="nav-icon active">
-              <i class="fa-solid fa-house"></i>
-            </a>
-          </li>
-          <li>
-            <a href="/produtos" class="nav-icon">
-              <i class="fa-solid fa-pizza-slice"></i>
-            </a>
-          </li>
-          <li>
-            <a href="/pedidos" class="nav-icon">
-              <i class="fa-solid fa-list-ul"></i>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </aside>
-    <div class="main-content">
-      <header>
-        <div>
-          <div>
-            <h2>Fatia Perfeita</h2>
-            <p style="color: #888; font-size: 14px">Ter. 11 Set 2001</p>
-          </div>
-          <div class="cart"></div>
-
-          <nav class="nav-bar hidden auth">
-            <ul>
-              <li class="active" id="pizzas">Pizzas</li>
-              <li id="esfihas">Esfihas</li>
-              <li id="sobremesas">Sobremesas</li>
-              <li id="bebidas">Bebidas</li>
-            </ul>
-          </nav>
-        </div>
-
-        <button id="cart-btn" class="hidden auth">
-          <i class="bi bi-basket2-fill"></i>
-        </button>
-      </header>
-      <div id="cart" class="isClosed">
-        <div class="cart-header">
-          <h2>Carrinho</h2>
-          <button id="close-cart-btn" class="close-btn">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-        <div id="cart-items"></div>
-        <div class="cart-footer">
-          <p>Total: R$<span id="total-price">0.00</span></p>
-          <button id="checkout-btn">Finalizar Pedido</button>
-        </div>
+  <body class="flex-center">
+    <form id="login-form">
+      <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" placeholder="Digite seu e-mail" required />
       </div>
-      <main class="flex-center">
-        <form id="login-form">
-          <div class="form-group">
-            <label for="email">E-mail:</label>
-            <input type="email" id="email" placeholder="Digite seu e-mail" required />
-          </div>
-          <div class="form-group">
-            <label for="password">Senha:</label>
-            <input type="password" id="password" placeholder="Digite sua senha" required />
-          </div>
-          <button type="submit">Entrar</button>
-          <div id="error-message"></div>
-        </form>
-        <section id="home-container" class="hidden auth">
-          <div id="pizzas">
-            <h1>Pizzas</h1>
-          </div>
-          <div class="hidden" id="esfihas">
-            <h1>Esfihas</h1>
-          </div>
-          <div class="hidden" id="sobremesas">
-            <h1>Sobremesas</h1>
-          </div>
-          <div class="hidden" id="bebidas">
-            <h1>Bebidas</h1>
-          </div>
-        </section>
-      </main>
-    </div>
-    <script type="module" src="./auth.js"></script>
-    <script type="module" src="./viewer/HomeViewer.js"></script>
-    <script type="module" src="./middleware.js"></script>
+      <div class="form-group">
+        <label for="password">Senha:</label>
+        <input type="password" id="password" placeholder="Digite sua senha" required />
+      </div>
+      <button type="submit">Entrar</button>
+      <div id="error-message"></div>
+    </form>
+    <script type="module" src="./controller/CtrlSessao.js"></script>
   </body>
-</html>
+  </html>

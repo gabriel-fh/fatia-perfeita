@@ -1,8 +1,20 @@
-class Usuario {
-  constructor(nome, email, funcao) {
-    this.nome = nome;
-    this.email = email;
-    this.funcao = funcao;
+import ModelError from "./ModelError.js";
+
+export default class Usuario {
+  #email;
+  #uid;
+  #funcao;
+
+  constructor(email, nome, uid, funcao) {
+    this.setEmail(email);
+    this.setNome(nome);
+    this.setUid(uid);
+    if (funcao === undefined || funcao === null) this.setFuncao("INABILITADO");
+    else this.setFuncao(funcao);
+  }
+
+  getUid() {
+    return this.#uid;
   }
 
   getNome() {
@@ -15,6 +27,11 @@ class Usuario {
 
   getFuncao() {
     return this.funcao;
+  }
+
+  setUid(uid) {
+    if (!Usuario.validarUid(uid)) throw new ModelError("UID inválido: " + uid);
+    this.#uid = uid;
   }
 
   setNome(nome) {
@@ -32,10 +49,20 @@ class Usuario {
     this.funcao = funcao;
   }
 
+  static validarSenha(senha) {
+    if (typeof senha !== "string" || senha.length < 6) {
+      throw new ModelError("A senha deve ter pelo menos 6 caracteres.");
+    }
+  }
+
   static validarNome(nome) {
     if (typeof nome !== "string" || nome.trim() === "" || nome.length < 3) {
       throw new ModelError("O nome deve ser uma string não vazia com no mínimo 3 caracteres.");
     }
+  }
+
+  static validarUid(uid) {
+    return true;
   }
 
   static validarEmail(email) {
@@ -46,13 +73,13 @@ class Usuario {
   }
 
   static validarFuncao(funcao) {
-    const funcoesValidas = ["ADMIN", "GARCON", "MESA"];
+    const funcoesValidas = ["ADMIN", "GARCOM", "MESA"];
     if (typeof funcao !== "string" || !funcoesValidas.includes(funcao)) {
-      throw new ModelError("Função inválida. As opções válidas são: ADMIN, GARCON ou MESA.");
+      throw new ModelError("Função inválida. As opções válidas são: ADMIN, GARCOM ou MESA.");
     }
   }
 
   static isFuncaoValida(funcao) {
-    return funcao === "ADMIN" || funcao === "GARCON" || funcao === "MESA";
+    return funcao === "ADMIN" || funcao === "GARCOM" || funcao === "MESA";
   }
 }

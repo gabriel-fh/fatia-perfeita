@@ -1,14 +1,16 @@
 import ModelError from "./ModelError.js";
 import Comanda from "./Comanda.js";
 import Produto from "/model/Produto.js";
+import ProdutoPedido from "./ProdutoPedido.js";
 
 export default class Pedido {
-  constructor(codigo, dataHora, situacao, comanda) {
+  constructor(codigo, dataHora, situacao, comanda, produtos) {
     this.setCodigo(codigo);
     this.setDataHora(dataHora);
     this.setSituacao(situacao);
     this.setComanda(comanda);
-    this.produtos = [];
+    this.produtos = []; // Inicializa corretamente antes de setar
+    this.setProdutos(produtos); // Agora sim, adiciona os produtos de verdade
   }
 
   getCodigo() {
@@ -51,10 +53,20 @@ export default class Pedido {
     this.comanda = comanda;
   }
 
+  setProdutos(produtos) {
+    if (!Array.isArray(produtos)) {
+      throw new ModelError("Produtos deve ser um array de Produto.");
+    }
+
+    produtos.forEach(produto => {
+      this.adicionarProduto(produto); // Usa o adicionarProduto já validando
+    });
+  }
+
   adicionarProduto(produto) {
-    if (produto instanceof Produto) {
+    if (produto instanceof ProdutoPedido) {
       this.produtos.push(produto);
-      produto.adicionarPedido(this);
+      produto.setPedido(this);
     } else {
       throw new ModelError("Objeto não é um produto válido.");
     }
