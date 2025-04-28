@@ -4,7 +4,7 @@ export function renderSidebar() {
         <nav>
           <ul>
             <li>
-            <a href="/" class="">
+            <a href="/index.html" class="">
               <img src="https://cdn.glitch.global/5f40ca2f-f96b-493b-806d-4711b651a143/logo.png?v=1744044819325" alt="Logo" />
               </a>
             </li>
