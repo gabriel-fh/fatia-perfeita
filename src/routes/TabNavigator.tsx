@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import React, { useMemo } from "react";
-import Home from "../screens/Home";
+import Home from "../screens/Home/Home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 
