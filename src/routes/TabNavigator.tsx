@@ -2,31 +2,37 @@ import { StyleSheet } from "react-native";
 import React, { useMemo } from "react";
 import Home from "../screens/Home/Home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import Product from "../screens/Product/Product";
+import { Ionicons, FontAwesome6 } from "@expo/vector-icons";
+import { colors } from "../utils/styles";
 
 const TabNavigator = () => {
   const Tab = createBottomTabNavigator();
 
   const icons = useMemo(
     () => ({
-      Home: { icon: "home", type: AntDesign },
-      Products: { icon: "shoppingcart", type: AntDesign },
-      Orders: { icon: "list-alt", type: FontAwesome5 },
-      User: { icon: "user", type: AntDesign },
+      Home: { icon: "home", type: Ionicons, size: 26 },
+      // Products: { icon: "pizza-slice", type: FontAwesome6, size: 24 },
+      Cart: { icon: "cart-shopping", type: FontAwesome6, size: 24 },
+      Orders: { icon: "clipboard-list", type: FontAwesome6, size: 24 },
     }),
     []
   );
-
+  // <FontAwesome6 name="pizza-slice" size={24} color="black" />
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, focused }) => {
-          const { icon, type: IconComponent } = icons[route.name as keyof typeof icons];
-          return <IconComponent name={icon} size={focused ? 28 : 24} color={focused ? "#29ABE2" : "#999"} />;
+          const routeName = route.name as keyof typeof icons;
+          if (routeName in icons) {
+            const { icon, type: IconComponent, size } = icons[routeName];
+            return <IconComponent name={icon} size={size} color={focused ? colors.primary : "#e2e2e2"} />;
+          }
+          // Ícone padrão caso a rota não tenha um ícone definido
+          return <Ionicons name="help" size={24} color={focused ? colors.primary : "#e2e2e2"} />;
         },
-        tabBarActiveTintColor: "#29ABE2",
-        tabBarInactiveTintColor: "#999",
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: "#e2e2e2",
         headerShown: false,
         tabBarStyle: styles.tabBarStyle,
         tabBarLabelStyle: styles.tabBarLabel,
@@ -34,8 +40,8 @@ const TabNavigator = () => {
     >
       <Tab.Screen name="Home" component={Home} options={{ title: "Início" }} />
       <Tab.Screen name="Products" component={Product} options={{ title: "Produtos" }} />
+      <Tab.Screen name="Cart" component={Home} options={{ title: "Carrinho" }} />
       <Tab.Screen name="Orders" component={Home} options={{ title: "Pedidos" }} />
-      <Tab.Screen name="User" component={Home} options={{ title: "Usuário" }} />
     </Tab.Navigator>
   );
 };
@@ -43,13 +49,17 @@ const TabNavigator = () => {
 const styles = StyleSheet.create({
   tabBarStyle: {
     position: "absolute",
-    height: 60,
-    backgroundColor: "#FFF",
+    height: 63,
+    backgroundColor: colors.bgTertiary,
     borderTopWidth: 0,
     elevation: 10,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
+    paddingTop: 5,
   },
   tabBarLabel: {
     fontSize: 12,
+    marginTop: 5,
   },
 });
 

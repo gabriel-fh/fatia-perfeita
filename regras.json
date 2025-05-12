@@ -60,7 +60,6 @@
         "endereco": {
           ".validate": "root.child('enderecos').child(newData.val()).exists()"
         },
-
         "produtos": {
           "$produtoId": {
             ".validate": "newData.hasChildren(['id', 'nome', 'imagem', 'preco', 'quantidade'])",

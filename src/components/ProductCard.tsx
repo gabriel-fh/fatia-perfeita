@@ -18,7 +18,7 @@ const ProductCard = ({ infos }: { infos: Produto }) => {
       onPress={() => {}}
       style={styles.containter}
       accessible={true}
-      activeOpacity={0.9}
+      activeOpacity={0.5}
       accessibilityLabel="Botão de acessar tela do produto"
       accessibilityHint={`Navegar para a tela do produto ${infos?.getNome()}`}
       accessibilityRole="link"
