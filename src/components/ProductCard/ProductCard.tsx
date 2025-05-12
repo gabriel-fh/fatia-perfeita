@@ -3,8 +3,15 @@ import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors } from "../../utils/styles";
 import AddRemoveButton from "./AddRemoveButton";
+import PrimaryCard from "./PrimaryCard";
+import SecondaryCard from "./SecondaryCard";
 
-const ProductCard = ({ infos }: { infos: Product }) => {
+type ProductCardProps = {
+  infos: Product;
+  variant?: "primary" | "secondary";
+};
+
+const ProductCard = ({ infos, variant = "primary" }: ProductCardProps) => {
   const formatToReal = (valor: number | bigint | Intl.StringNumericLiteral): string => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -12,39 +19,7 @@ const ProductCard = ({ infos }: { infos: Product }) => {
     }).format(valor);
   };
 
-  return (
-    <TouchableOpacity
-      onPress={() => {}}
-      style={styles.containter}
-      accessible={true}
-      activeOpacity={0.5}
-      accessibilityLabel="Botão de acessar tela do produto"
-      accessibilityHint={`Navegar para a tela do produto ${infos?.nome}`}
-      accessibilityRole="link"
-    >
-      <View style={styles.imgContainer}>
-        {infos.imagem ? (
-          <Image
-            source={{ uri: infos.imagem }}
-            style={{
-              width: "100%",
-              height: "100%",
-              marginTop: -60,
-            }}
-          />
-        ) : (
-          <MaterialIcons name="image-not-supported" size={24} color="black" />
-        )}
-      </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.text}>{formatToReal(infos.preco_base)}</Text>
-        <Text style={styles.title} numberOfLines={2}>
-          {infos?.nome}
-        </Text>
-        <AddRemoveButton id={infos.codigo} variant={"primary"} />
-      </View>
-    </TouchableOpacity>
-  );
+  return variant === "primary" ? <PrimaryCard infos={infos} formatToReal={formatToReal} /> : <SecondaryCard />;
 };
 
 const styles = StyleSheet.create({
