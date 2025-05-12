@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet, StatusBar, SafeAreaView, View } from "react-native";
+import { StyleSheet, StatusBar, View } from "react-native";
 import ProductCard from "../../components/ProductCard";
 import { ScrollView } from "react-native-gesture-handler";
 import { colors } from "../../utils/styles";
 import Header from "./components/Header";
 import SubNavigation from "./components/SubNavigation";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home = () => {
   const [currentProducts, setcurrentProducts] = useState<number>(1);
@@ -118,12 +119,14 @@ const Home = () => {
   });
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
       <StatusBar barStyle="light-content" backgroundColor={colors.bgPrimary} />
       <View style={styles.content}>
-        <View style={{
-          paddingBottom: 20,
-        }}>
+        <View
+          style={{
+            paddingBottom: 20,
+          }}
+        >
           <Header />
           <SubNavigation currentProducts={currentProducts} setcurrentProducts={setcurrentProducts} />
         </View>
@@ -146,7 +149,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingVertical: 30,
+    paddingTop: 10,
+    paddingBottom: 30,
     paddingHorizontal: 16,
   },
   text: {

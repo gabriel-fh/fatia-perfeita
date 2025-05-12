@@ -5,7 +5,6 @@ import { colors } from "../utils/styles";
 import AddRemoveButton from "./AddRemoveButton";
 
 const ProductCard = ({ infos }: { infos: Product }) => {
-
   const formatToReal = (valor: number | bigint | Intl.StringNumericLiteral): string => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -37,13 +36,13 @@ const ProductCard = ({ infos }: { infos: Product }) => {
           <MaterialIcons name="image-not-supported" size={24} color="black" />
         )}
       </View>
-      <View>
+      <View style={styles.infoContainer}>
         <Text style={styles.text}>{formatToReal(infos.preco_base)}</Text>
         <Text style={styles.title} numberOfLines={2}>
           {infos?.nome}
         </Text>
-      </View>
         <AddRemoveButton />
+      </View>
     </TouchableOpacity>
   );
 };
@@ -51,14 +50,14 @@ const ProductCard = ({ infos }: { infos: Product }) => {
 const styles = StyleSheet.create({
   containter: {
     width: 180,
-    height: 280,
+    height: 275,
     backgroundColor: colors.bgTertiary,
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "center",
     borderRadius: 8,
     marginBottom: 50,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   imgContainer: {
     width: 143,
@@ -67,6 +66,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 16,
     padding: 8,
+  },
+  infoContainer: {
+    width: "100%",
+    height: 275 * 0.45,
+    justifyContent: "space-between",
   },
   title: {
     color: "#fff",

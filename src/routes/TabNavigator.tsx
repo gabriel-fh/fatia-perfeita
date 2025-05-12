@@ -4,6 +4,7 @@ import Home from "../screens/Home/Home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons, FontAwesome6 } from "@expo/vector-icons";
 import { colors } from "../utils/styles";
+import Cart from "../screens/Cart/Cart";
 
 const TabNavigator = () => {
   const Tab = createBottomTabNavigator();
@@ -39,7 +40,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen name="Home" component={Home} options={{ title: "Início" }} />
       {/* <Tab.Screen name="Products" component={Home} options={{ title: "Produtos" }} /> */}
-      <Tab.Screen name="Cart" component={Home} options={{ title: "Carrinho" }} />
+      <Tab.Screen name="Cart" component={Cart} options={{ title: "Carrinho" }} />
       <Tab.Screen name="Orders" component={Home} options={{ title: "Pedidos" }} />
     </Tab.Navigator>
   );
