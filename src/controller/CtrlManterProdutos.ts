@@ -1,81 +1,57 @@
-"use strict";
-
-import DaoProduto from "../model/dao/DaoProduto";
-import Produto, { SituacaoProduto, TipoProduto } from "../model/Produto";
+import { database } from "@/src/setup/FirebaseSetup";
+import { ref, get, set, remove } from "firebase/database";
+import Produto from "../model/Produto";
 import ViewerProduto from "../viewer/ViewerProduto";
 
-type ProdutoType = {
-  codigo: string;
-  nome: string;
-  imagem: string;
-  descricao: string;
-  tipo: TipoProduto;
-  preco_base: number;
-  situacao: SituacaoProduto;
-};
-
 export default class CtrlManterProdutos {
-  #daoProduto;
-  #viewer;
+  viewer: ViewerProduto;
 
-  constructor() {
-    this.#daoProduto = new DaoProduto();
-    this.#viewer = new ViewerProduto(this);
-    this.#atualizarContextoNavegacao();
+  constructor(viewer: ViewerProduto) {
+    this.viewer = viewer;
   }
 
-  async #atualizarContextoNavegacao() {
-    let produtos = await this.#daoProduto.obterProdutos();
-    this.#viewer.carregarProdutos(produtos);
-  }
+  async carregar() {
+    const produtosRef = ref(database, "/produtos");
+    const snapshot = await get(produtosRef);
+    const data = snapshot.val();
+    const produtos: Produto[] = [];
 
-  async incluir({ codigo, nome, imagem, descricao, tipo, preco_base, situacao }: ProdutoType) {
-    try {
-      let produto = new Produto(codigo, nome, imagem, descricao, tipo, Number(preco_base), situacao);
-      await this.#daoProduto.incluir(produto);
-      this.#atualizarContextoNavegacao();
-    } catch (e) {
-      console.log(e);
-
-      alert(e);
+    if (data) {
+      Object.keys(data).forEach((key) => {
+        const p = data[key];
+        produtos.push(
+          new Produto(
+            p.codigo,
+            p.nome,
+            p.imagem,
+            p.descricao,
+            p.tipo,
+            p.preco_base,
+            p.situacao
+          )
+        );
+      });
     }
+
+    return produtos;
   }
 
-  async alterar({ codigo, nome, imagem, descricao, tipo, preco_base, situacao }: ProdutoType) {
-    try {
-      let produto = await this.#daoProduto.obterProdutoPeloCodigo(codigo);
-      if (!produto) {
-        alert(`Produto com codigo ${codigo} não encontrado.`);
-      } else {
-        produto.setNome(nome);
-        produto.setImagem(imagem);
-        produto.setDescricao(descricao);
-        produto.setTipo(tipo);
-        produto.setPrecoBase(Number(preco_base));
-        produto.setSituacao(situacao);
-        await this.#daoProduto.alterar(produto);
-      }
-      this.#atualizarContextoNavegacao();
-    } catch (e) {
-      alert(e);
-    }
+  async incluir(produto: Produto) {
+    const refProduto = ref(database, `produtos/${produto.getCodigo()}`);
+    await set(refProduto, produto);
+    this.carregar();
   }
 
-  async excluir(codigo : string) {
-    try {
-      let produto = await this.#daoProduto.obterProdutoPeloCodigo(codigo);
-      if (!produto) {
-        alert(`Produto com codigo ${codigo} não encontrado.`);
-      } else {
-        await this.#daoProduto.excluir(produto);
-      }
-      this.#atualizarContextoNavegacao();
-    } catch (e) {
-      alert(e);
-    }
+  async alterar(produto: Produto) {
+    const refProduto = ref(database, `produtos/${produto.getCodigo()}`);
+    await set(refProduto, produto);
+    this.carregar();
   }
 
-  cancelar() {
-    this.#atualizarContextoNavegacao();
+  async excluir(codigo: string) {
+    const refProduto = ref(database, `produtos/${codigo}`);
+    await remove(refProduto);
+    this.carregar();
   }
+
 }

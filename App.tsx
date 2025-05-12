@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import * as Font from "expo-font";
-import { Routes } from "./src/routes/Routes";
 import Entypo from "@expo/vector-icons/Entypo";
 import AnimatedSplash from "react-native-animated-splash-screen";
+
 
 import {
   useFonts,
@@ -12,6 +12,7 @@ import {
   SpaceGrotesk_600SemiBold,
   SpaceGrotesk_700Bold,
 } from "@expo-google-fonts/space-grotesk";
+import { Routes } from "./src/routes/Routes";
 import { ActivityIndicator, View } from "react-native";
 // import FlashMessage from "react-native-flash-message";
 
@@ -47,22 +48,6 @@ export default function App() {
     return (
       <View style={{ flex: 1, backgroundColor: "#1b1f2b" }}>
         {fontsLoaded ? <Routes /> : <ActivityIndicator style={{ flex: 1 }} />}
-
-        {/*  <Toast autoHide visibilityTime={4000} />
-        <FlashMessage
-          position="top"
-          animated={true}
-          titleStyle={{ fontWeight: "bold", fontSize: 18 }}
-          autoHide={true}
-          duration={4000}
-          style={{
-            paddingTop: 30,
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        />
-         */}
       </View>
     );
   };

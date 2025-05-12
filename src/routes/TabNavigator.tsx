@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 import React, { useMemo } from "react";
 import Home from "../screens/Home/Home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Product from "../screens/Product/Product";
 import { Ionicons, FontAwesome6 } from "@expo/vector-icons";
 import { colors } from "../utils/styles";
 
@@ -38,7 +39,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={Home} options={{ title: "Início" }} />
-      {/* <Tab.Screen name="Products" component={Home} options={{ title: "Produtos" }} /> */}
+      <Tab.Screen name="Products" component={Product} options={{ title: "Produtos" }} />
       <Tab.Screen name="Cart" component={Home} options={{ title: "Carrinho" }} />
       <Tab.Screen name="Orders" component={Home} options={{ title: "Pedidos" }} />
     </Tab.Navigator>

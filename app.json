@@ -18,7 +18,8 @@
       },
       "edgeToEdgeEnabled": true
     },
-    
+    "jsEngine": "jsc",
+
     "experiments": {
       "typedRoutes": true
     }

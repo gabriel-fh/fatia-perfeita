@@ -5,8 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 
 export type RootStackParamList = RoutesParamsType;
 
-export function Routes(pap) {
-
+export function Routes() {
   return (
     <NavigationContainer>
       <Screens />
