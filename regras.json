@@ -50,8 +50,7 @@
           "produtos": {
             "$idProduto" : {
               ".validate": "newData.hasChildren(['codigo', 'nome','imagem', 'preco', 'quantidade', 'descricao', 'tipopreco_basesituacao'])",
-              // qtd, 
-            }
+            },
             "codigo": {
               ".validate": "root.child('produtos').child(newData.val()).exists()"
             },
