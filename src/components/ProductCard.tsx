@@ -3,16 +3,16 @@ import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors } from "../utils/styles";
 import AddRemoveButton from "./AddRemoveButton";
+import Produto from "../model/Produto";
 
-const ProductCard = ({ infos }: { infos: Product }) => {
-
+const ProductCard = ({ infos }: { infos: Produto }) => {
   const formatToReal = (valor: number | bigint | Intl.StringNumericLiteral): string => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
       currency: "BRL",
     }).format(valor);
   };
-
+  
   return (
     <TouchableOpacity
       onPress={() => {}}
@@ -20,13 +20,13 @@ const ProductCard = ({ infos }: { infos: Product }) => {
       accessible={true}
       activeOpacity={0.9}
       accessibilityLabel="Botão de acessar tela do produto"
-      accessibilityHint={`Navegar para a tela do produto ${infos?.nome}`}
+      accessibilityHint={`Navegar para a tela do produto ${infos?.getNome()}`}
       accessibilityRole="link"
     >
       <View style={styles.imgContainer}>
-        {infos.imagem ? (
+        {infos.getImagem() ? (
           <Image
-            source={{ uri: infos.imagem }}
+            source={{ uri: infos.getImagem() }}
             style={{
               width: "100%",
               height: "100%",
@@ -38,12 +38,12 @@ const ProductCard = ({ infos }: { infos: Product }) => {
         )}
       </View>
       <View>
-        <Text style={styles.text}>{formatToReal(infos.preco_base)}</Text>
+        <Text style={styles.text}>{formatToReal(infos.getPrecoBase())}</Text>
         <Text style={styles.title} numberOfLines={2}>
-          {infos?.nome}
+          {infos?.getNome()}
         </Text>
       </View>
-        <AddRemoveButton />
+      <AddRemoveButton />
     </TouchableOpacity>
   );
 };
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 8,
     marginBottom: 50,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   imgContainer: {
     width: 143,

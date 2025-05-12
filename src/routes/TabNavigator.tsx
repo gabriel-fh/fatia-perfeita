@@ -3,6 +3,7 @@ import React, { useMemo } from "react";
 import Home from "../screens/Home/Home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+import Product from "../screens/Product/Product";
 
 const TabNavigator = () => {
   const Tab = createBottomTabNavigator();
@@ -21,7 +22,7 @@ const TabNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, focused }) => {
-          const { icon, type: IconComponent } = icons[route.name];
+          const { icon, type: IconComponent } = icons[route.name as keyof typeof icons];
           return <IconComponent name={icon} size={focused ? 28 : 24} color={focused ? "#29ABE2" : "#999"} />;
         },
         tabBarActiveTintColor: "#29ABE2",
@@ -32,7 +33,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={Home} options={{ title: "Início" }} />
-      <Tab.Screen name="Products" component={Home} options={{ title: "Produtos" }} />
+      <Tab.Screen name="Products" component={Product} options={{ title: "Produtos" }} />
       <Tab.Screen name="Orders" component={Home} options={{ title: "Pedidos" }} />
       <Tab.Screen name="User" component={Home} options={{ title: "Usuário" }} />
     </Tab.Navigator>
