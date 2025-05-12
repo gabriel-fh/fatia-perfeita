@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, StatusBar, SafeAreaView, View } from "react-native";
-import ProductCard from "../../components/ProductCard";
+import { StyleSheet, StatusBar, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { colors } from "../../utils/styles";
 import Header from "./components/Header";
 import ViewerProduto from "@/src/viewer/ViewerProduto";
 import Produto from "@/src/model/Produto";
+import ProductCard from "@/src/components/ProductCard/ProductCard";
+import { SafeAreaView } from "react-native-safe-area-context";
 const viewer = new ViewerProduto();
 
 const Home = () => {
@@ -33,7 +34,7 @@ const Home = () => {
   // });
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
       <StatusBar barStyle="light-content" backgroundColor={colors.bgPrimary} />
       <View style={styles.content}>
         <View
@@ -63,7 +64,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingVertical: 30,
+    paddingTop: 10,
+    paddingBottom: 30,
     paddingHorizontal: 16,
   },
   text: {

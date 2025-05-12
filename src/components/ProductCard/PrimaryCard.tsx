@@ -1,18 +1,15 @@
-import { View, Image, TouchableOpacity, StyleSheet, Text } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors } from "../utils/styles";
 import AddRemoveButton from "./AddRemoveButton";
-import Produto from "../model/Produto";
+import { colors } from "@/src/utils/styles";
 
-const ProductCard = ({ infos }: { infos: Produto }) => {
-  const formatToReal = (valor: number | bigint | Intl.StringNumericLiteral): string => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(valor);
-  };
-  
+type PrimaryCardProps = {
+  infos: Product;
+  formatToReal: (valor: number | bigint | Intl.StringNumericLiteral) => string;
+};
+
+const PrimaryCard = ({ infos, formatToReal }: PrimaryCardProps) => {
   return (
     <TouchableOpacity
       onPress={() => {}}
@@ -37,13 +34,13 @@ const ProductCard = ({ infos }: { infos: Produto }) => {
           <MaterialIcons name="image-not-supported" size={24} color="black" />
         )}
       </View>
-      <View>
-        <Text style={styles.text}>{formatToReal(infos.getPrecoBase())}</Text>
+      <View style={styles.infoContainer}>
+        <Text style={styles.text}>{formatToReal(infos.preco_base)}</Text>
         <Text style={styles.title} numberOfLines={2}>
           {infos?.getNome()}
         </Text>
+        <AddRemoveButton id={infos.codigo} variant={"primary"} />
       </View>
-      <AddRemoveButton />
     </TouchableOpacity>
   );
 };
@@ -51,7 +48,7 @@ const ProductCard = ({ infos }: { infos: Produto }) => {
 const styles = StyleSheet.create({
   containter: {
     width: 180,
-    height: 280,
+    height: 275,
     backgroundColor: colors.bgTertiary,
     flexDirection: "column",
     justifyContent: "flex-start",
@@ -67,6 +64,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 16,
     padding: 8,
+  },
+  infoContainer: {
+    width: "100%",
+    height: 275 * 0.45,
+    justifyContent: "space-between",
   },
   title: {
     color: "#fff",
@@ -84,4 +86,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductCard;
+export default PrimaryCard;
