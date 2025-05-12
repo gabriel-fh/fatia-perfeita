@@ -45,20 +45,21 @@
         "endereco": {
           ".validate": "root.child('enderecos').child(newData.val()).exists()"
         },
-        "produtos": [
-          {
-            ".indexOn": ["codigo"],
-            "$produto": {
+        "$idPedido": {
+          ".indexOn": ["codigo"],
+          "produtos": {
+            "$idProduto" : {
               ".validate": "newData.hasChildren(['codigo', 'nome','imagem', 'preco', 'quantidade', 'descricao', 'tipopreco_basesituacao'])",
-              "codigo": {
-                ".validate": "root.child('produtos').child(newData.val()).exists()"
-              },
-              "quantidade": {
-                ".validate": "newData.val() > 0"
-              }
+              // qtd, 
+            }
+            "codigo": {
+              ".validate": "root.child('produtos').child(newData.val()).exists()"
+            },
+            "quantidade": {
+              ".validate": "newData.val() > 0"
             }
           }
-        ]
+        }
       }
     }
   }
