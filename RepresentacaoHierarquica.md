@@ -1,0 +1,49 @@
+/
+ +---"usuarios"
+      +---$uid
+          +---"cpf"
+          +---"email"
+          +---"nome"
+          +---"funcao"    
+   
+ +---"clientes"
+      +---$uid
+          +---"cpf"
+          +---"email"
+          +---"nome"
+          +---listaEnderecos
+              +---[$idEndereco1, $idEndereco2, $idEndereco3]
+               
+ +---"enderecos"
+      +---$uid
+	      +---$idEndereco
+			  +---"rua"
+			  +---"bairro"
+	          +---"numero"
+	          +---"complemento"
+	          +---"cidade"
+	          +---"cep"
+	          +---"latitude"
+	          +---"longitude"
+ +---"produtos"
+      +---$id
+          +---"nome"
+          +---"imagem"
+          +---"descricao" 
+          +---"tipo"
+          +---"preco_base"
+          +---"situacao"
+ +---"pedidos"
+      +---$uid
+          +---$idPedido
+              +---listaItems
+                  +---[$item1:
+                      		+---"quantidade"
+                      		+---"preco"
+                      		+---"$idProduto",
+                       $item2:
+							+---"quantidade"
+							+---"preco"
+							+---"idProduto"
+                      ]
+/

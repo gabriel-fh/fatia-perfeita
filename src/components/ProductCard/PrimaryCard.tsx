@@ -17,13 +17,13 @@ const PrimaryCard = ({ infos, formatToReal }: PrimaryCardProps) => {
       accessible={true}
       activeOpacity={0.5}
       accessibilityLabel="Botão de acessar tela do produto"
-      accessibilityHint={`Navegar para a tela do produto ${infos?.nome}`}
+      accessibilityHint={`Navegar para a tela do produto ${infos?.getNome()}`}
       accessibilityRole="link"
     >
       <View style={styles.imgContainer}>
-        {infos.imagem ? (
+        {infos.getImagem() ? (
           <Image
-            source={{ uri: infos.imagem }}
+            source={{ uri: infos.getImagem() }}
             style={{
               width: "100%",
               height: "100%",
@@ -37,7 +37,7 @@ const PrimaryCard = ({ infos, formatToReal }: PrimaryCardProps) => {
       <View style={styles.infoContainer}>
         <Text style={styles.text}>{formatToReal(infos.preco_base)}</Text>
         <Text style={styles.title} numberOfLines={2}>
-          {infos?.nome}
+          {infos?.getNome()}
         </Text>
         <AddRemoveButton id={infos.codigo} variant={"primary"} />
       </View>

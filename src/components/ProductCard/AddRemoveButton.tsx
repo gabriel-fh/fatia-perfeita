@@ -5,7 +5,7 @@ import useAddRemove from "./useAddRemove";
 import { colors } from "@/src/utils/styles";
 type AddRemoveButtonProps = {
   id: string;
-  variant: "primary" | "secondary";
+  variant?: "primary" | "secondary";
 };
 
 const AddRemoveButton = ({ id, variant = "primary" }: AddRemoveButtonProps) => {

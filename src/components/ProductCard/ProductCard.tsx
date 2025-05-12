@@ -1,17 +1,11 @@
 import { View, Image, TouchableOpacity, StyleSheet, Text } from "react-native";
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors } from "../../utils/styles";
 import AddRemoveButton from "./AddRemoveButton";
-import PrimaryCard from "./PrimaryCard";
-import SecondaryCard from "./SecondaryCard";
+import Produto from "@/src/model/Produto";
+import { colors } from "@/src/utils/styles";
 
-type ProductCardProps = {
-  infos: Product;
-  variant?: "primary" | "secondary";
-};
-
-const ProductCard = ({ infos, variant = "primary" }: ProductCardProps) => {
+const ProductCard = ({ infos }: { infos: Produto }) => {
   const formatToReal = (valor: number | bigint | Intl.StringNumericLiteral): string => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -19,13 +13,45 @@ const ProductCard = ({ infos, variant = "primary" }: ProductCardProps) => {
     }).format(valor);
   };
 
-  return variant === "primary" ? <PrimaryCard infos={infos} formatToReal={formatToReal} /> : <SecondaryCard />;
+  return (
+    <TouchableOpacity
+      onPress={() => {}}
+      style={styles.containter}
+      accessible={true}
+      activeOpacity={0.5}
+      accessibilityLabel="Botão de acessar tela do produto"
+      accessibilityHint={`Navegar para a tela do produto ${infos?.getNome()}`}
+      accessibilityRole="link"
+    >
+      <View style={styles.imgContainer}>
+        {infos.getImagem() ? (
+          <Image
+            source={{ uri: infos.getImagem() }}
+            style={{
+              width: "100%",
+              height: "100%",
+              marginTop: -60,
+            }}
+          />
+        ) : (
+          <MaterialIcons name="image-not-supported" size={24} color="black" />
+        )}
+      </View>
+      <View>
+        <Text style={styles.text}>{formatToReal(infos.getPrecoBase())}</Text>
+        <Text style={styles.title} numberOfLines={2}>
+          {infos?.getNome()}
+        </Text>
+      </View>
+      <AddRemoveButton id={infos.getCodigo()} />
+    </TouchableOpacity>
+  );
 };
 
 const styles = StyleSheet.create({
   containter: {
     width: 180,
-    height: 275,
+    height: 280,
     backgroundColor: colors.bgTertiary,
     flexDirection: "column",
     justifyContent: "flex-start",
@@ -41,11 +67,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 16,
     padding: 8,
-  },
-  infoContainer: {
-    width: "100%",
-    height: 275 * 0.45,
-    justifyContent: "space-between",
   },
   title: {
     color: "#fff",
