@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, StatusBar, View } from "react-native";
-import ProductCard from "../../components/ProductCard";
+import ProductCard from "../../components/ProductCard/ProductCard";
 import { ScrollView } from "react-native-gesture-handler";
 import { colors } from "../../utils/styles";
 import Header from "./components/Header";

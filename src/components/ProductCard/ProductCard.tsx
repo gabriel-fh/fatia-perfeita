@@ -1,7 +1,7 @@
 import { View, Image, TouchableOpacity, StyleSheet, Text } from "react-native";
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors } from "../utils/styles";
+import { colors } from "../../utils/styles";
 import AddRemoveButton from "./AddRemoveButton";
 
 const ProductCard = ({ infos }: { infos: Product }) => {
@@ -41,7 +41,7 @@ const ProductCard = ({ infos }: { infos: Product }) => {
         <Text style={styles.title} numberOfLines={2}>
           {infos?.nome}
         </Text>
-        <AddRemoveButton />
+        <AddRemoveButton id={infos.codigo} variant={"primary"} />
       </View>
     </TouchableOpacity>
   );

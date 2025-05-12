@@ -49,7 +49,7 @@
           ".indexOn": ["codigo"],
           "produtos": {
             "$idProduto" : {
-              ".validate": "newData.hasChildren(['codigo', 'nome','imagem', 'preco', 'quantidade', 'descricao', 'tipopreco_basesituacao'])",
+              ".validate": "newData.hasChildren(['codigo', 'nome','imagem', 'preco', 'quantidade', 'descricao', 'tipopreco_basesituacao'])"
             },
             "codigo": {
               ".validate": "root.child('produtos').child(newData.val()).exists()"
