@@ -14,6 +14,7 @@ import {
 } from "@expo-google-fonts/space-grotesk";
 import { Routes } from "./src/routes/Routes";
 import { ActivityIndicator, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import FlashMessage from "react-native-flash-message";
 
 // import Toast from "react-native-toast-message";
@@ -43,6 +44,14 @@ export default function App() {
 
     prepare();
   }, []);
+
+  // useEffect(() => {
+  //   const clearStorage = async () => {
+  //     await AsyncStorage.clear();
+  //     console.log("Storage cleared");
+  //   }
+  //   clearStorage();
+  // }, []);
 
   const appRoutes = () => {
     return (

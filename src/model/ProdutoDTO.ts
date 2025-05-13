@@ -1,4 +1,4 @@
-import Produto, { SituacaoProduto, TipoProduto } from "./Produto"; // Certifique-se de que Produto esteja tipado corretamente
+import Produto, { SituacaoProduto, TipoProduto } from "./Produto"; 
 
 export default class ProdutoDTO {
   private codigo: string;

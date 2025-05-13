@@ -37,14 +37,8 @@ const Home = () => {
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
       <StatusBar barStyle="light-content" backgroundColor={colors.bgPrimary} />
       <View style={styles.content}>
-        <View
-          style={{
-            paddingBottom: 20,
-          }}
-        >
-          <Header />
-          {/* <SubNavigation currentProducts={currentProducts} setcurrentProducts={setcurrentProducts} /> */}
-        </View>
+        <Header />
+        {/* <SubNavigation currentProducts={currentProducts} setcurrentProducts={setcurrentProducts} /> */}
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.products}>
             {produtos.map((product) => (

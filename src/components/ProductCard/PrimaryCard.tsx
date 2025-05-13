@@ -1,11 +1,13 @@
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import AddRemoveButton from "./AddRemoveButton";
 import { colors } from "@/src/utils/styles";
+import Produto from "@/src/model/Produto";
+import { Image } from "expo-image";
 
 type PrimaryCardProps = {
-  infos: Product;
+  infos: Produto;
   formatToReal: (valor: number | bigint | Intl.StringNumericLiteral) => string;
 };
 
@@ -35,11 +37,11 @@ const PrimaryCard = ({ infos, formatToReal }: PrimaryCardProps) => {
         )}
       </View>
       <View style={styles.infoContainer}>
-        <Text style={styles.text}>{formatToReal(infos.preco_base)}</Text>
+        <Text style={styles.text}>{formatToReal(infos.getPrecoBase())}</Text>
         <Text style={styles.title} numberOfLines={2}>
-          {infos?.getNome()}
+          {infos.getNome()}
         </Text>
-        <AddRemoveButton id={infos.codigo} variant={"primary"} />
+        <AddRemoveButton id={infos.getCodigo()} variant={"primary"} />
       </View>
     </TouchableOpacity>
   );

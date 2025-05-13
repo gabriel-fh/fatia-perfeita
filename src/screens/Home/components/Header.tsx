@@ -24,7 +24,9 @@ const Header = () => {
 };
 
 const styles = StyleSheet.create({
-  containter: {},
+  containter: {
+    paddingBottom: 20,
+  },
   title: {
     color: "#fff",
     fontFamily: "SpaceGrotesk_600SemiBold",
