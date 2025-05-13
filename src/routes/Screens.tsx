@@ -3,6 +3,7 @@ import { RootStackParamList } from "./Routes";
 import { createStackNavigator } from "@react-navigation/stack";
 import Cart from "../screens/Cart/Cart";
 import TabNavigator from "./TabNavigator";
+import Profile from "../screens/Profile/Profile";
 
 const Screens = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -15,6 +16,7 @@ const Screens = () => {
     >
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="Main" component={TabNavigator} options={{ gestureEnabled: false }} />
+      <Stack.Screen name="Profile" component={Profile} options={{ gestureEnabled: false }} />
     </Stack.Navigator>
   );
 };
