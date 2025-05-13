@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Cart from "../screens/Cart/Cart";
 import TabNavigator from "./TabNavigator";
 import Profile from "../screens/Profile/Profile";
+import Login from "../screens/Login/Login";
 
 const Screens = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -17,6 +18,7 @@ const Screens = () => {
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="Main" component={TabNavigator} options={{ gestureEnabled: false }} />
       <Stack.Screen name="Profile" component={Profile} options={{ gestureEnabled: false }} />
+      <Stack.Screen name="Login" component={Login} options={{ gestureEnabled: false }} />
     </Stack.Navigator>
   );
 };

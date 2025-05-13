@@ -4,4 +4,5 @@ export type RoutesParamsType = {
   Main: { screen: any; params?: any };
   Cart: undefined;
   Profile: undefined;
+  Login: undefined;
 };
