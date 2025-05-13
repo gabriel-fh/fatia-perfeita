@@ -1,146 +1,94 @@
 
 
 import Produto from "../Produto";
-import ModelError from "../ModelError";
+import { ref, get, set, remove } from "firebase/database";
+import { database } from "@/src/setup/FirebaseSetup";
 
-// Definindo a tipagem para a classe DaoProduto
 export default class DaoProduto {
   static promessaConexao: Promise<any> | null = null;
 
-  constructor() {
-    this.obterConexao();
-  }
+  async obterProdutos(): Promise<Produto[]> {
+    const produtosRef = ref(database, "/produtos");
+    const snapshot = await get(produtosRef);
+    const data = snapshot.val();
+    const produtos: Produto[] = [];
 
-  // Tipagem da função obterConexao
-  async obterConexao(): Promise<any> {
-    if (DaoProduto.promessaConexao == null) {
-      DaoProduto.promessaConexao = new Promise((resolve, reject) => {
-        const db = getDatabase();
-        if (db) resolve(db);
-        else reject(new ModelError("Não foi possível conectar ao banco de dados"));
+    if (data) {
+      Object.keys(data).forEach((key) => {
+        const p = data[key];
+        produtos.push(
+          new Produto(
+            p.codigo,
+            p.nome,
+            p.imagem,
+            p.descricao,
+            p.tipo,
+            p.preco_base,
+            p.situacao
+          )
+        );
       });
     }
-    return DaoProduto.promessaConexao;
+
+    return produtos;
   }
 
-  // Tipagem da função obterProdutos
-  async obterProdutos(): Promise<Produto[]> {
-    let connectionDB = await this.obterConexao();
-    return new Promise((resolve) => {
-      let conjProdutos: Produto[] = [];
-      let dbRefProdutos = ref(connectionDB, "produtos");
-      let consulta = query(dbRefProdutos, orderByChild("codigo"));
-      let resultPromise = get(consulta);
-
-      resultPromise
-        .then((dataSnapshot) => {
-          dataSnapshot.forEach((dataSnapshotObj) => {
-            let elem = dataSnapshotObj.val();
-            let produto = new Produto(
-              elem.codigo, // codigo
-              elem.nome, // nome
-              elem.imagem, // imagem
-              elem.descricao, // descricao
-              elem.tipo, // tipo
-              elem.preco_base, // preco_base
-              elem.situacao // situacao
-            );
-            conjProdutos.push(produto);
-          });
-          resolve(conjProdutos);
-        })
-        .catch((e) => {
-          console.error("#ERRO: " + e);
-          resolve([]);
-        });
-    });
-  }
-
-  // Tipagem da função obterProdutoPeloCodigo
   async obterProdutoPeloCodigo(codigo: string): Promise<Produto | null> {
-    let connectionDB = await this.obterConexao();
-    return new Promise((resolve) => {
-      let dbRefCurso = ref(connectionDB, "produtos/" + codigo);
-      let consulta = query(dbRefCurso);
-      let resultPromise = get(consulta);
-      resultPromise.then((dataSnapshot) => {
-        let produtoSnap = dataSnapshot.val();
-        if (produtoSnap != null) {
-          resolve(
-            new Produto(
-              produtoSnap.codigo,
-              produtoSnap.nome,
-              produtoSnap.imagem,
-              produtoSnap.descricao,
-              produtoSnap.tipo,
-              produtoSnap.preco_base,
-              produtoSnap.situacao
-            )
+    const produtosRef = ref(database, "/produtos");
+    const snapshot = await get(produtosRef);
+    const data = snapshot.val();
+
+    if (data) {
+      for (const key of Object.keys(data)) {
+        const p = data[key];
+        if (p.codigo === codigo) {
+          return new Produto(
+            p.codigo,
+            p.nome,
+            p.imagem,
+            p.descricao,
+            p.tipo,
+            p.preco_base,
+            p.situacao
           );
-        } else {
-          resolve(null);
         }
-      });
-    });
+      }
+    }
+
+    return null;
   }
 
-  // Tipagem da função incluir
+
   async incluir(produto: Produto): Promise<boolean> {
-    let connectionDB = await this.obterConexao();
-    return new Promise((resolve, reject) => {
-      let dbRefProdutos = ref(connectionDB, "produtos");
-      runTransaction(dbRefProdutos, (produtos) => {
-        let dbRefNovoProduto = child(dbRefProdutos, produto.getCodigo());
-        let setPromise = set(dbRefNovoProduto, produto);
-        setPromise
-          .then(() => {
-            resolve(true);
-          })
-          .catch((e) => {
-            console.log("#ERRO: " + e);
-            resolve(false);
-          });
-      });
-    });
+    try {
+      const dbRefNovoProduto = ref(database, `/produtos/${produto.getCodigo()}`);
+      await set(dbRefNovoProduto, produto);
+      return true;
+    } catch (error) {
+      console.log("#ERRO incluir:", error);
+      return false;
+    }
   }
 
-  // Tipagem da função alterar
   async alterar(produto: Produto): Promise<boolean> {
-    let connectionDB = await this.obterConexao();
-    return new Promise((resolve, reject) => {
-      let dbRefProdutos = ref(connectionDB, "produtos");
-      runTransaction(dbRefProdutos, (produtos) => {
-        let dbRefProdutoAlterado = child(dbRefProdutos, produto.getCodigo());
-        let setPromise = set(dbRefProdutoAlterado, produto);
-        setPromise
-          .then(() => {
-            resolve(true);
-          })
-          .catch((e) => {
-            console.log("#ERRO: " + e);
-            resolve(false);
-          });
-      });
-    });
+    try {
+      const dbRefProduto = ref(database, `/produtos/${produto.getCodigo()}`);
+      await set(dbRefProduto, produto);
+      return true;
+    } catch (error) {
+      console.log("#ERRO alterar:", error);
+      return false;
+    }
   }
 
-  // Tipagem da função excluir
-  async excluir(produto: Produto): Promise<boolean> {
-    let connectionDB = await this.obterConexao();
-    return new Promise((resolve, reject) => {
-      let dbRefProdutos = ref(connectionDB, "produtos");
-      runTransaction(dbRefProdutos, (produtos) => {
-        let dbRefExcluirProduto = child(dbRefProdutos, produto.getCodigo());
-        let setPromise = remove(dbRefExcluirProduto, produtos);
-        setPromise
-          .then(() => {
-            resolve(true);
-          })
-          .catch((e) => {
-            console.log("#ERRO: " + e);
-            resolve(false);
-          });
-      });
-    });
+  async excluir(produtoCodigo: string): Promise<boolean> {
+    try {
+      const dbRefProduto = ref(database, `/produtos/${produtoCodigo}`);
+      await remove(dbRefProduto);
+      return true;
+    } catch (error) {
+      console.log("#ERRO excluir:", error);
+      return false;
+    }
   }
 }

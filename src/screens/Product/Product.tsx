@@ -31,6 +31,7 @@ export default function Product() {
   const [tipo, setTipo] = useState<TipoProduto>("DELIVERY");
   const [precoBase, setPrecoBase] = useState("");
   const [situacao, setSituacao] = useState<SituacaoProduto>("DISPONIVEL");
+  const [editando, setEditando] = useState(false);
 
   const carregarProdutos = async () => {
     setLoading(true);
@@ -43,17 +44,34 @@ export default function Product() {
     carregarProdutos();
   }, []);
 
-  const handleSalvar = async () => {
-    const novoProduto = new Produto(
-      codigo,
-      nome,
-      imagem,
-      descricao,
-      tipo,
-      parseFloat(precoBase),
-      situacao
-    );
-    await viewer.incluirProduto(novoProduto);
+  const salvarProduto = async () => {
+    const produto = new Produto(codigo, nome, imagem, descricao, tipo, parseFloat(precoBase), situacao);
+
+    if (editando) {
+      await viewer.alterarProduto(produto);
+    } else {
+      await viewer.incluirProduto(produto);
+    }
+
+    setModalVisible(false);
+    setEditando(false);
+    carregarProdutos();
+  };
+
+  const editarProduto = (produto: Produto) => {
+    setCodigo(produto.getCodigo());
+    setNome(produto.getNome());
+    setImagem(produto.getImagem());
+    setDescricao(produto.getDescricao());
+    setTipo(produto.getTipo());
+    setPrecoBase(produto.getPrecoBase().toString());
+    setSituacao(produto.getSituacao());
+    setEditando(true);
+    setModalVisible(true);
+  };
+
+  const excluirProduto = async () => {
+    await viewer.excluirProduto(codigo);
     setModalVisible(false);
     carregarProdutos();
   };
@@ -75,14 +93,16 @@ export default function Product() {
           <ActivityIndicator style={{ marginTop: 50 }} />
         ) : (
           produtos.map((p) => (
-            <View key={p.getCodigo()} style={styles.row}>
-              <Image source={{ uri: p.getImagem() }} style={styles.image} />
-              <Text style={styles.cell}>{p.getCodigo()}</Text>
-              <Text style={styles.cell}>{p.getNome()}</Text>
-              <Text style={styles.cell}>{p.getTipo()}</Text>
-              <Text style={styles.cell}>R$ {p.getPrecoBase().toFixed(2)}</Text>
-              <Text style={styles.cell}>{p.getSituacao()}</Text>
-            </View>
+            <TouchableOpacity onPress={() => editarProduto(p)} key={p.getCodigo()}>
+              <View style={styles.row}>
+                <Image source={{ uri: p.getImagem() }} style={styles.image} />
+                <Text style={styles.cell}>{p.getCodigo()}</Text>
+                <Text style={styles.cell}>{p.getNome()}</Text>
+                <Text style={styles.cell}>{p.getTipo()}</Text>
+                <Text style={styles.cell}>R$ {p.getPrecoBase().toFixed(2)}</Text>
+                <Text style={styles.cell}>{p.getSituacao()}</Text>
+              </View>
+            </TouchableOpacity>
           ))
         )}
       </ScrollView>
@@ -102,15 +122,44 @@ export default function Product() {
             <TextInput placeholder="Nome" value={nome} onChangeText={setNome} style={styles.input} />
             <TextInput placeholder="Imagem (URL)" value={imagem} onChangeText={setImagem} style={styles.input} />
             <TextInput placeholder="Descrição" value={descricao} onChangeText={setDescricao} style={styles.input} />
-            <TextInput placeholder="Tipo (DELIVERY | RETIRADA)" value={tipo} onChangeText={(t) => setTipo(t as TipoProduto)} style={styles.input} />
-            <TextInput placeholder="Preço base" value={precoBase} onChangeText={setPrecoBase} keyboardType="numeric" style={styles.input} />
-            <TextInput placeholder="Situação (DISPONIVEL | INATIVO)" value={situacao} onChangeText={(s) => setSituacao(s as SituacaoProduto)} style={styles.input} />
+            <TextInput
+              placeholder="Tipo (DELIVERY | RETIRADA)"
+              value={tipo}
+              onChangeText={(t) => setTipo(t as TipoProduto)}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Preço base"
+              value={precoBase}
+              onChangeText={setPrecoBase}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Situação (DISPONIVEL | INATIVO)"
+              value={situacao}
+              onChangeText={(s) => setSituacao(s as SituacaoProduto)}
+              style={styles.input}
+            />
 
             <View style={styles.modalButtons}>
-              <TouchableOpacity style={styles.button} onPress={handleSalvar}>
+              {editando && (
+                <TouchableOpacity style={[styles.button, { backgroundColor: "red" }]} onPress={excluirProduto}>
+                  <Text style={styles.buttonText}>Excluir</Text>
+                </TouchableOpacity>
+              )}
+
+              <TouchableOpacity style={styles.button} onPress={salvarProduto}>
                 <Text style={styles.buttonText}>Salvar</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, { backgroundColor: "#aaa" }]} onPress={() => setModalVisible(false)}>
+
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: "#aaa" }]}
+                onPress={() => {
+                  setModalVisible(false);
+                  setEditando(false);
+                }}
+              >
                 <Text style={styles.buttonText}>Cancelar</Text>
               </TouchableOpacity>
             </View>
