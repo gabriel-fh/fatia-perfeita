@@ -5,7 +5,6 @@ import { ref, get, set, remove } from "firebase/database";
 import { auth, database } from "@/src/setup/FirebaseSetup";
 
 export default class DaoProduto {
-  static promessaConexao: Promise<any> | null = null;
 
   async obterProdutos(): Promise<Produto[]> {
     const produtosRef = ref(database, "/produtos");

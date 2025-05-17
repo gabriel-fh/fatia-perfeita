@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@/src/utils/styles";
 import { ScrollView } from "react-native-gesture-handler";
 import ViewerUsuario from "@/src/viewer/ViewerUsuario";
-import Usuario from "@/src/model/Usuario";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/src/routes/Routes";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
@@ -12,8 +11,8 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 const viewer = new ViewerUsuario();
 
 const SignUp = () => {
-    const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
-  
+  const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
+
   const [nome, setNome] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [telefone, setTelefone] = React.useState("");
@@ -28,13 +27,11 @@ const SignUp = () => {
 
   const handleSignUp = async () => {
     try {
-      const user = await viewer.criarConta(email, senha);
+      const user = await viewer.criarConta(email, senha, nome, telefone, "CLIENTE", cpf);
       if (!user) {
         alert("Erro ao criar conta. Tente novamente.");
         return;
       }
-      console.log("Usuário criado com UID: ", user.uid);
-      await viewer.incluirUsuario(new Usuario(user.uid, nome, email, telefone, "CLIENTE", cpf));
       alert("Usuário cadastrado com sucesso!");
       navigation.navigate("Main", { screen: "Home" });
     } catch (error) {

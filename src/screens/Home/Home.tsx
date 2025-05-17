@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, StatusBar, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { colors } from "../../utils/styles";
@@ -7,31 +7,33 @@ import ViewerProduto from "@/src/viewer/ViewerProduto";
 import Produto from "@/src/model/Produto";
 import ProductCard from "@/src/components/ProductCard/ProductCard";
 import { SafeAreaView } from "react-native-safe-area-context";
+import SubNavigation from "./components/SubNavigation";
+import { useFocusEffect } from "@react-navigation/native";
 const viewer = new ViewerProduto();
 
 const Home = () => {
   const [produtos, setProdutos] = useState<Produto[]>([]);
+  const [currentProducts, setcurrentProducts] = useState(1);
 
-  useEffect(() => {
+  useFocusEffect(() => {
     const fetchData = async () => {
       const data = await viewer.carregarProdutos();
 
       setProdutos(data);
     };
-
     fetchData();
-  }, []);
+  });
 
-  // const filteredProducts = products.filter((product) => {
-  //   if (currentProducts === 1) {
-  //     return product.tipo === "PIZZA";
-  //   } else if (currentProducts === 2) {
-  //     return product.tipo === "SOBREMESA";
-  //   } else if (currentProducts === 3) {
-  //     return product.tipo === "BEBIDA";
-  //   }
-  //   return true;
-  // });
+  const filteredProducts = produtos.filter((product) => {
+    if (currentProducts === 1) {
+      return product.getTipo() === "PIZZA";
+    } else if (currentProducts === 2) {
+      return product.getTipo() === "SOBREMESA";
+    } else if (currentProducts === 3) {
+      return product.getTipo() === "BEBIDA";
+    }
+    return true;
+  });
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
@@ -43,11 +45,11 @@ const Home = () => {
           }}
         >
           <Header />
-          {/* <SubNavigation currentProducts={currentProducts} setcurrentProducts={setcurrentProducts} /> */}
+          <SubNavigation currentProducts={currentProducts} setcurrentProducts={setcurrentProducts} />
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.products}>
-            {produtos.map((product) => (
+            {filteredProducts.map((product) => (
               <ProductCard key={product.getCodigo()} infos={product} />
             ))}
           </View>
@@ -77,6 +79,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    gap: 10,
     marginTop: 30,
   },
 });
