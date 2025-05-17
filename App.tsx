@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import * as Font from "expo-font";
 import Entypo from "@expo/vector-icons/Entypo";
 import AnimatedSplash from "react-native-animated-splash-screen";
-
-
 import {
   useFonts,
   SpaceGrotesk_300Light,
