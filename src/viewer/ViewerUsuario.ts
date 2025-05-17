@@ -1,5 +1,4 @@
 import CtrlManterUsuarios from "../controller/CtrlManterUsuarios";
-import Usuario from "../model/Usuario";
 
 export default class ViewerUsuario {
   #ctrl: CtrlManterUsuarios;
@@ -8,11 +7,14 @@ export default class ViewerUsuario {
     this.#ctrl = new CtrlManterUsuarios(this);
   }
 
-  async criarConta(email: string, senha: string) {
-    return this.#ctrl.criarConta(email, senha);
+  async carregarUsuario(email: string) {
+    const data = await this.#ctrl.carregarUsuario(email);
+
+    return data;
   }
 
-  async incluirUsuario(usuario: Usuario) {
-    return this.#ctrl.incluir(usuario);
+  async criarConta(email: string, senha: string, nome: string, telefone: string, funcao: string, cpf: string) {
+    return this.#ctrl.criarConta(email, senha, nome, telefone, funcao, cpf);
   }
+
 }

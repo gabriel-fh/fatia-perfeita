@@ -5,9 +5,11 @@ import { colors } from "@/src/utils/styles";
 
 const Cart = () => {
   return (
-    <View style={styles.container}>
-      <Text>Cart</Text>
-    </View>
+    <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
+      <View style={styles.container}>
+        <Text>Cart</Text>
+      </View>
+    </SafeAreaView>
   );
 };
 

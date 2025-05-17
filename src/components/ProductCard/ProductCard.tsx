@@ -50,7 +50,7 @@ const ProductCard = ({ infos }: { infos: Produto }) => {
 
 const styles = StyleSheet.create({
   containter: {
-    width: 180,
+    width: 175,
     height: 280,
     backgroundColor: colors.bgTertiary,
     flexDirection: "column",

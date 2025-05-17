@@ -19,6 +19,7 @@ const Login = () => {
       const user = await ctrlSessao.login({ email, senha });
       console.log("Usuário logado:", user);
       alert("Login bem-sucedido!");
+      navigation.navigate("Main", { screen: "Home" });
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       alert("Erro ao fazer login: " + error);
@@ -27,7 +28,7 @@ const Login = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
-      <View>
+      <View style={{ gap: 10 }}>
         <Text style={styles.text}>E-mail</Text>
         <TextInput
           placeholder="Digite seu e-mail"
@@ -56,6 +57,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.bgPrimary,
+    padding: 16,
   },
   input: {
     borderWidth: 1,

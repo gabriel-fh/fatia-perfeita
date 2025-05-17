@@ -55,6 +55,7 @@ export default function Product() {
 
     setModalVisible(false);
     setEditando(false);
+    limparCampos();
     carregarProdutos();
   };
 
@@ -74,6 +75,16 @@ export default function Product() {
     await viewer.excluirProduto(codigo);
     setModalVisible(false);
     carregarProdutos();
+  };
+
+  const limparCampos = () => {
+    setCodigo("");
+    setNome("");
+    setImagem("");
+    setDescricao("");
+    setTipo("PIZZA");
+    setPrecoBase("");
+    setSituacao("DISPONIVEL");
   };
 
   return (
@@ -118,7 +129,13 @@ export default function Product() {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Adicionar Produto</Text>
 
-            <TextInput placeholder="Código" value={codigo} onChangeText={setCodigo} style={styles.input} />
+            <TextInput
+              placeholder="Código"
+              value={codigo}
+              onChangeText={setCodigo}
+              style={styles.input}
+              editable={!editando}
+            />
             <TextInput placeholder="Nome" value={nome} onChangeText={setNome} style={styles.input} />
             <TextInput placeholder="Imagem (URL)" value={imagem} onChangeText={setImagem} style={styles.input} />
             <TextInput placeholder="Descrição" value={descricao} onChangeText={setDescricao} style={styles.input} />

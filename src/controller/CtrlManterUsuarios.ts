@@ -1,5 +1,4 @@
 import DaoUsuario from "../model/dao/DaoUsuario";
-import Usuario from "../model/Usuario";
 import ViewerUsuario from "../viewer/ViewerUsuario";
 
 export default class CtrlManterUsuarios {
@@ -10,27 +9,21 @@ export default class CtrlManterUsuarios {
     this.viewer = viewer;
   }
 
-  async carregar() {
-    const usuarios = await this.#dao.obterUsuarios();
+  async carregarUsuario(uid: string) {
+    const usuario = await this.#dao.obterUsuarioPeloUID(uid);
 
-    return usuarios;
+    return usuario;
   }
 
-  async criarConta(email: string, senha: string) {
-    const refUsuario = await this.#dao.criarConta(email, senha);
+  async criarConta(email: string, senha: string, nome: string, telefone: string, funcao: string, cpf: string) {
+    const refUsuario = await this.#dao.criarConta(email, senha, nome, telefone, funcao, cpf);
 
     return refUsuario;
   }
 
-  async incluir(usuario: Usuario) {
-    const refUsuario = await this.#dao.incluir(usuario);
+  // async excluir(usuario: Usuario) {
+  //   const refUsuario = await this.#dao.excluir(usuario);
 
-    return refUsuario;
-  }
-
-  async excluir(usuario: Usuario) {
-    const refUsuario = await this.#dao.excluir(usuario);
-
-    return refUsuario;
-  }
+  //   return refUsuario;
+  // }
 }
