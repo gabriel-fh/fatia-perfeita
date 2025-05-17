@@ -28,7 +28,7 @@ export default function Product() {
   const [nome, setNome] = useState("");
   const [imagem, setImagem] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [tipo, setTipo] = useState<TipoProduto>("DELIVERY");
+  const [tipo, setTipo] = useState<TipoProduto>("PIZZA");
   const [precoBase, setPrecoBase] = useState("");
   const [situacao, setSituacao] = useState<SituacaoProduto>("DISPONIVEL");
   const [editando, setEditando] = useState(false);
@@ -123,7 +123,7 @@ export default function Product() {
             <TextInput placeholder="Imagem (URL)" value={imagem} onChangeText={setImagem} style={styles.input} />
             <TextInput placeholder="Descrição" value={descricao} onChangeText={setDescricao} style={styles.input} />
             <TextInput
-              placeholder="Tipo (DELIVERY | RETIRADA)"
+              placeholder="Tipo PIZZA"
               value={tipo}
               onChangeText={(t) => setTipo(t as TipoProduto)}
               style={styles.input}

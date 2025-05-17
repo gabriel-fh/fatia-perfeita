@@ -1,6 +1,6 @@
 import ModelError from "./ModelError";
 
-export type TipoProduto = "DELIVERY" | "BEBIDA" | "OUTROS";
+export type TipoProduto = "PIZZA" | "BEBIDA" | "SOBREMESA";
 export type SituacaoProduto = "DISPONIVEL" | "INDISPONIVEL";
 type Pedido = {}; // Defina o tipo Pedido de acordo com sua implementação
 
@@ -133,9 +133,9 @@ export default class Produto {
   }
 
   static validarTipo(tipo: string): void {
-    const tiposValidos: TipoProduto[] = ["DELIVERY", "BEBIDA", "OUTROS"];
+    const tiposValidos: TipoProduto[] = ["PIZZA", "BEBIDA", "SOBREMESA"];
     if (!tiposValidos.includes(tipo as TipoProduto)) {
-      throw new ModelError("Tipo inválido. O tipo deve ser um dos seguintes: DELIVERY, BEBIDA, OUTROS.");
+      throw new ModelError("Tipo inválido. O tipo deve ser um dos seguintes: PIZZA, BEBIDA, SOBREMESA.");
     }
   }
 

@@ -35,7 +35,7 @@ export default class ProdutoDTO {
     return this.descricao;
   }
 
-  getTipo(): "DELIVERY" | "BEBIDA" | "OUTROS" {
+  getTipo(): "PIZZA" | "BEBIDA" | "SOBREMESA" {
     return this.tipo;
   }
 

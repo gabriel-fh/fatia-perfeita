@@ -2,13 +2,17 @@ import { Text, StyleSheet, View, TextInput, Button } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@/src/utils/styles";
-import CtrlSessao from './../../controller/CtrlSessao';
+import CtrlSessao from "./../../controller/CtrlSessao";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@/src/routes/Routes";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
 const ctrlSessao = new CtrlSessao();
 
 const Login = () => {
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
+  const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
 
   const handleLogin = async () => {
     try {
@@ -19,7 +23,7 @@ const Login = () => {
       console.error("Erro ao fazer login:", error);
       alert("Erro ao fazer login: " + error);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
@@ -42,6 +46,7 @@ const Login = () => {
           onChangeText={setSenha}
         />
         <Button title="Entrar" onPress={handleLogin} />
+        <Button title="Criar conta" onPress={() => navigation.navigate("SignUp")} />
       </View>
     </SafeAreaView>
   );

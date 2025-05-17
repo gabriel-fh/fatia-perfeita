@@ -5,4 +5,5 @@ export type RoutesParamsType = {
   Cart: undefined;
   Profile: undefined;
   Login: undefined;
+  SignUp: undefined;
 };
