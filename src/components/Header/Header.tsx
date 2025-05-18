@@ -1,16 +1,20 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { Entypo } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@/src/routes/Routes";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
 type HeaderProps = {
   title: string;
-  onBackPress?: () => void;
 };
 
-const Header = ({ title, onBackPress }: HeaderProps) => {
+const Header = ({ title }: HeaderProps) => {
+  const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onBackPress} style={styles.icon}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.icon}>
         <Entypo name="chevron-small-left" size={24} color="#fff" />
       </TouchableOpacity>
       <Text style={styles.title}>{title}</Text>
@@ -36,7 +40,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     top: 16,
-  }
+  },
 });
 
 export default Header;
