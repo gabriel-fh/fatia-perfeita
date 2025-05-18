@@ -1,4 +1,4 @@
-import { Text, StyleSheet, Button, View } from "react-native";
+import { Text, StyleSheet, Button, View, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@/src/utils/styles";
@@ -8,13 +8,19 @@ import { RootStackParamList } from "@/src/routes/Routes";
 import { auth } from "@/src/setup/FirebaseSetup";
 import ViewerUsuario from "@/src/viewer/ViewerUsuario";
 import Usuario from "@/src/model/Usuario";
+import NotAuth from "@/src/components/NoAuth/NotAuth";
+import Header from "@/src/components/Header/Header";
+import UserInfo from "./components/UserInfo";
+import { isLoading } from "expo-font";
+import Options from "./components/Options";
 
 const viewer = new ViewerUsuario();
 
 const Profile = () => {
   const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
 
-  const [usuario, setUsuario] = useState<Usuario | null>();
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -22,30 +28,44 @@ const Profile = () => {
         const user = await viewer.carregarUsuario(auth.currentUser.uid);
         setUsuario(user);
       }
+      setLoading(false);
     };
 
-    fetchUser();
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        fetchUser();
+      } else {
+        setUsuario(null);
+        setLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
+
+  const handleLogout = async () => {
+    await auth.signOut();
+    navigation.navigate("Main", { screen: "Home" });
+    setUsuario(null);
+  };
+
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
-      {!usuario ? (
-        <Button title="Login" onPress={() => navigation.navigate("Login")} />
-      ) : (
-        <View>
-          <Text style={styles.text}>Nome: {usuario?.getNome()}</Text>
-          <Text style={styles.text}>Email: {usuario?.getEmail()}</Text>
-          <Text style={styles.text}>Telefone: {usuario?.getTelefone()}</Text>
-          <Button
-            title="Sair"
-            onPress={() => {
-              auth.signOut().then(() => {
-                setUsuario(null);
-                navigation.navigate("Main", { screen: "Home" });
-              });
-            }}
-          />
+      <Header title="Meu Perfil" />
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
+      ) : !usuario ? (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <NotAuth />
+        </View>
+      ) : (
+        <>
+          <UserInfo user={usuario} />
+          <Options handleLogout={handleLogout} />
+        </>
       )}
     </SafeAreaView>
   );
@@ -56,11 +76,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.bgPrimary,
     padding: 16,
-  },
-  text: {
-    color: "#fff",
-    fontSize: 20,
-    marginBottom: 12,
   },
 });
 
