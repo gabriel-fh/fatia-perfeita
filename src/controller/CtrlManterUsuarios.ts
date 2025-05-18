@@ -1,11 +1,12 @@
 import DaoUsuario from "../model/dao/DaoUsuario";
+import ViewerPerfil from "../viewer/ViewerPerfil";
 import ViewerUsuario from "../viewer/ViewerUsuario";
 
 export default class CtrlManterUsuarios {
-  viewer: ViewerUsuario;
+  viewer: ViewerUsuario | ViewerPerfil;
   #dao = new DaoUsuario();
 
-  constructor(viewer: ViewerUsuario) {
+  constructor(viewer: ViewerUsuario | ViewerPerfil) {
     this.viewer = viewer;
   }
 

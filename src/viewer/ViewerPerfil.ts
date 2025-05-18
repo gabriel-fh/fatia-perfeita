@@ -1,14 +1,15 @@
 import CtrlManterUsuarios from "../controller/CtrlManterUsuarios";
 
-export default class ViewerUsuario {
+export default class ViewerPerfil {
   #ctrl: CtrlManterUsuarios;
 
   constructor() {
     this.#ctrl = new CtrlManterUsuarios(this);
   }
 
-  async carregarUsuario(uid: string) {
-    const data = await this.#ctrl.carregarUsuario(uid);
+  async carregarUsuario(email: string) {
+    const data = await this.#ctrl.carregarUsuario(email);
+
     return data;
   }
 
