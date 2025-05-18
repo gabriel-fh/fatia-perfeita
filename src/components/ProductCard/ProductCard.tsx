@@ -5,7 +5,12 @@ import AddRemoveButton from "./AddRemoveButton";
 import Produto from "@/src/model/Produto";
 import { colors } from "@/src/utils/styles";
 
-const ProductCard = ({ infos }: { infos: Produto }) => {
+type ProductCardProps = {
+  infos: Produto;
+  variant?: "default" | "cart";
+};
+
+const ProductCard = ({ infos, variant = "default" }: ProductCardProps) => {
   const formatToReal = (valor: number | bigint | Intl.StringNumericLiteral): string => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -16,14 +21,14 @@ const ProductCard = ({ infos }: { infos: Produto }) => {
   return (
     <TouchableOpacity
       onPress={() => {}}
-      style={styles.containter}
+      style={variant === "cart" ? styles.containerCartVariant : styles.container}
       accessible={true}
       activeOpacity={0.5}
       accessibilityLabel="Botão de acessar tela do produto"
       accessibilityHint={`Navegar para a tela do produto ${infos?.getNome()}`}
       accessibilityRole="link"
     >
-      <View style={styles.imgContainer}>
+      <View style={variant === "cart" ? styles.imgContainerCartVariant : styles.imgContainer}>
         {infos.getImagem() ? (
           <Image
             source={{ uri: infos.getImagem() }}
@@ -37,27 +42,30 @@ const ProductCard = ({ infos }: { infos: Produto }) => {
           <MaterialIcons name="image-not-supported" size={24} color="black" />
         )}
       </View>
-      <View>
-        <Text style={styles.text}>{formatToReal(infos.getPrecoBase())}</Text>
-        <Text style={styles.title} numberOfLines={2}>
-          {infos?.getNome()}
-        </Text>
+      <View style={{ width: "100%"}}>
+        <View>
+          <Text style={styles.text} numberOfLines={2}>
+            {infos?.getNome()}
+          </Text>
+          <Text style={styles.title}>{formatToReal(infos.getPrecoBase())}</Text>
+        </View>
+        <View style={variant === "cart" ? styles.addRemove : {}}>
+          <AddRemoveButton produto={infos} />
+        </View>
       </View>
-      <AddRemoveButton produto={infos} />
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  containter: {
+  container: {
     width: 175,
     height: 280,
     backgroundColor: colors.bgTertiary,
     flexDirection: "column",
     justifyContent: "flex-start",
-    alignItems: "center",
     borderRadius: 8,
-    marginBottom: 50,
+    marginBottom: 20,
     paddingHorizontal: 10,
   },
   imgContainer: {
@@ -73,14 +81,38 @@ const styles = StyleSheet.create({
     fontFamily: "SpaceGrotesk_500Medium",
     fontSize: 16,
     marginTop: 5,
-    marginBottom: 15,
+    marginBottom: 10,
   },
   text: {
     color: "#787878",
-    textDecorationLine: "line-through",
-    fontFamily: "SpaceGrotesk_400Regular",
-    fontSize: 15,
+    fontFamily: "SpaceGrotesk_500Medium",
+    fontSize: 16,
     marginTop: 5,
+  },
+
+  //
+
+  containerCartVariant: {
+    flexDirection: "row",
+    backgroundColor: colors.bgTertiary,
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 8,
+    width: "100%",
+  },
+
+  imgContainerCartVariant: {
+    width: 100,
+    height: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 16,
+    padding: 8,
+    marginRight: 15,
+  },
+
+  addRemove: {
+    width: 200,
   },
 });
 

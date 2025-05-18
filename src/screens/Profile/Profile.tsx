@@ -26,6 +26,12 @@ const Profile = () => {
     const fetchUser = async () => {
       if (auth.currentUser && auth.currentUser.uid) {
         const user = await viewer.carregarUsuario(auth.currentUser.uid);
+        
+        if (!user) {
+          setLoading(false);
+          return;
+        }
+
         const address = await viewer.obterUmEnderecoDoUsuario(auth.currentUser.uid);
         if (address) {
           await saveAddressToStorage(address);

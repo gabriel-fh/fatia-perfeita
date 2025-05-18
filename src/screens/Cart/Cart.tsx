@@ -1,43 +1,19 @@
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@/src/utils/styles";
-import { CartItem, useCartStore } from "@/src/contexts/Cart";
-import AddRemoveButton from "@/src/components/ProductCard/AddRemoveButton";
+import { useCartStore } from "@/src/contexts/Cart";
 import Produto, { SituacaoProduto, TipoProduto } from "@/src/model/Produto";
+import Header from "@/src/components/Header/Header";
+import ProductCard from "@/src/components/ProductCard/ProductCard";
+import Button from "@/src/components/Button/Button";
 
 const Cart = () => {
   const { cart, clearCartItems, getTotalItemsInCart } = useCartStore();
 
-  const renderItem = ({ item }: { item: CartItem }) => {
-    if (!item) return null;
-
-    return (
-      <View style={styles.itemContainer}>
-        <Image source={{ uri: item.imagem }} style={styles.image} />
-        <View style={styles.info}>
-          <Text style={styles.name}>{item.nome}</Text>
-          <Text style={styles.price}>R$ {item.preco_base?.toFixed(2)}</Text>
-          <AddRemoveButton
-            produto={
-              new Produto(
-                item.codigo,
-                item.nome,
-                item.imagem,
-                item.descricao,
-                item.tipo as TipoProduto,
-                item.preco_base,
-                item.situacao as SituacaoProduto
-              )
-            }
-          />
-        </View>
-      </View>
-    );
-  };
-
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
+      <Header title={"Meu Carrinho"} />
       <View style={styles.header}>
         <Text style={styles.title}>Carrinho ({getTotalItemsInCart()} itens)</Text>
         {cart.length > 0 && (
@@ -52,10 +28,34 @@ const Cart = () => {
         <FlatList
           data={cart}
           keyExtractor={(item) => item.codigo}
-          renderItem={renderItem}
-          contentContainerStyle={{ paddingBottom: 20 }}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <ProductCard
+              infos={
+                new Produto(
+                  item.codigo,
+                  item.nome,
+                  item.imagem,
+                  item.descricao,
+                  item.tipo as TipoProduto,
+                  item.preco_base,
+                  item.situacao as SituacaoProduto
+                )
+              }
+              variant="cart"
+            />
+          )}
+          contentContainerStyle={{ paddingBottom: 80 }}
         />
       )}
+      <View style={styles.floatButton}>
+        <Button
+          title={"Continuar"}
+          onPress={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -72,47 +72,29 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   title: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 16,
+    fontFamily: "SpaceGrotesk_600SemiBold",
+    color: "#fff",
   },
   clear: {
-    color: "red",
+    fontSize: 14,
+    color: colors.primary,
+    fontFamily: "SpaceGrotesk_500Medium",
   },
   empty: {
     textAlign: "center",
     marginTop: 50,
     fontSize: 16,
   },
-  itemContainer: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 8,
-  },
-  image: {
-    width: 80,
-    height: 80,
-    borderRadius: 8,
-    marginRight: 10,
-  },
-  info: {
-    flex: 1,
-    justifyContent: "space-between",
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  price: {
-    color: "#555",
-  },
-  quantity: {
-    color: "#777",
-  },
-  remove: {
-    color: "red",
-    marginTop: 4,
+  floatButton: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    left: 0,
+    paddingVertical: 5,
+    paddingHorizontal: 16,
+    width: Dimensions.get("window").width,
+    backgroundColor: colors.bgPrimary,
   },
 });
 

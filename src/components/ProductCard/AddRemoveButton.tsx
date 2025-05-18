@@ -6,10 +6,9 @@ import { colors } from "@/src/utils/styles";
 import Produto from "@/src/model/Produto";
 type AddRemoveButtonProps = {
   produto: Produto;
-  variant?: "primary" | "secondary";
 };
 
-const AddRemoveButton = ({ produto, variant = "primary" }: AddRemoveButtonProps) => {
+const AddRemoveButton = ({ produto}: AddRemoveButtonProps) => {
   const {
     counterValue,
     product,
@@ -31,7 +30,7 @@ const AddRemoveButton = ({ produto, variant = "primary" }: AddRemoveButtonProps)
       <Pressable onPress={() => removeProduct(1)} onLongPress={onLongPressLess} onPressOut={onPressOutLess}>
         <FontAwesome name="minus" size={15} color="white" />
       </Pressable>
-      <Text accessibilityLiveRegion="assertive">{counterValue || 0}</Text>
+      <Text accessibilityLiveRegion="assertive" style={styles.text}>{counterValue || 0}</Text>
       <Pressable onPress={() => addProduct(1)} onLongPress={onLongPressAdd} onPressOut={onPressOutAdd}>
         <FontAwesome name="plus" size={15} color="white" />
       </Pressable>
