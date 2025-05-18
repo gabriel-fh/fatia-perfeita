@@ -9,10 +9,10 @@ export class Endereco {
   private cep!: string;
   private userUid?: string;
 
-  constructor(rua: string, bairro: string, numero: string, complemento: string, cidade: string, cep: string) {
+  constructor(rua: string, numero: string, bairro: string, complemento: string, cidade: string, cep: string) {
     this.setRua(rua);
-    this.setBairro(bairro);
     this.setNumero(numero);
+    this.setBairro(bairro);
     this.setComplemento(complemento);
     this.setCidade(cidade);
     this.setCep(cep);

@@ -11,6 +11,7 @@ import Input from "@/src/components/Input/Input";
 import Button from "@/src/components/Button/Button";
 import Header from "@/src/components/Header/Header";
 import { Endereco } from "@/src/model/Endereco";
+import { useAddress } from "@/src/contexts/Address";
 
 const viewer = new ViewerUsuario();
 
@@ -22,12 +23,7 @@ const SignUp = () => {
   const [telefone, setTelefone] = React.useState("");
   const [cpf, setCpf] = React.useState("");
   const [senha, setSenha] = React.useState("");
-  // const [rua, setRua] = React.useState("");
-  // const [bairro, setBairro] = React.useState("");
-  // const [numero, setNumero] = React.useState("");
-  // const [complemento, setComplemento] = React.useState("");
-  // const [cidade, setCidade] = React.useState("");
-  // const [cep, setCep] = React.useState("");
+  const { address } = useAddress();
 
   const handleSignUp = async () => {
     try {
@@ -36,12 +32,15 @@ const SignUp = () => {
         alert("Erro ao criar conta. Tente novamente.");
         return;
       }
-
-      const endereco = new Endereco("rua", "bairro", "numero", "complemento", "cidade", "23934005");
-      user.adicionarEndereco(endereco);
-      console.log(endereco)
-      console.log(user)
-      const a = await viewer.vincularEndereco(endereco);
+      if (!address) {
+        alert("Erro ao criar conta. Endereço não encontrado.");
+        navigation.navigate("Address");
+        return;
+      }
+      user.adicionarEndereco(address);
+      console.log(address);
+      console.log(user);
+      const a = await viewer.vincularEndereco(address);
       console.log("Endereço vinculado:", a);
 
       alert("Usuário cadastrado com sucesso!");
@@ -66,15 +65,15 @@ const SignUp = () => {
         Insira suas informações nos campos abaixo:
       </Text>
       <ScrollView>
-        <Input label={"Nome"} placeholder={"Digite seu nome"} value={nome} onChangeText={setNome} isSignUp />
-        <Input label={"CPF"} placeholder={"Digite seu CPF"} value={cpf} onChangeText={setCpf} isSignUp />
-        <Input label={"E-mail"} placeholder={"Digite seu e-mail"} value={email} onChangeText={setEmail} isSignUp />
+        <Input label={"Nome"} placeholder={"Digite seu nome"} value={nome} onChangeText={setNome} required />
+        <Input label={"CPF"} placeholder={"Digite seu CPF"} value={cpf} onChangeText={setCpf} required />
+        <Input label={"E-mail"} placeholder={"Digite seu e-mail"} value={email} onChangeText={setEmail} required />
         <Input
           label={"Telefone"}
           placeholder={"Digite seu telefone"}
           value={telefone}
           onChangeText={setTelefone}
-          isSignUp
+          required
         />
         <Input
           label={"Senha"}
@@ -82,7 +81,7 @@ const SignUp = () => {
           value={senha}
           onChangeText={setSenha}
           password
-          isSignUp
+          required
         />
         <View style={{ marginTop: 20 }}>
           <Button title="Confirmar" onPress={handleSignUp} />

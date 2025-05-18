@@ -1,4 +1,4 @@
-import { Text, StyleSheet, Image, StatusBar, View } from "react-native";
+import { Text, StyleSheet, Image, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@/src/utils/styles";
@@ -12,7 +12,6 @@ const FirstPage = () => {
   
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "bottom"]}>
-      <StatusBar hidden />
       <Image source={require("../../../assets/fsimg.jpg")} style={styles.image} resizeMode="cover" blurRadius={0.5} />
       <View style={styles.infoContainer}>
         <View>
