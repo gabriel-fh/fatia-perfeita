@@ -45,7 +45,7 @@ const SignUp = () => {
       console.log("Endereço vinculado:", a);
 
       alert("Usuário cadastrado com sucesso!");
-      // navigation.navigate("Main", { screen: "Home" });
+      navigation.navigate("Main", { screen: "Home" });
     } catch (error) {
       console.error("Erro ao cadastrar usuário:", error);
       alert("Erro ao cadastrar usuário: " + error);

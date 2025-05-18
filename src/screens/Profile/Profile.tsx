@@ -24,7 +24,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       if (auth.currentUser && auth.currentUser.uid) {
-        const user = null;
+        const user = await viewer.carregarUsuario(auth.currentUser.uid);
         setUsuario(user);
       }
       setLoading(false);

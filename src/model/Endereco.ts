@@ -1,5 +1,4 @@
 import ModelError from "./ModelError";
-import Usuario from "./Usuario";
 
 export class Endereco {
   private rua!: string;
@@ -52,56 +51,38 @@ export class Endereco {
   }
 
   setRua(rua: string) {
-    Endereco.validarRua(rua);
+    Endereco.isNull(rua, "Rua");
     this.rua = rua;
   }
 
   setBairro(bairro: string) {
-    Endereco.validarBairro(bairro);
+    Endereco.isNull(bairro, "Bairro");
     this.bairro = bairro;
   }
 
   setNumero(numero: string) {
-    Endereco.validarNumero(numero);
+    Endereco.isNull(numero, "Número");
     this.numero = numero;
   }
 
   setComplemento(complemento: string) {
-    Endereco.validarComplemento(complemento);
+    Endereco.isNull(complemento, "Complemento");
     this.complemento = complemento;
   }
 
   setCidade(cidade: string) {
-    Endereco.validarCidade(cidade);
+    Endereco.isNull(cidade, "Cidade");
     this.cidade = cidade;
   }
 
   setCep(cep: string) {
-    Endereco.validarCep(cep);
+    Endereco.isNull(cep, "CEP");
     this.cep = cep;
   }
 
-  static validarRua(rua: string) {
-    if (rua.length < 3) throw new ModelError("Rua inválida: " + rua);
-  }
-
-  static validarBairro(bairro: string) {
-    if (bairro.length < 3) throw new ModelError("Bairro inválido: " + bairro);
-  }
-
-  static validarNumero(numero: string) {
-    if (numero.length < 1) throw new ModelError("Número inválido: " + numero);
-  }
-
-  static validarComplemento(complemento: string) {
-    if (complemento.length < 3) throw new ModelError("Complemento inválido: " + complemento);
-  }
-
-  static validarCidade(cidade: string) {
-    if (cidade.length < 3) throw new ModelError("Cidade inválida: " + cidade);
-  }
-
-  static validarCep(cep: string) {
-    if (cep.length < 8) throw new ModelError("CEP inválido: " + cep);
+  static isNull(value: string, name: string): void {
+    if (value === null || value === undefined || value.trim() === "") {
+      throw new ModelError(`${name} não pode ser nulo ou vazio`);
+    }
   }
 }
