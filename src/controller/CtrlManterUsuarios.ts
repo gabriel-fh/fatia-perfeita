@@ -30,6 +30,11 @@ export default class CtrlManterUsuarios {
     return refEndereco;
   }
 
+  async obterUmEnderecoDoUsuario(uid: string) {
+    const enderecos = await this.#daoEndereco.obterEnderecosDoUsuario(uid);
+    return enderecos[0];
+  }
+
   // async excluir(usuario: Usuario) {
   //   const refUsuario = await this.#dao.excluir(usuario);
 

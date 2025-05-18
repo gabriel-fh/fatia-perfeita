@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Alert, ScrollView } from "react-native";
+import { Text, StyleSheet, Alert, ScrollView } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "@/src/components/Button/Button";
@@ -64,14 +64,14 @@ const Address = () => {
         address.cidade,
         address.cep
       );
-      
+
       await saveAddressToStorage(endereco);
       navigation.navigate("Main", { screen: "Home" });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving address:", error);
-      Alert.alert("Erro ao salvar o endereço.", error as string);
+      Alert.alert("Erro ao salvar o endereço.", error.message);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "bottom"]}>

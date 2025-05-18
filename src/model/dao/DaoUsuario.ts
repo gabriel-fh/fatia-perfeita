@@ -4,7 +4,7 @@ import {
   get,
   set,
 } from "firebase/database";
-import { createUserWithEmailAndPassword, User } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, database } from "@/src/setup/FirebaseSetup";
 
 export default class DaoUsuario {
@@ -14,6 +14,7 @@ export default class DaoUsuario {
       const snapshot = await get(dbRefUsuario);
       if (snapshot.exists()) {
         const data = snapshot.val();
+        console.log("Dados do usuário:", data);
         return new Usuario(uid, data.nome, data.email, data.telefone, data.funcao, data.cpf);
       } else {
         console.log("Nenhum dado encontrado para o UID fornecido.");
@@ -39,7 +40,7 @@ export default class DaoUsuario {
 
       const usuario = new Usuario(user.uid, nome, email, telefone, funcao, cpf);
       const dbRefNovoUsuario = ref(database, `/usuarios/${user.uid}`);
-      await set(dbRefNovoUsuario, usuario);
+      await set(dbRefNovoUsuario, {...usuario, enderecos: []});
       
       return usuario;
     } catch (error) {

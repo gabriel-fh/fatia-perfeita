@@ -13,24 +13,23 @@ import { useAddress } from "../contexts/Address";
 const Screens = () => {
   const Stack = createStackNavigator<RootStackParamList>();
   const { address } = useAddress();
-
   return (
     <Stack.Navigator
       id={"MainStackbNavigator" as unknown as undefined}
       initialRouteName={address ? "Main" : "FirstPage"}
       screenOptions={{ headerShown: false, animation: "slide_from_right", animationTypeForReplace: "push" }}
     >
-      {address && (
+      <Stack.Screen name="Main" component={TabNavigator} options={{ gestureEnabled: false }} />
+      <Stack.Screen name="Cart" component={Cart} />
+      <Stack.Screen name="Profile" component={Profile} options={{ gestureEnabled: false }} />
+      <Stack.Screen name="Login" component={Login} options={{ gestureEnabled: false }} />
+      <Stack.Screen name="SignUp" component={SignUp} options={{ gestureEnabled: false }} />
+      {!address && (
         <>
-          <Stack.Screen name="Cart" component={Cart} />
-          <Stack.Screen name="Main" component={TabNavigator} options={{ gestureEnabled: false }} />
-          <Stack.Screen name="Profile" component={Profile} options={{ gestureEnabled: false }} />
-          <Stack.Screen name="Login" component={Login} options={{ gestureEnabled: false }} />
-          <Stack.Screen name="SignUp" component={SignUp} options={{ gestureEnabled: false }} />
+          <Stack.Screen name="Address" component={Address} options={{ gestureEnabled: false }} />
+          <Stack.Screen name="FirstPage" component={FirstPage} options={{ gestureEnabled: false }} />
         </>
       )}
-      <Stack.Screen name="FirstPage" component={FirstPage} options={{ gestureEnabled: false }} />
-      <Stack.Screen name="Address" component={Address} options={{ gestureEnabled: false }} />
     </Stack.Navigator>
   );
 };

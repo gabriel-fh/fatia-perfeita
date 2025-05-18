@@ -21,4 +21,9 @@ export default class ViewerUsuario {
   async vincularEndereco(endereco: Endereco) {
     return this.#ctrl.vincularEndereco(endereco);
   }
+
+  async obterUmEnderecoDoUsuario(uid: string) {
+    const endereco = await this.#ctrl.obterUmEnderecoDoUsuario(uid);
+    return endereco;
+  }
 }
