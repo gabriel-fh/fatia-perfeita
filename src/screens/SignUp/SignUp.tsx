@@ -1,4 +1,4 @@
-import { Text, StyleSheet, TextInput, Button } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@/src/utils/styles";
@@ -7,6 +7,9 @@ import ViewerUsuario from "@/src/viewer/ViewerUsuario";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/src/routes/Routes";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import Input from "@/src/components/Input/Input";
+import Button from "@/src/components/Button/Button";
+import Header from "@/src/components/Header/Header";
 
 const viewer = new ViewerUsuario();
 
@@ -41,10 +44,42 @@ const SignUp = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
+      <Header title={"Criar conta"} />
+      <Text
+        style={{
+          color: "#e6e6e6",
+          fontFamily: "SpaceGrotesk_500Medium",
+          fontSize: 15,
+          marginVertical: 20,
+        }}
+      >
+        Insira suas informações nos campos abaixo:
+      </Text>
       <ScrollView>
-        <Text style={styles.text}>Nome: </Text>
+        <Input label={"Nome"} placeholder={"Digite seu nome"} value={nome} onChangeText={setNome} isSignUp />
+        <Input label={"CPF"} placeholder={"Digite seu CPF"} value={cpf} onChangeText={setCpf} isSignUp />
+        <Input label={"E-mail"} placeholder={"Digite seu e-mail"} value={email} onChangeText={setEmail} isSignUp />
+        <Input
+          label={"Telefone"}
+          placeholder={"Digite seu telefone"}
+          value={telefone}
+          onChangeText={setTelefone}
+          isSignUp
+        />
+        <Input
+          label={"Senha"}
+          placeholder={"Digite sua senha"}
+          value={senha}
+          onChangeText={setSenha}
+          password
+          isSignUp
+        />
+        <View style={{ marginTop: 20 }}>
+          <Button title="Criar conta" onPress={handleSignUp} />
+        </View>
+        {/* <Text style={styles.text}>Rua: </Text>
         <TextInput
-          placeholder="Digite seu nome"
+          placeholder="Digite sua rua"
           style={styles.input}
           placeholderTextColor={"#fff"}
           onChangeText={setNome}
@@ -131,7 +166,6 @@ const SignUp = () => {
           onChangeText={setCep}
           value={cep}
         /> */}
-        <Button title="Criar conta" onPress={handleSignUp} />
       </ScrollView>
     </SafeAreaView>
   );
