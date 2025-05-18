@@ -1,65 +1,83 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Produto from "../model/Produto";
 
-type CartItem = {
-  id: string;
-  quantity: number;
+export type CartItem = {
+  codigo: string;
+  nome: string;
+  imagem: string;
+  descricao: string;
+  preco_base: number;
+  tipo: string;
+  situacao: string;
+  quantidade: number;
 };
 
 type CartStore = {
   cart: CartItem[];
-  addProductToCart: (product: CartItem) => void;
+  addProductToCart: (product: Produto, quantidade: number) => void;
   decreaseProductQuantity: (product: CartItem) => void;
-  removeProductFromCart: (id: string) => void;
+  removeProductFromCart: (codigo: string) => void;
   clearCartItems: () => void;
   getTotalItemsInCart: () => number;
-  getProductById: (id: string) => CartItem | undefined;
+  getProductByCodigo: (codigo: string) => CartItem | undefined;
 };
 
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       cart: [],
-      addProductToCart: (product) => {
+      addProductToCart: (product: Produto, quantidade: number) => {
         set((state) => {
-          const exists = state.cart.find((p) => p.id === product.id);
+          const exists = state.cart.find((p) => p.codigo === product.getCodigo());
           if (exists) {
             return {
-              cart: state.cart.map((p) => {
-                return p.id === product.id ? { ...p, quantity: p.quantity + product.quantity } : p;
-              }),
+              cart: state.cart.map((p) =>
+                p.codigo === product.getCodigo() ? { ...p, quantidade: p.quantidade + quantidade } : p
+              ),
             };
           } else {
-            return { cart: [...state.cart, product] };
+            const cartItem: CartItem = {
+              codigo: product.getCodigo(),
+              nome: product.getNome(),
+              imagem: product.getImagem(),
+              descricao: product.getDescricao(),
+              preco_base: product.getPrecoBase(),
+              tipo: product.getTipo(),
+              situacao: product.getSituacao(),
+              quantidade: quantidade,
+            };
+            return { cart: [...state.cart, cartItem] };
           }
         });
       },
+
       decreaseProductQuantity: (product) => {
         set((state) => {
-          const existingProduct = state.cart.find((p) => p.id === product.id);
+          const existingProduct = state.cart.find((p) => p.codigo === product.codigo);
           if (!existingProduct) return state;
 
-          if (existingProduct.quantity > product.quantity) {
+          if (existingProduct.quantidade > product.quantidade) {
             return {
               cart: state.cart.map((p) =>
-                p.id === product.id ? { ...p, quantity: p.quantity - product.quantity } : p
+                p.codigo === product.codigo ? { ...p, quantidade: p.quantidade - product.quantidade } : p
               ),
             };
           }
 
           return {
-            cart: state.cart.filter((p) => p.id !== product.id),
+            cart: state.cart.filter((p) => p.codigo !== product.codigo),
           };
         });
       },
-      removeProductFromCart: (id) => {
-        set((state) => ({ cart: state.cart.filter((p) => p.id !== id) }));
+      removeProductFromCart: (codigo) => {
+        set((state) => ({ cart: state.cart.filter((p) => p.codigo !== codigo) }));
       },
       clearCartItems: () => set({ cart: [] }),
-      getTotalItemsInCart: () => get().cart.reduce((acc, item) => acc + item.quantity, 0),
-      getProductById: (id): CartItem | undefined => {
-        return get().cart.find((p) => p.id === id);
+      getTotalItemsInCart: () => get().cart.reduce((acc, item) => acc + item.quantidade, 0),
+      getProductByCodigo: (codigo) => {
+        return get().cart.find((p) => p.codigo === codigo);
       },
     }),
     {

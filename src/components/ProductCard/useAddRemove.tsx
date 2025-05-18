@@ -1,9 +1,10 @@
 import { useCartStore } from "@/src/contexts/Cart";
+import Produto from "@/src/model/Produto";
 import { impactAsync, ImpactFeedbackStyle } from "expo-haptics";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface UseAddRemoveProps {
-  id: string;
+  produto: Produto;
 }
 
 function useContinuousCounter(
@@ -39,23 +40,24 @@ function useContinuousCounter(
   return counterRef.current;
 }
 
-export default function useAddRemove({ id }: UseAddRemoveProps) {
-  const cartContext = useCartStore();
+export default function useAddRemove({ produto }: UseAddRemoveProps) {
+  const { addProductToCart, getProductByCodigo, decreaseProductQuantity } = useCartStore();
 
-  const product = useMemo(() => cartContext.getProductById(id), [cartContext, id]);
+  const product = useMemo(() => getProductByCodigo(produto.getCodigo()), [produto, getProductByCodigo]);
 
   const addProduct = useCallback(
-    (quantity: number = 1) => {
-      cartContext.addProductToCart({ id, quantity });
+    (quantidade: number = 1) => {
+      addProductToCart(produto, quantidade);
     },
-    [id, cartContext]
+    [produto, addProductToCart]
   );
 
   const removeProduct = useCallback(
-    (quantity: number) => {
-      cartContext.decreaseProductQuantity({ id, quantity });
+    (quantidade: number) => {
+      if (!product) return;
+      decreaseProductQuantity({ ...product, quantidade });
     },
-    [cartContext, id]
+    [product, decreaseProductQuantity]
   );
 
   const handleClickProduct = useCallback(() => {
@@ -66,13 +68,18 @@ export default function useAddRemove({ id }: UseAddRemoveProps) {
   const [addDelta, setAddDelta] = useState(0);
   const [removeDelta, setRemoveDelta] = useState(false);
 
-  const addedCount = useContinuousCounter(addDelta > 0, addDelta, addProduct, product?.quantity);
-  const removedCount = useContinuousCounter(removeDelta, -1, (qty) => removeProduct(Math.abs(qty)), product?.quantity);
+  const addedCount = useContinuousCounter(addDelta > 0, addDelta, addProduct, product?.quantidade ?? 0);
+  const removedCount = useContinuousCounter(
+    removeDelta,
+    -1,
+    (qty) => removeProduct(Math.abs(qty)),
+    product?.quantidade ?? 0
+  );
 
   const counterValue = useMemo(() => {
-    const base = product?.quantity || 0;
+    const base = product?.quantidade || 0;
     return base + addedCount + removedCount;
-  }, [product?.quantity, addedCount, removedCount]);
+  }, [product?.quantidade, addedCount, removedCount]);
 
   const onLongPressAdd = useCallback(() => {
     impactAsync(ImpactFeedbackStyle.Heavy);

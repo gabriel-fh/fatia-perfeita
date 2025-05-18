@@ -3,14 +3,24 @@ import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import useAddRemove from "./useAddRemove";
 import { colors } from "@/src/utils/styles";
+import Produto from "@/src/model/Produto";
 type AddRemoveButtonProps = {
-  id: string;
+  produto: Produto;
   variant?: "primary" | "secondary";
 };
 
-const AddRemoveButton = ({ id, variant = "primary" }: AddRemoveButtonProps) => {
-  const { counterValue, product, addProduct, removeProduct, handleClickProduct, onLongPressAdd, onPressOutAdd, onLongPressLess, onPressOutLess } =
-    useAddRemove({ id });
+const AddRemoveButton = ({ produto, variant = "primary" }: AddRemoveButtonProps) => {
+  const {
+    counterValue,
+    product,
+    addProduct,
+    removeProduct,
+    handleClickProduct,
+    onLongPressAdd,
+    onPressOutAdd,
+    onLongPressLess,
+    onPressOutLess,
+  } = useAddRemove({ produto });
 
   return !product ? (
     <Pressable style={styles.button} onPress={handleClickProduct}>
@@ -21,9 +31,7 @@ const AddRemoveButton = ({ id, variant = "primary" }: AddRemoveButtonProps) => {
       <Pressable onPress={() => removeProduct(1)} onLongPress={onLongPressLess} onPressOut={onPressOutLess}>
         <FontAwesome name="minus" size={15} color="white" />
       </Pressable>
-      <Text  accessibilityLiveRegion="assertive">
-        {counterValue || 0}
-      </Text>
+      <Text accessibilityLiveRegion="assertive">{counterValue || 0}</Text>
       <Pressable onPress={() => addProduct(1)} onLongPress={onLongPressAdd} onPressOut={onPressOutAdd}>
         <FontAwesome name="plus" size={15} color="white" />
       </Pressable>
@@ -45,7 +53,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 8
+    paddingVertical: 8,
   },
   text: {
     color: "#fff",

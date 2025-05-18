@@ -43,7 +43,7 @@ const ProductCard = ({ infos }: { infos: Produto }) => {
           {infos?.getNome()}
         </Text>
       </View>
-      <AddRemoveButton id={infos.getCodigo()} />
+      <AddRemoveButton produto={infos} />
     </TouchableOpacity>
   );
 };
