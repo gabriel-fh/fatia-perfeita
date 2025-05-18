@@ -20,7 +20,7 @@ const Profile = () => {
   const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [loading, setLoading] = useState(true);
-  const { saveAddressToStorage } = useAddress();
+  const { address, saveAddressToStorage } = useAddress();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -53,7 +53,9 @@ const Profile = () => {
     setUsuario(null);
   };
 
-  console.log("Usuario", usuario);
+  useEffect(() => {
+    console.log("Endereço do usuário:", address);
+  }, [address]);
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
