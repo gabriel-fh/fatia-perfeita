@@ -1,12 +1,14 @@
-import Usuario from "./Usuario";
+import { Endereco } from "./Endereco";
+import Usuario, { FuncaoUsuario } from "./Usuario";
 
 export default class UsuarioDto {
   private uid: string;
   private nome: string;
   private email: string;
-  private funcao: string;
+  private funcao: FuncaoUsuario;
   private telefone: string;
   private cpf: string;
+  private enderecos: Endereco[];
 
   constructor(usuario: Usuario) {
     this.uid = usuario.getUid();
@@ -15,6 +17,7 @@ export default class UsuarioDto {
     this.funcao = usuario.getFuncao();
     this.telefone = usuario.getTelefone();
     this.cpf = usuario.getCpf();
+    this.enderecos = usuario.getEnderecos();
   }
 
   getUid(): string {
@@ -24,12 +27,12 @@ export default class UsuarioDto {
   getNome(): string {
     return this.nome;
   }
-  
+
   getEmail(): string {
     return this.email;
   }
 
-  getFuncao(): string {
+  getFuncao(): FuncaoUsuario {
     return this.funcao;
   }
 
@@ -41,4 +44,7 @@ export default class UsuarioDto {
     return this.cpf;
   }
 
+  getEnderecos(): Endereco[] {
+    return this.enderecos;
+  }
 }

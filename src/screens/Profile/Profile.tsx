@@ -1,4 +1,4 @@
-import { Text, StyleSheet, Button, View, ActivityIndicator } from "react-native";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@/src/utils/styles";
@@ -11,21 +11,25 @@ import Usuario from "@/src/model/Usuario";
 import NotAuth from "@/src/components/NoAuth/NotAuth";
 import Header from "@/src/components/Header/Header";
 import UserInfo from "./components/UserInfo";
-import { isLoading } from "expo-font";
 import Options from "./components/Options";
+import { useAddress } from "@/src/contexts/Address";
 
 const viewer = new ViewerUsuario();
 
 const Profile = () => {
   const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
-
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [loading, setLoading] = useState(true);
+  const { address, saveAddressToStorage } = useAddress();
 
   useEffect(() => {
     const fetchUser = async () => {
       if (auth.currentUser && auth.currentUser.uid) {
         const user = await viewer.carregarUsuario(auth.currentUser.uid);
+        const address = await viewer.obterUmEnderecoDoUsuario(auth.currentUser.uid);
+        if (address) {
+          await saveAddressToStorage(address);
+        }
         setUsuario(user);
       }
       setLoading(false);
@@ -41,7 +45,7 @@ const Profile = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [saveAddressToStorage]);
 
   const handleLogout = async () => {
     await auth.signOut();
@@ -49,6 +53,9 @@ const Profile = () => {
     setUsuario(null);
   };
 
+  useEffect(() => {
+    console.log("Endereço do usuário:", address);
+  }, [address]);
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>

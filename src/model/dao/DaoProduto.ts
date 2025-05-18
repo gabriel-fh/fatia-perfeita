@@ -2,7 +2,7 @@
 
 import Produto from "../Produto";
 import { ref, get, set, remove } from "firebase/database";
-import { auth, database } from "@/src/setup/FirebaseSetup";
+import { database } from "@/src/setup/FirebaseSetup";
 
 export default class DaoProduto {
 

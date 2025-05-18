@@ -8,7 +8,7 @@
       "$uid": {
         ".read": "$uid === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
         ".write": "$uid === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
-        ".validate": "newData.hasChildren(['cpf','nome', 'email', 'funcao'])",
+        ".validate": "newData.hasChildren(['cpf','nome', 'email', 'funcao', 'telefone'])",
         "funcao": {
           ".validate": "newData.val() === 'ADMIN' || newData.val() === 'CLIENTE'"
         }
@@ -16,29 +16,28 @@
     },
 
     "clientes": {
-      ".indexOn": ["cpf", "endereco"],
+      ".indexOn": ["cpf", "enderecos"],
       "$uid": {
         ".read": "$uid === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
         ".write": "$uid === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
-        ".validate": "newData.hasChildren(['cpf','nome', 'email'])"
+        ".validate": "newData.hasChildren(['cpf','nome', 'email', 'funcao', 'telefone'])"
       }
     },
 
     "enderecos": {
-  	".indexOn": ["cep"],
-      "$uid": {
-        ".read": "$uid === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
-        ".write": "$uid === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
-        ".validate": "newData.hasChildren(['cep','rua', 'numero', 'bairro', 'cidade', 'estado'])"
- 			 }
-		},
-
+      ".indexOn": ["cep", "userUid"],
+      "$enderecoId": {
+        ".read": "data.child('userUid').val() === auth.uid",
+        ".write": "newData.child('userUid').val() === auth.uid",
+        ".validate": "newData.hasChildren(['cep', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'userUid'])"
+      }
+    },
 
     "produtos": {
       ".read": "auth.token !== null",
       ".write": "auth.token.isAdmin === true || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
       "$produtoId": {
-        ".validate": "newData.hasChildren(['id', 'nome', 'imagem', 'descricao', 'tipo', 'preco_base', 'situacao'])"
+        ".validate": "newData.hasChildren(['codigo', 'nome', 'imagem', 'descricao', 'tipo', 'preco_base', 'situacao'])"
       }
     },
 

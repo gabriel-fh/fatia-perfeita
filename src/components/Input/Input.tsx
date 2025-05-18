@@ -7,19 +7,19 @@ type InputProps = {
   label: string;
   placeholder: string;
   value: string;
-  isSignUp?: boolean;
+  required?: boolean;
   password?: boolean;
   onChangeText: (text: string) => void;
 };
 
-const Input = ({ label, placeholder, value, isSignUp, password, onChangeText }: InputProps) => {
+const Input = ({ label, placeholder, value, required, password, onChangeText }: InputProps) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (
     <View style={styles.container}>
       <Text style={styles.label}>
         {label}
-        {isSignUp && <Text style={{ color: colors.primary }}> *</Text>}
+        {required && <Text style={{ color: colors.primary }}> *</Text>}
       </Text>
       <View style={styles.inputContainer}>
         <TextInput

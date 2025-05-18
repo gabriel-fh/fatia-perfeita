@@ -6,4 +6,6 @@ export type RoutesParamsType = {
   Profile: undefined;
   Login: undefined;
   SignUp: undefined;
+  Address: undefined;
+  FirstPage: undefined;
 };
