@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   text: {
     color: "#fff",
     fontFamily: "SpaceGrotesk_600SemiBold",
-    fontSize: 18,
+    fontSize: 16,
   },
 });
 

@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   link: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#fff',
     textAlign: "center",
     fontFamily: "SpaceGrotesk_500Medium",

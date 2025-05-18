@@ -1,4 +1,4 @@
-import { Text, StyleSheet, Button, View } from "react-native";
+import { Text, StyleSheet, Button, View, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@/src/utils/styles";
@@ -10,6 +10,9 @@ import ViewerUsuario from "@/src/viewer/ViewerUsuario";
 import Usuario from "@/src/model/Usuario";
 import NotAuth from "@/src/components/NoAuth/NotAuth";
 import Header from "@/src/components/Header/Header";
+import UserInfo from "./components/UserInfo";
+import { isLoading } from "expo-font";
+import Options from "./components/Options";
 
 const viewer = new ViewerUsuario();
 
@@ -46,28 +49,23 @@ const Profile = () => {
     setUsuario(null);
   };
 
-  if (loading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.text}>Carregando...</Text>
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
       <Header title="Meu Perfil" />
-      {!usuario ? (
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      ) : !usuario ? (
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <NotAuth />
         </View>
       ) : (
-        <View>
-          <Text style={styles.text}>Nome: {usuario?.getNome()}</Text>
-          <Text style={styles.text}>Email: {usuario?.getEmail()}</Text>
-          <Text style={styles.text}>Telefone: {usuario?.getTelefone()}</Text>
-          <Button title="Sair" onPress={handleLogout} />
-        </View>
+        <>
+          <UserInfo user={usuario} />
+          <Options handleLogout={handleLogout} />
+        </>
       )}
     </SafeAreaView>
   );
@@ -78,11 +76,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.bgPrimary,
     padding: 16,
-  },
-  text: {
-    color: "#fff",
-    fontSize: 20,
-    marginBottom: 12,
   },
 });
 

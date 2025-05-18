@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import Home from "../screens/Home/Home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Product from "../screens/Product/Product";
-import { Ionicons, FontAwesome6 } from "@expo/vector-icons";
+import { Ionicons, FontAwesome6, FontAwesome } from "@expo/vector-icons";
 import { colors } from "../utils/styles";
 import Profile from "../screens/Profile/Profile";
 import Cart from "../screens/Cart/Cart";
@@ -17,7 +17,7 @@ const TabNavigator = () => {
       Products: { icon: "pizza-slice", type: FontAwesome6, size: 24 },
       Cart: { icon: "cart-shopping", type: FontAwesome6, size: 24 },
       Orders: { icon: "clipboard-list", type: FontAwesome6, size: 24 },
-      Profile: { icon: "person-circle-sharp", type: Ionicons, size: 30 },
+      Profile: { icon: "user-circle-o", type: FontAwesome, size: 28 },
     }),
     []
   );

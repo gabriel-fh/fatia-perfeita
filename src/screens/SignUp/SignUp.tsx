@@ -75,7 +75,7 @@ const SignUp = () => {
           isSignUp
         />
         <View style={{ marginTop: 20 }}>
-          <Button title="Criar conta" onPress={handleSignUp} />
+          <Button title="Confirmar" onPress={handleSignUp} />
         </View>
         {/* <Text style={styles.text}>Rua: </Text>
         <TextInput

@@ -22,23 +22,23 @@ export default class Usuario {
     return this.uid;
   }
 
-  getNome() : string {
+  getNome(): string {
     return this.nome;
   }
 
-  getEmail() : string {
+  getEmail(): string {
     return this.email;
   }
 
-  getFuncao() : string {
+  getFuncao(): string {
     return this.funcao;
   }
 
-  getTelefone() : string {
-    return this.telefone;
+  getTelefone(): string {
+    return Usuario.formatarTelefone(this.telefone);
   }
 
-  getCpf() : string {
+  getCpf(): string {
     return this.cpf;
   }
 
@@ -121,5 +121,12 @@ export default class Usuario {
 
   static isFuncaoValida(funcao: string) {
     return funcao === "ADMIN" || funcao === "GARCOM" || funcao === "MESA";
+  }
+
+  static formatarTelefone(telefone: string) {
+    if (telefone.length === 11) {
+      return `(${telefone.slice(0, 2)}) ${telefone.slice(2, 7)}-${telefone.slice(7)}`;
+    }
+    return telefone;
   }
 }
