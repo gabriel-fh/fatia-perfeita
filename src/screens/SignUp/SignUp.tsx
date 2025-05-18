@@ -10,6 +10,7 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import Input from "@/src/components/Input/Input";
 import Button from "@/src/components/Button/Button";
 import Header from "@/src/components/Header/Header";
+import { Endereco } from "@/src/model/Endereco";
 
 const viewer = new ViewerUsuario();
 
@@ -35,9 +36,18 @@ const SignUp = () => {
         alert("Erro ao criar conta. Tente novamente.");
         return;
       }
+
+      const endereco = new Endereco("rua", "bairro", "numero", "complemento", "cidade", "23934005");
+      user.adicionarEndereco(endereco);
+      console.log(endereco)
+      console.log(user)
+      const a = await viewer.vincularEndereco(endereco);
+      console.log("Endereço vinculado:", a);
+
       alert("Usuário cadastrado com sucesso!");
-      navigation.navigate("Main", { screen: "Home" });
+      // navigation.navigate("Main", { screen: "Home" });
     } catch (error) {
+      console.error("Erro ao cadastrar usuário:", error);
       alert("Erro ao cadastrar usuário: " + error);
     }
   };

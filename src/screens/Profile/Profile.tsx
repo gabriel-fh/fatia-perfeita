@@ -1,4 +1,4 @@
-import { Text, StyleSheet, Button, View, ActivityIndicator } from "react-native";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@/src/utils/styles";
@@ -11,7 +11,6 @@ import Usuario from "@/src/model/Usuario";
 import NotAuth from "@/src/components/NoAuth/NotAuth";
 import Header from "@/src/components/Header/Header";
 import UserInfo from "./components/UserInfo";
-import { isLoading } from "expo-font";
 import Options from "./components/Options";
 
 const viewer = new ViewerUsuario();
@@ -25,7 +24,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       if (auth.currentUser && auth.currentUser.uid) {
-        const user = await viewer.carregarUsuario(auth.currentUser.uid);
+        const user = null;
         setUsuario(user);
       }
       setLoading(false);

@@ -1,21 +1,25 @@
+import { Endereco } from "./Endereco";
 import ModelError from "./ModelError";
+
+export type FuncaoUsuario = "ADMIN" | "CLIENTE";
 
 export default class Usuario {
   private uid!: string;
   private nome!: string;
   private email!: string;
-  private funcao!: string;
+  private funcao!: FuncaoUsuario;
   private telefone!: string;
   private cpf!: string;
+  private enderecos!: Endereco[];
 
-  constructor(uid: string, nome: string, email: string, telefone: string, funcao: string, cpf: string) {
+  constructor(uid: string, nome: string, email: string, telefone: string, funcao: FuncaoUsuario, cpf: string) {
     this.setUid(uid);
     this.setNome(nome);
     this.setEmail(email);
-    if (funcao === undefined || funcao === null) this.setFuncao("INABILITADO");
-    else this.setFuncao(funcao);
+    this.setFuncao(funcao);
     this.setTelefone(telefone);
     this.setCpf(cpf);
+    this.enderecos = [];
   }
 
   getUid(): string {
@@ -30,7 +34,7 @@ export default class Usuario {
     return this.email;
   }
 
-  getFuncao(): string {
+  getFuncao(): FuncaoUsuario {
     return this.funcao;
   }
 
@@ -40,6 +44,10 @@ export default class Usuario {
 
   getCpf(): string {
     return this.cpf;
+  }
+
+  getEnderecos(): Endereco[] {
+    return this.enderecos;
   }
 
   setUid(uid: string) {
@@ -57,8 +65,8 @@ export default class Usuario {
     this.email = email;
   }
 
-  setFuncao(funcao: string) {
-    Usuario.isFuncaoValida(funcao);
+  setFuncao(funcao: FuncaoUsuario) {
+    Usuario.validarFuncao(funcao);
     this.funcao = funcao;
   }
 
@@ -70,6 +78,14 @@ export default class Usuario {
   setCpf(cpf: string) {
     Usuario.validarCpf(cpf);
     this.cpf = cpf;
+  }
+
+  adicionarEndereco(endereco: Endereco) {
+    if (!(endereco instanceof Endereco)) {
+      throw new ModelError("Endereço inválido.");
+    }
+    endereco.setUserUid(this.uid);
+    this.enderecos.push(endereco);
   }
 
   static validarSenha(senha: string) {
@@ -105,10 +121,10 @@ export default class Usuario {
     }
   }
 
-  static validarFuncao(funcao: string) {
-    const funcoesValidas = ["ADMIN", "GARCOM", "MESA"];
+  static validarFuncao(funcao: FuncaoUsuario) {
+    const funcoesValidas = ["ADMIN", "CLIENTE"];
     if (typeof funcao !== "string" || !funcoesValidas.includes(funcao)) {
-      throw new ModelError("Função inválida. As opções válidas são: ADMIN, GARCOM ou MESA.");
+      throw new ModelError("Função inválida. As opções válidas são: ADMIN OU CLIENTE");
     }
   }
 
@@ -117,10 +133,6 @@ export default class Usuario {
     if (typeof cpf !== "string" || !regex.test(cpf)) {
       throw new ModelError("O CPF deve conter apenas números e ter 11 dígitos.");
     }
-  }
-
-  static isFuncaoValida(funcao: string) {
-    return funcao === "ADMIN" || funcao === "GARCOM" || funcao === "MESA";
   }
 
   static formatarTelefone(telefone: string) {

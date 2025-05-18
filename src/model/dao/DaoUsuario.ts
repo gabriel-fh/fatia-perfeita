@@ -1,4 +1,4 @@
-import Usuario from "@/src/model/Usuario";
+import Usuario, { FuncaoUsuario } from "@/src/model/Usuario";
 import {
   ref,
   get,
@@ -8,7 +8,6 @@ import { createUserWithEmailAndPassword, User } from "firebase/auth";
 import { auth, database } from "@/src/setup/FirebaseSetup";
 
 export default class DaoUsuario {
-
   async obterUsuarioPeloUID(uid: string): Promise<Usuario | null> {
     try {
       const dbRefUsuario = ref(database, `/usuarios/${uid}`);
@@ -26,7 +25,14 @@ export default class DaoUsuario {
     }
   }
 
-  async criarConta(email: string, senha: string, nome: string, telefone: string, funcao: string, cpf: string): Promise<User | null> {
+  async criarConta(
+    email: string,
+    senha: string,
+    nome: string,
+    telefone: string,
+    funcao: FuncaoUsuario,
+    cpf: string
+  ): Promise<Usuario | null> {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
       const user = userCredential.user;
@@ -34,13 +40,13 @@ export default class DaoUsuario {
       const usuario = new Usuario(user.uid, nome, email, telefone, funcao, cpf);
       const dbRefNovoUsuario = ref(database, `/usuarios/${user.uid}`);
       await set(dbRefNovoUsuario, usuario);
-
-      return user;
+      
+      return usuario;
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
 
-
+  // async obterEnderecosDoUsuario(uid: string): Promise<any[]> {}
 }

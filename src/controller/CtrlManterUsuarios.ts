@@ -1,12 +1,15 @@
+import DaoEndereco from "../model/dao/DaoEndereco";
 import DaoUsuario from "../model/dao/DaoUsuario";
-import ViewerPerfil from "../viewer/ViewerPerfil";
+import { Endereco } from "../model/Endereco";
+import { FuncaoUsuario } from "../model/Usuario";
 import ViewerUsuario from "../viewer/ViewerUsuario";
 
 export default class CtrlManterUsuarios {
-  viewer: ViewerUsuario | ViewerPerfil;
+  viewer: ViewerUsuario;
   #dao = new DaoUsuario();
+  #daoEndereco = new DaoEndereco();
 
-  constructor(viewer: ViewerUsuario | ViewerPerfil) {
+  constructor(viewer: ViewerUsuario) {
     this.viewer = viewer;
   }
 
@@ -16,10 +19,15 @@ export default class CtrlManterUsuarios {
     return usuario;
   }
 
-  async criarConta(email: string, senha: string, nome: string, telefone: string, funcao: string, cpf: string) {
+  async criarConta(email: string, senha: string, nome: string, telefone: string, funcao: FuncaoUsuario, cpf: string) {
     const refUsuario = await this.#dao.criarConta(email, senha, nome, telefone, funcao, cpf);
 
     return refUsuario;
+  }
+
+  async vincularEndereco(endereco: Endereco) {
+    const refEndereco = await this.#daoEndereco.incluir(endereco);
+    return refEndereco;
   }
 
   // async excluir(usuario: Usuario) {
