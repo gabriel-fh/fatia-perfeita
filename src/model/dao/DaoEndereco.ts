@@ -1,5 +1,5 @@
 import { Endereco } from "../Endereco";
-import { ref, get, set, push } from "firebase/database";
+import { ref, get, set, push, query, orderByChild, equalTo } from "firebase/database";
 import { auth, database } from "@/src/setup/FirebaseSetup";
 
 export default class DaoEndereco {
@@ -57,8 +57,9 @@ export default class DaoEndereco {
 
   async obterEnderecosDoUsuario(uid: string): Promise<Endereco[]> {
     try {
-      const dbRefEnderecos = ref(database, `/usuarios/${uid}/enderecos`);
-      const snapshot = await get(dbRefEnderecos);
+      const dbRefEnderecos = ref(database, `/enderecos`);
+      const enderecoQuery = query(dbRefEnderecos, orderByChild("userUid"), equalTo(uid));
+      const snapshot = await get(enderecoQuery);
       const enderecos: Endereco[] = [];
 
       if (snapshot.exists()) {

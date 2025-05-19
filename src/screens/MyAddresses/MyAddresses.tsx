@@ -27,7 +27,7 @@ const MyAddresses = () => {
     };
 
     loadEnderecos();
-  }, [addresses]);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
