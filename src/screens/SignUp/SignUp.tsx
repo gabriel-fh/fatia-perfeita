@@ -24,7 +24,6 @@ const SignUp = () => {
   const [senha, setSenha] = React.useState("");
   const { address, setAddress, saveAddressToStorage } = useAddress();
 
-
   const handleSignUp = async () => {
     try {
       const user = await viewer.criarConta(email, senha, nome, telefone, "CLIENTE", cpf);

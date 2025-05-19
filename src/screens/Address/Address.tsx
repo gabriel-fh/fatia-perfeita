@@ -12,6 +12,7 @@ import { Endereco } from "@/src/model/Endereco";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RoutesParamsType } from "@/src/routes/RoutesParamsType";
 import ViewerEndereco from "@/src/viewer/ViewerEndereco";
+import { useAddress } from "@/src/contexts/Address";
 
 type AddressType = {
   rua: string;
@@ -29,7 +30,7 @@ const viewer = new ViewerEndereco();
 
 const Address = ({ route }: AddressProps) => {
   const { add } = route.params;
-
+  const { saveAddressToStorage } = useAddress();
 
   const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
   const [address, setAddress] = React.useState<AddressType>({
@@ -54,15 +55,6 @@ const Address = ({ route }: AddressProps) => {
     { label: "CEP", value: address.cep, onChange: (text: string) => setAddress({ ...address, cep: text }) },
   ];
 
-  const saveAddressToStorage = async (address: Endereco) => {
-    try {
-      const jsonValue = JSON.stringify(address);
-      await AsyncStorage.setItem("address", jsonValue);
-    } catch (error) {
-      console.error("Error saving address to storage:", error);
-      throw error;
-    }
-  };
 
   const onSaveAddress = async () => {
     try {
