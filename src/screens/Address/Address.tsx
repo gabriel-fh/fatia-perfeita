@@ -9,7 +9,6 @@ import { colors } from "@/src/utils/styles";
 import Header from "@/src/components/Header/Header";
 import Input from "@/src/components/Input/Input";
 import { Endereco } from "@/src/model/Endereco";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RoutesParamsType } from "@/src/routes/RoutesParamsType";
 import ViewerEndereco from "@/src/viewer/ViewerEndereco";
 import { useAddress } from "@/src/contexts/Address";
