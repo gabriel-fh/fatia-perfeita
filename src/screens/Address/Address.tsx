@@ -2,7 +2,7 @@ import { Text, StyleSheet, Alert, ScrollView } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "@/src/components/Button/Button";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { RootStackParamList } from "@/src/routes/Routes";
 import { colors } from "@/src/utils/styles";
@@ -10,6 +10,8 @@ import Header from "@/src/components/Header/Header";
 import Input from "@/src/components/Input/Input";
 import { Endereco } from "@/src/model/Endereco";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { RoutesParamsType } from "@/src/routes/RoutesParamsType";
+import ViewerEndereco from "@/src/viewer/ViewerEndereco";
 
 type AddressType = {
   rua: string;
@@ -20,7 +22,15 @@ type AddressType = {
   cep: string;
 };
 
-const Address = () => {
+type AddressProps = {
+  route: RouteProp<RoutesParamsType, "Address">;
+};
+const viewer = new ViewerEndereco();
+
+const Address = ({ route }: AddressProps) => {
+  const { add } = route.params;
+
+
   const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
   const [address, setAddress] = React.useState<AddressType>({
     rua: "",
@@ -64,6 +74,12 @@ const Address = () => {
         address.cidade,
         address.cep
       );
+      
+      if (add) {
+        await viewer.incluirEndereco(endereco);
+        navigation.goBack();
+        return;
+      }
 
       await saveAddressToStorage(endereco);
       navigation.navigate("Main", { screen: "Home" });

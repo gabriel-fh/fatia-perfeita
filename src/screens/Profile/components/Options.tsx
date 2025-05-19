@@ -2,8 +2,13 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { colors } from "@/src/utils/styles";
 import { FontAwesome } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@/src/routes/Routes";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
 const Options = ({ handleLogout }: { handleLogout: () => Promise<void> }) => {
+    const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
+  
   const options = [
     {
       icon: "info-circle" as const,
@@ -13,7 +18,7 @@ const Options = ({ handleLogout }: { handleLogout: () => Promise<void> }) => {
     {
       icon: "map-marker" as const,
       label: "Meus Endereços",
-      onPress: () => console.log("Meus Endereços Pressed"),
+      onPress: () => navigation.navigate("MyAddresses"),
     },
     {
       icon: "power-off" as const,

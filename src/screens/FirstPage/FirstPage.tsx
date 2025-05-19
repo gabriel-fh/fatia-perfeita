@@ -18,7 +18,7 @@ const FirstPage = () => {
           <Text style={styles.title}>Bem vindo à Fatia Perfeita</Text>
           <Text style={styles.text}>Onde cada pedaço é feito com equilíbrio, carinho e queijo.</Text>
         </View>
-        <Button title="Clique para continuar" onPress={() => navigation.navigate("Address")} />
+        <Button title="Clique para continuar" onPress={() => navigation.navigate("Address", {add: false})} />
       </View>
     </SafeAreaView>
   );
