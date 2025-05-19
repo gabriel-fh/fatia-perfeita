@@ -3,7 +3,6 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@/src/utils/styles";
 import { useCartStore } from "@/src/contexts/Cart";
-import Produto, { SituacaoProduto, TipoProduto } from "@/src/model/Produto";
 import Header from "@/src/components/Header/Header";
 import ProductCard from "@/src/components/ProductCard/ProductCard";
 import Button from "@/src/components/Button/Button";
@@ -40,24 +39,9 @@ const Cart = () => {
         <>
           <FlatList
             data={cart}
-            keyExtractor={(item) => item.codigo}
+            keyExtractor={(item) => item.getCodigo()}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <ProductCard
-                infos={
-                  new Produto(
-                    item.codigo,
-                    item.nome,
-                    item.imagem,
-                    item.descricao,
-                    item.tipo as TipoProduto,
-                    item.preco_base,
-                    item.situacao as SituacaoProduto
-                  )
-                }
-                variant="cart"
-              />
-            )}
+            renderItem={({ item }) => <ProductCard infos={item} variant="cart" />}
             contentContainerStyle={{ paddingBottom: 80 }}
           />
           <View style={styles.floatButton}>

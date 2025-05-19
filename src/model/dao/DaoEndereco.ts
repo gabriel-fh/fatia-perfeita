@@ -1,25 +1,37 @@
 import { Endereco } from "../Endereco";
 import { ref, get, set, push } from "firebase/database";
-import { database } from "@/src/setup/FirebaseSetup";
+import { auth, database } from "@/src/setup/FirebaseSetup";
 
 export default class DaoEndereco {
-  async incluir(endereco: Endereco): Promise<boolean> {
+  async incluir(endereco: Endereco): Promise<Endereco | null> {
     const dbRefEndereco = ref(database, `enderecos`);
     const novoEnderecoRef = push(dbRefEndereco);
     const enderecoId = novoEnderecoRef.key;
 
     try {
       const dbRefNovoEndereco = ref(database, `/enderecos/${enderecoId}`);
-      await set(dbRefNovoEndereco, { ...endereco });
 
-      const dbRefCliente = ref(database, `/usuarios/${endereco.getUserUid()}/enderecos/${enderecoId}`);
-      await set(dbRefCliente, true);
+      const enderecoParaSalvar = {
+        rua: endereco.getRua(),
+        numero: endereco.getNumero(),
+        bairro: endereco.getBairro(),
+        complemento: endereco.getComplemento(),
+        cidade: endereco.getCidade(),
+        cep: endereco.getCep(),
+        userUid: auth.currentUser?.uid,
+      };
 
-      console.log("#SUCESSO: Endereço criado com sucesso.");
-      return true;
+      await set(dbRefNovoEndereco, enderecoParaSalvar);
+
+      endereco.setId(enderecoId);
+      if (auth.currentUser?.uid) {
+        endereco.setUserUid(auth.currentUser.uid);
+      }
+
+      return endereco;
     } catch (error: any) {
       console.log("#ERRO incluir:", error.code, error.message);
-      return false;
+      return null;
     }
   }
 

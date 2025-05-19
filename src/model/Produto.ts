@@ -1,5 +1,4 @@
 import ModelError from "./ModelError";
-import { Pedido } from "./Pedido";
 
 export type TipoProduto = "PIZZA" | "BEBIDA" | "SOBREMESA";
 export type SituacaoProduto = "DISPONIVEL" | "INDISPONIVEL";
@@ -12,7 +11,6 @@ export default class Produto {
   private tipo!: TipoProduto;
   private preco_base!: number;
   private situacao!: SituacaoProduto;
-  private pedidos: Pedido[];
 
   constructor(
     codigo: string,
@@ -30,7 +28,6 @@ export default class Produto {
     this.setTipo(tipo);
     this.setPrecoBase(preco_base);
     this.setSituacao(situacao);
-    this.pedidos = [];
   }
 
   getCodigo(): string {
@@ -59,10 +56,6 @@ export default class Produto {
 
   getSituacao(): SituacaoProduto {
     return this.situacao;
-  }
-
-  getPedidos(): Pedido[] {
-    return this.pedidos;
   }
 
   setCodigo(codigo: string): void {
@@ -98,13 +91,6 @@ export default class Produto {
   setSituacao(situacao: SituacaoProduto): void {
     Produto.validarSituacao(situacao);
     this.situacao = situacao;
-  }
-
-  adicionarPedidos(pedido: Pedido): void {
-    if(!(pedido instanceof Pedido)) {
-      throw new ModelError("Pedido inválido.");
-    }
-    this.pedidos.push(pedido);
   }
 
   static validarCodigo(codigo: string): void {

@@ -6,7 +6,6 @@ import Header from "@/src/components/Header/Header";
 import AccordionProducts from "@/src/components/AccordionProducts/AccordionProducts";
 import { useCartStore } from "@/src/contexts/Cart";
 import ProductCard from "@/src/components/ProductCard/ProductCard";
-import Produto, { SituacaoProduto, TipoProduto } from "@/src/model/Produto";
 import AddressInfo from "./components/AddressInfo";
 import { useAddress } from "@/src/contexts/Address";
 import PaymentMethod from "./components/PaymentMethod";
@@ -14,52 +13,42 @@ import PurchaseDetails from "./components/PurchaseDetails";
 import Button from "@/src/components/Button/Button";
 import { MetodoPagamento, Pedido } from "@/src/model/Pedido";
 import { auth } from "@/src/setup/FirebaseSetup";
+import ViewerUsuario from "@/src/viewer/ViewerUsuario";
+import ViewerPedido from "@/src/viewer/ViewerPedido";
+
+const viewer = new ViewerPedido();
+const viewerUsuario = new ViewerUsuario();
+
 const Checkout = () => {
   const { cart, getCartValue } = useCartStore();
-  const { address } = useAddress();
+  const { address: endereco } = useAddress();
   const [paymentMethod, setPaymentMethod] = useState<MetodoPagamento>("DINHEIRO");
 
   const RenderItem = () => {
-    return cart.map((item) => (
-      <ProductCard
-        key={item.codigo}
-        infos={
-          new Produto(
-            item.codigo,
-            item.nome,
-            item.imagem,
-            item.descricao,
-            item.tipo as TipoProduto,
-            item.preco_base,
-            item.situacao as SituacaoProduto
-          )
-        }
-        variant="cart"
-      />
-    ));
+    return cart.map((item) => <ProductCard key={item.getCodigo()} infos={item} variant="cart" />);
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const subTotal = getCartValue();
     const taxaDeServico = 5; // Defina a taxa de serviço aqui
     const total = subTotal + taxaDeServico;
-    const userId = auth.currentUser?.uid || "";
-    const enderecoId = address?.getId() || "";
+    if (!auth.currentUser?.uid) {
+      return;
+    }
+    console.log(endereco);
+    
+    const usuario = await viewerUsuario.carregarUsuario(auth.currentUser.uid);
 
-    const pedido = new Pedido(
-      subTotal,
-      taxaDeServico,
-      total,
-      'NOVO',
-      paymentMethod,
-      userId,
-      enderecoId
-    )
+    if (!usuario || !endereco) {
+      return;
+    }
 
-    // cart.forEach((produto) => {
-    //   pedido.adicionarProduto(produto);
-    // })
-  }
+    const pedido = new Pedido(subTotal, taxaDeServico, total, "NOVO", paymentMethod, usuario, endereco);
+
+    pedido.setProdutos(cart);
+
+    await viewer.incluirPedido(pedido);
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
@@ -68,14 +57,12 @@ const Checkout = () => {
         <AccordionProducts>
           <RenderItem />
         </AccordionProducts>
-        {address && <AddressInfo address={address} />}
+        {endereco && <AddressInfo address={endereco} />}
         <PaymentMethod paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
         <PurchaseDetails cartValue={getCartValue()} />
       </ScrollView>
       <View style={styles.floatButton}>
-        <Button title={"Finalizar Pedido"} onPress={function (): void {
-          throw new Error("Function not implemented.");
-        } }/>
+        <Button title={"Finalizar Pedido"} onPress={onSubmit} />
       </View>
     </SafeAreaView>
   );

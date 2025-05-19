@@ -2,27 +2,52 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Produto from "../model/Produto";
-
-export type CartItem = {
-  codigo: string;
-  nome: string;
-  imagem: string;
-  descricao: string;
-  preco_base: number;
-  tipo: string;
-  situacao: string;
-  quantidade: number;
-};
+import ProdutoPedido from "../model/ProdutoPedido";
+import type { PersistStorage } from "zustand/middleware";
 
 type CartStore = {
-  cart: CartItem[];
+  cart: ProdutoPedido[];
   addProductToCart: (product: Produto, quantidade: number) => void;
-  decreaseProductQuantity: (product: CartItem) => void;
+  decreaseProductQuantity: (codigo: string, quantidade: number) => void;
   removeProductFromCart: (codigo: string) => void;
   clearCartItems: () => void;
   getTotalItemsInCart: () => number;
-  getProductByCodigo: (codigo: string) => CartItem | undefined;
+  getProductByCodigo: (codigo: string) => ProdutoPedido | undefined;
   getCartValue: () => number;
+};
+
+// ✅ Custom storage com suporte à re-hidratação do ProdutoPedido
+const customStorage: PersistStorage<CartStore> = {
+  getItem: async (name) => {
+    const str = await AsyncStorage.getItem(name);
+    if (!str) return null;
+
+    const parsed = JSON.parse(str);
+
+    // Reidrata ProdutoPedido
+    if (parsed.state?.cart) {
+      parsed.state.cart = parsed.state.cart.map((item: any) =>
+        new ProdutoPedido(
+          item.codigo,
+          item.nome,
+          item.imagem,
+          item.descricao,
+          item.tipo,
+          item.preco_base,
+          item.situacao,
+          item.quantidade
+        )
+      );
+    }
+
+    return parsed;
+  },
+  setItem: async (name, value) => {
+    await AsyncStorage.setItem(name, JSON.stringify(value));
+  },
+  removeItem: async (name) => {
+    await AsyncStorage.removeItem(name);
+  },
 };
 
 export const useCartStore = create<CartStore>()(
@@ -31,73 +56,68 @@ export const useCartStore = create<CartStore>()(
       cart: [],
       addProductToCart: (product: Produto, quantidade: number) => {
         set((state) => {
-          const exists = state.cart.find((p) => p.codigo === product.getCodigo());
-          if (exists) {
-            return {
-              cart: state.cart.map((p) =>
-                p.codigo === product.getCodigo() ? { ...p, quantidade: p.quantidade + quantidade } : p
-              ),
-            };
+          const index = state.cart.findIndex(p => p.getCodigo() === product.getCodigo());
+
+          if (index !== -1) {
+            const updatedCart = [...state.cart];
+            updatedCart[index].adicionarQuantidade(quantidade);
+            return { cart: updatedCart };
           } else {
-            const cartItem: CartItem = {
-              codigo: product.getCodigo(),
-              nome: product.getNome(),
-              imagem: product.getImagem(),
-              descricao: product.getDescricao(),
-              preco_base: product.getPrecoBase(),
-              tipo: product.getTipo(),
-              situacao: product.getSituacao(),
-              quantidade: quantidade,
-            };
-            return { cart: [...state.cart, cartItem] };
+            const novoProduto = new ProdutoPedido(
+              product.getCodigo(),
+              product.getNome(),
+              product.getImagem(),
+              product.getDescricao(),
+              product.getTipo(),
+              product.getPrecoBase(),
+              product.getSituacao(),
+              quantidade
+            );
+            return { cart: [...state.cart, novoProduto] };
           }
         });
       },
 
-      decreaseProductQuantity: (product) => {
+      decreaseProductQuantity: (codigo, quantidade) => {
         set((state) => {
-          const existingProduct = state.cart.find((p) => p.codigo === product.codigo);
-          if (!existingProduct) return state;
+          const index = state.cart.findIndex(p => p.getCodigo() === codigo);
+          if (index === -1) return state;
 
-          if (existingProduct.quantidade > product.quantidade) {
-            return {
-              cart: state.cart.map((p) =>
-                p.codigo === product.codigo ? { ...p, quantidade: p.quantidade - product.quantidade } : p
-              ),
-            };
+          const updatedCart = [...state.cart];
+          const produto = updatedCart[index];
+
+          try {
+            produto.removerQuantidade(quantidade);
+            return { cart: updatedCart };
+          } catch {
+            return { cart: state.cart.filter(p => p.getCodigo() !== codigo) };
           }
-
-          return {
-            cart: state.cart.filter((p) => p.codigo !== product.codigo),
-          };
         });
       },
+
       removeProductFromCart: (codigo) => {
-        set((state) => ({ cart: state.cart.filter((p) => p.codigo !== codigo) }));
+        set((state) => ({
+          cart: state.cart.filter(p => p.getCodigo() !== codigo),
+        }));
       },
+
       clearCartItems: () => set({ cart: [] }),
-      getTotalItemsInCart: () => get().cart.reduce((acc, item) => acc + item.quantidade, 0),
-      getProductByCodigo: (codigo) => {
-        return get().cart.find((p) => p.codigo === codigo);
+
+      getTotalItemsInCart: () => {
+        return get().cart.reduce((acc, item) => acc + item.getQuantidade(), 0);
       },
+
+      getProductByCodigo: (codigo) => {
+        return get().cart.find(p => p.getCodigo() === codigo);
+      },
+
       getCartValue: () => {
-        return get().cart.reduce((acc, item) => acc + item.preco_base * item.quantidade, 0);
-      }
+        return get().cart.reduce((acc, item) => acc + item.getPrecoBase() * item.getQuantidade(), 0);
+      },
     }),
     {
       name: "@FatiaPerfeita:cart",
-      storage: {
-        getItem: async (name) => {
-          const value = await AsyncStorage.getItem(name);
-          return value ? JSON.parse(value) : null;
-        },
-        setItem: async (name, value) => {
-          await AsyncStorage.setItem(name, JSON.stringify(value));
-        },
-        removeItem: async (name) => {
-          await AsyncStorage.removeItem(name);
-        },
-      },
+      storage: customStorage,
     }
   )
 );

@@ -6,7 +6,7 @@ import Produto from "@/src/model/Produto";
 import { colors } from "@/src/utils/styles";
 
 type ProductCardProps = {
-  infos: Produto;
+  infos: Produto
   variant?: "default" | "cart";
 };
 

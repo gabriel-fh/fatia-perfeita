@@ -1,5 +1,8 @@
+import { Endereco } from "./Endereco";
 import ModelError from "./ModelError";
 import Produto from "./Produto";
+import ProdutoPedido from "./ProdutoPedido";
+import Usuario from "./Usuario";
 
 export type SituacaoPedido = "NOVO" | "EM_PREPARO" | "EM_ENTREGA" | "ENTREGUE" | "CANCELADO";
 export type MetodoPagamento = "CARTAO_CREDITO" | "DINHEIRO" | "PIX";
@@ -11,9 +14,9 @@ export class Pedido {
   private total!: number;
   private situacao!: SituacaoPedido;
   private metodo_pagamento!: MetodoPagamento;
-  private produtos!: Produto[];
-  private userUid!: string;
-  private enderecoId!: string;
+  private produtos!: ProdutoPedido[];
+  private user!: Usuario;
+  private endereco!: Endereco;
 
   constructor(
     subtotal: number,
@@ -21,8 +24,8 @@ export class Pedido {
     total: number,
     situacao: SituacaoPedido,
     metodo_pagamento: MetodoPagamento,
-    userUid: string,
-    enderecoId: string
+    user: Usuario,
+    endereco: Endereco
   ) {
     this.setData(new Date());
     this.setSubtotal(subtotal);
@@ -30,8 +33,8 @@ export class Pedido {
     this.setTotal(total);
     this.setSituacao(situacao);
     this.setMetodoPagamento(metodo_pagamento);
-    this.setUserUid(userUid);
-    this.setEndereco(enderecoId);
+    this.setUser(user);
+    this.setEndereco(endereco);
     this.produtos = [];
   }
 
@@ -59,16 +62,16 @@ export class Pedido {
     return this.metodo_pagamento;
   }
 
-  getProdutos(): Produto[] {
+  getProdutos(): ProdutoPedido[] {
     return this.produtos;
   }
 
-  getUserUid(): string {
-    return this.userUid;
+  getUser(): Usuario {
+    return this.user;
   }
 
-  getEnderecoId(): string {
-    return this.enderecoId;
+  getEndereco(): Endereco {
+    return this.endereco;
   }
 
   setData(data: Date): void {
@@ -100,22 +103,34 @@ export class Pedido {
     this.metodo_pagamento = metodo_pagamento;
   }
 
-  setUserUid(userUid: string): void {
-    if (typeof userUid !== 'string' || userUid.trim() === '') {
-      throw new ModelError("User UID deve ser uma string não vazia.");
+  setUser(user: Usuario): void {
+    if (!(user instanceof Usuario)) {
+      throw new ModelError("User deve ser um Usuario válido.");
     }
-    this.userUid = userUid;
+    this.user = user;
   }
 
-  setEndereco(id: string): void {
-    if (typeof id !== 'string' || id.trim() === '') {
-      throw new ModelError("ID de endereço deve ser uma string não vazia.");
+  setEndereco(endereco: Endereco): void {
+    if (!(endereco instanceof Endereco)) {
+      throw new ModelError("Endereco deve ser um Endereco válido.");
     }
-    this.enderecoId = id;
+    this.endereco = endereco;
   }
 
-  adicionarProduto(produto: Produto): void {
-    if (!(produto instanceof Produto)) {
+  setProdutos(produtos: ProdutoPedido[]): void {
+    if (!Array.isArray(produtos)) {
+      throw new ModelError("Produtos deve ser um array de Produto.");
+    }
+    produtos.forEach((produto) => {
+      if (!(produto instanceof Produto)) {
+        throw new ModelError("Produto inválido.");
+      }
+    });
+    this.produtos = produtos;
+  }
+
+  adicionarProduto(produto: ProdutoPedido): void {
+    if (!(produto instanceof ProdutoPedido)) {
       throw new ModelError("Produto inválido.");
     }
     this.produtos.push(produto);

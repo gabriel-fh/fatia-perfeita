@@ -22,7 +22,7 @@ const SignUp = () => {
   const [telefone, setTelefone] = React.useState("");
   const [cpf, setCpf] = React.useState("");
   const [senha, setSenha] = React.useState("");
-  const { address } = useAddress();
+  const { address, saveAddressToStorage } = useAddress();
 
   const handleSignUp = async () => {
     try {
@@ -37,8 +37,11 @@ const SignUp = () => {
         return;
       }
       user.adicionarEndereco(address);
-      const a = await viewer.vincularEndereco(address);
-      console.log("Endereço vinculado:", a);
+      const enderecoDB = await viewer.vincularEndereco(address);
+
+      if (enderecoDB) {
+        await saveAddressToStorage(enderecoDB);
+      }
 
       alert("Usuário cadastrado com sucesso!");
       navigation.navigate("Main", { screen: "Home" });

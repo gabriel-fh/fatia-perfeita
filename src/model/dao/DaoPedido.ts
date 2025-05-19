@@ -4,19 +4,36 @@ import { Pedido } from "../Pedido";
 
 export default class DaoPedido {
   async realizarPedido(pedido: Pedido) {
-    const dbRefNovoPedido = ref(database, `pedidos`);
-    const novoPedidoRef = push(dbRefNovoPedido);
-    const pedidoId = novoPedidoRef.key;
-
     try {
-      const dbRefNovoPedido = ref(database, `/pedidos/${pedidoId}`);
-      await set(dbRefNovoPedido, { ...pedido });
-      const dbRefCliente = ref(database, `/usuarios/${pedido.getUserUid()}/pedidos/${pedidoId}`);
-      await set(dbRefCliente, true);
-      const dbRefEndereco = ref(database, `/enderecos/${pedido.getEnderecoId()}/pedidos/${pedidoId}`);
-      await set(dbRefEndereco, true);
-      const dbRefProduto = ref(database, `/produtos/${pedido.getProdutos().map(produto => produto.getCodigo())}/pedidos/${pedidoId}`);
-      await set(dbRefProduto, true);
+      const dbRefNovoPedido = ref(database, `pedidos`);
+      const novoPedidoRef = push(dbRefNovoPedido);
+      const pedidoId = novoPedidoRef.key;
+      
+      if (!pedidoId) throw new Error("Erro ao gerar ID do pedido");
+
+      const produtosSerializados = pedido.getProdutos().map((produto) => ({
+        id: produto.getCodigo(),
+        nome: produto.getNome(),
+        imagem: produto.getImagem(),
+        preco: produto.getPrecoBase(),
+        quantidade: produto.getQuantidade(),
+      }));
+
+      const pedidoParaSalvar = {
+        codigo: pedidoId,
+        data: pedido.getData().toISOString(),
+        subtotal: pedido.getSubtotal(),
+        taxaServico: pedido.getTaxaServico(),
+        total: pedido.getTotal(),
+        situacao: pedido.getSituacao(),
+        metodoPagamento: pedido.getMetodoPagamento(),
+        usuario: pedido.getUser().getUid(),
+        endereco: pedido.getEndereco().getId(),
+        produtos: produtosSerializados,
+      };
+
+      const dbRefPedidoFinal = ref(database, `/pedidos/${pedidoId}`);
+      await set(dbRefPedidoFinal, pedidoParaSalvar);
     } catch (error: any) {
       console.log("#ERRO incluir:", error.code, error.message);
     }

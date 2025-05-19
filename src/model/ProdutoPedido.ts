@@ -1,43 +1,52 @@
 import ModelError from "./ModelError";
+import Produto, { SituacaoProduto, TipoProduto } from "./Produto";
 
-export default class ProdutoPedido {
-  private prodId!: string;
-  private pedidoId!: string;
+export default class ProdutoPedido extends Produto {
   private quantidade!: number;
 
-  constructor(prodId: string, pedidoId: string, quantidade: number) {
-    this.setProdId(prodId);
-    this.setPedidoId(pedidoId);
+  constructor(
+    codigo: string,
+    nome: string,
+    imagem: string,
+    descricao: string,
+    tipo: TipoProduto,
+    preco_base: number,
+    situacao: SituacaoProduto,
+    quantidade: number = 1
+  ) {
+    super(codigo, nome, imagem, descricao, tipo, preco_base, situacao);
+
     this.setQuantidade(quantidade);
   }
 
-  getProdId(): string {
-    return this.prodId;
-  }
-
-  getPedidoId(): string {
-    return this.pedidoId;
-  }
 
   getQuantidade(): number {
     return this.quantidade;
   }
 
-  setProdId(prodId: string): void {
-    ProdutoPedido.isNull(prodId, "Produto ID");
-    this.prodId = prodId;
-  }
-
-  setPedidoId(pedidoId: string): void {
-    ProdutoPedido.isNull(pedidoId, "Pedido ID");
-    this.pedidoId = pedidoId;
-  }
 
   setQuantidade(quantidade: number): void {
     if (quantidade <= 0) {
       throw new ModelError("Quantidade deve ser maior que zero");
     }
     this.quantidade = quantidade;
+  }
+
+  adicionarQuantidade(quantidade: number): void {
+    if (quantidade <= 0) {
+      throw new ModelError("Quantidade deve ser maior que zero");
+    }
+    this.quantidade += quantidade;
+  }
+
+  removerQuantidade(quantidade: number): void {
+    if (quantidade <= 0) {
+      throw new ModelError("Quantidade deve ser maior que zero");
+    }
+    if (this.quantidade - quantidade < 0) {
+      throw new ModelError("Quantidade não pode ser negativa");
+    }
+    this.quantidade -= quantidade;
   }
 
   static isNull(value: string, name: string): void {

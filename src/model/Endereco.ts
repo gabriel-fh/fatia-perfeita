@@ -1,5 +1,4 @@
 import ModelError from "./ModelError";
-import { Pedido } from "./Pedido";
 
 export class Endereco {
   private rua!: string;
@@ -9,7 +8,6 @@ export class Endereco {
   private cidade!: string;
   private cep!: string;
   private userUid?: string;
-  private pedidos!: Pedido[];
   private id?: string;
 
   constructor(rua: string, numero: string, bairro: string, complemento: string, cidade: string, cep: string) {
@@ -20,7 +18,6 @@ export class Endereco {
     this.setCidade(cidade);
     this.setCep(cep);
     this.userUid = undefined;
-    this.pedidos = [];
     this.id = undefined;
   }
 
@@ -50,10 +47,6 @@ export class Endereco {
 
   getUserUid(): string | undefined {
     return this.userUid;
-  }
-
-  getPedidos(): Pedido[] {
-    return this.pedidos;
   }
 
   getId(): string | undefined {
@@ -99,16 +92,6 @@ export class Endereco {
       throw new ModelError("ID não pode ser nulo ou vazio");
     }
     this.id = id;
-  }
-
-  adicionarPedido(pedido: Pedido) {
-    if (!(pedido instanceof Pedido)) {
-      throw new ModelError("Pedido inválido.");
-    }
-    if(!!this.id) {
-      pedido.setEndereco(this.id);
-      this.pedidos.push(pedido);
-    }
   }
 
   static isNull(value: string, name: string): void {
