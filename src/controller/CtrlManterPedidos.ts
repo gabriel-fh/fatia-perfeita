@@ -10,8 +10,18 @@ export default class CtrlManterPedidos {
     this.viewer = viewer;
   }
 
-  async carregar() {
+  async carregarPedidos() {
     const pedidos = await this.#dao.obterPedidos();
+    return pedidos;
+  }
+
+  async carregarPedido(pedidoId: string) {
+    const pedido = await this.#dao.obterPedidoPorId(pedidoId);
+    return pedido;
+  }
+
+  async carregarPedidosDoUsuario(uid: string) {
+    const pedidos = await this.#dao.obterPedidosDoUsuario(uid);
     return pedidos;
   }
 

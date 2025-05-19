@@ -9,7 +9,19 @@ export default class ViewerPedido {
   }
 
   async carregarPedidos() {
-    const data = await this.#ctrl.carregar();
+    const data = await this.#ctrl.carregarPedidos();
+
+    return data;
+  }
+
+  async carregarPedido(pedidoId: string) {
+    const data = await this.#ctrl.carregarPedido(pedidoId);
+
+    return data;
+  }
+
+  async carregarPedidosDoUsuario(uid: string) {
+    const data = await this.#ctrl.carregarPedidosDoUsuario(uid);
 
     return data;
   }

@@ -15,6 +15,9 @@ import { MetodoPagamento, Pedido } from "@/src/model/Pedido";
 import { auth } from "@/src/setup/FirebaseSetup";
 import ViewerUsuario from "@/src/viewer/ViewerUsuario";
 import ViewerPedido from "@/src/viewer/ViewerPedido";
+import { RootStackParamList } from "@/src/routes/Routes";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
 
 const viewer = new ViewerPedido();
 const viewerUsuario = new ViewerUsuario();
@@ -23,6 +26,7 @@ const Checkout = () => {
   const { cart, getCartValue } = useCartStore();
   const { address: endereco } = useAddress();
   const [paymentMethod, setPaymentMethod] = useState<MetodoPagamento>("DINHEIRO");
+  const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
 
   const RenderItem = () => {
     return cart.map((item) => <ProductCard key={item.getCodigo()} infos={item} variant="cart" />);
@@ -35,8 +39,7 @@ const Checkout = () => {
     if (!auth.currentUser?.uid) {
       return;
     }
-    console.log(endereco);
-    
+
     const usuario = await viewerUsuario.carregarUsuario(auth.currentUser.uid);
 
     if (!usuario || !endereco) {
@@ -47,7 +50,13 @@ const Checkout = () => {
 
     pedido.setProdutos(cart);
 
-    await viewer.incluirPedido(pedido);
+    const pedidoId = await viewer.incluirPedido(pedido);
+
+    if (!pedidoId) {
+      alert("Erro ao incluir pedido");
+      return;
+    }
+    navigation.navigate("OrderDetails", { id: pedidoId });
   };
 
   return (
