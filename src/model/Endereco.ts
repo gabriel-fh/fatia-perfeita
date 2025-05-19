@@ -88,9 +88,6 @@ export class Endereco {
   }
 
   setId(id: string) {
-    if (id === null || id === undefined || id.trim() === "") {
-      throw new ModelError("ID não pode ser nulo ou vazio");
-    }
     this.id = id;
   }
 

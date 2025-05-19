@@ -24,17 +24,19 @@ const SignUp = () => {
   const [senha, setSenha] = React.useState("");
   const { address, setAddress, saveAddressToStorage } = useAddress();
 
+
   const handleSignUp = async () => {
     try {
-      if (!address) {
-        alert("Erro ao criar conta. Endereço não encontrado.");
-        navigation.navigate("Address", { add: false });
-        return;
-      }
       const user = await viewer.criarConta(email, senha, nome, telefone, "CLIENTE", cpf);
       
       if (!user) {
         alert("Erro ao criar conta. Tente novamente.");
+        return;
+      }
+
+      if (!address) {
+        alert("Erro ao criar conta. Endereço não encontrado.");
+        navigation.navigate("Address", { add: false });
         return;
       }
       user.adicionarEndereco(address);

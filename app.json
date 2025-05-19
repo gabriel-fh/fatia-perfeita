@@ -25,7 +25,8 @@
       "edgeToEdgeEnabled": true,
       "googleServicesFile": "./google-services.json",
       "package": "com.fatiaperfeita.fatiaperfeita",
-      "versionCode": 1
+      "versionCode": 1,
+      "runtimeVersion": "1.0.0"
     },
     "jsEngine": "jsc",
     "experiments": {
@@ -36,8 +37,6 @@
         "projectId": "c1fde18f-b6c5-430a-ad4d-4d079b646e2f"
       }
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    }
+    "runtimeVersion": "1.0.0" 
   }
 }

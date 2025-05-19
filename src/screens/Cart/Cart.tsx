@@ -76,6 +76,8 @@ const styles = StyleSheet.create({
   },
   empty: {
     textAlign: "center",
+    fontFamily: "SpaceGrotesk_500Medium",
+    color: "#fff", 
     marginTop: 50,
     fontSize: 16,
   },
