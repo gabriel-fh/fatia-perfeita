@@ -15,26 +15,21 @@
       }
     },
 
-    "clientes": {
-      ".indexOn": ["cpf", "enderecos"],
-      "$uid": {
-        ".read": "$uid === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
-        ".write": "$uid === auth.uid || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
-        ".validate": "newData.hasChildren(['cpf','nome', 'email', 'funcao', 'telefone'])"
+		"enderecos": {
+      ".indexOn": ["userUid"],
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$enderecoId": {
+        ".read": "auth != null && root.child('enderecos').child($enderecoId).child('userUid').val() === auth.uid",
+        ".write": "newData.child('userUid').val() === auth.uid",
+        ".validate": "newData.hasChildren(['rua', 'numero', 'bairro', 'complemento', 'cidade', 'cep', 'userUid'])"
       }
     },
 
-    "enderecos": {
-      ".indexOn": ["cep", "userUid"],
-      "$enderecoId": {
-        ".read": "data.child('userUid').val() === auth.uid",
-        ".write": "newData.child('userUid').val() === auth.uid",
-        ".validate": "newData.hasChildren(['cep', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'userUid'])"
-      }
-    },
+
 
     "produtos": {
-      ".read": "auth.token !== null",
+      ".read": "true",
       ".write": "auth.token.isAdmin === true || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
       "$produtoId": {
         ".validate": "newData.hasChildren(['codigo', 'nome', 'imagem', 'descricao', 'tipo', 'preco_base', 'situacao'])"
@@ -42,38 +37,40 @@
     },
 
     "pedidos": {
-      ".indexOn": ["codigo", "cliente", "endereco"],
-      ".read": "auth.token !== null",
-      ".write": "auth.token.isAdmin === true || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
-      "$uid": {
-        ".validate": "newData.hasChildren(['codigo', 'data', 'situacao', 'subtotal', 'total', 'taxaServico', 'produtos'])",
+    ".indexOn": ["codigo", "cliente", "endereco"],
+    ".read": "auth.token !== null || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
+    ".write": "auth.token !== null || root.child('usuarios').child(auth.uid).child('funcao').val() === 'ADMIN'",
 
-        "situacao": {
-          ".validate": "newData.val() === 'NOVO' || newData.val() === 'EM_PREPARACAO' || newData.val() === 'EM_ENTREGA' || newData.val() === 'CANCELADO' || newData.val() === 'ENTREGUE'"
-        },
+    "$uid": {
 
-        "cliente": {
-          ".validate": "root.child('clientes').child(newData.val()).exists()"
-        },
+      "situacao": {
+        ".validate": "newData.val() === 'NOVO' || newData.val() === 'EM_PREPARO' || newData.val() === 'EM_ENTREGA' || newData.val() === 'CANCELADO' || newData.val() === 'ENTREGUE'"
+      },
 
-        "endereco": {
-          ".validate": "root.child('enderecos').child(newData.val()).exists()"
-        },
-        "produtos": {
-          "$produtoId": {
-            ".validate": "newData.hasChildren(['id', 'nome', 'imagem', 'preco', 'quantidade'])",
-            "id": {
-              ".validate": "root.child('produtos').child(newData.val()).exists()"
-            },
-            "preco": {
-              ".validate": "newData.val() >= 0"
-            },
-            "quantidade": {
-              ".validate": "newData.val() > 0"
-            }
+      "usuario": {
+        ".validate": "root.child('usuarios').child(newData.val()).exists()"
+      },
+
+      "endereco": {
+        ".validate": "root.child('enderecos').child(newData.val()).exists()"
+      },
+
+      "produtos": {
+        "$produtoId": {
+          ".validate": "newData.hasChildren(['id', 'nome', 'imagem', 'preco', 'quantidade'])",
+          "id": {
+            ".validate": "root.child('produtos').child(newData.val()).exists()"
+          },
+          "preco": {
+            ".validate": "newData.val() >= 0"
+          },
+          "quantidade": {
+            ".validate": "newData.val() > 0"
           }
         }
       }
     }
+  }
+
   }
 }
