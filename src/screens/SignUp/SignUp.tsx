@@ -22,7 +22,7 @@ const SignUp = () => {
   const [telefone, setTelefone] = React.useState("");
   const [cpf, setCpf] = React.useState("");
   const [senha, setSenha] = React.useState("");
-  const { address, saveAddressToStorage } = useAddress();
+  const { address, setAddress, saveAddressToStorage } = useAddress();
 
   const handleSignUp = async () => {
     try {
@@ -41,6 +41,7 @@ const SignUp = () => {
       const enderecoDB = await viewer.vincularEndereco(address);
 
       if (enderecoDB) {
+        setAddress(enderecoDB);
         await saveAddressToStorage(enderecoDB);
       }
 
