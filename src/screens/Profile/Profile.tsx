@@ -49,7 +49,7 @@ const Profile = () => {
     });
 
     return () => unsubscribe();
-  }, [saveAddressToStorage]);
+  }, []);
 
   const handleLogout = async () => {
     if (address) {
