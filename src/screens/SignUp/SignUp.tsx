@@ -45,9 +45,9 @@ const SignUp = () => {
 
       alert("Usuário cadastrado com sucesso!");
       navigation.navigate("Main", { screen: "Home" });
-    } catch (error) {
-      console.error("Erro ao cadastrar usuário:", error);
-      alert("Erro ao cadastrar usuário: " + error);
+    } catch (error: any) {
+      console.error("Erro ao cadastrar usuário:", error.message);
+      alert("Erro ao cadastrar usuário: " + error.message);
     }
   };
 
