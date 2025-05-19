@@ -26,14 +26,15 @@ const SignUp = () => {
 
   const handleSignUp = async () => {
     try {
-      const user = await viewer.criarConta(email, senha, nome, telefone, "CLIENTE", cpf);
-      if (!user) {
-        alert("Erro ao criar conta. Tente novamente.");
-        return;
-      }
       if (!address) {
         alert("Erro ao criar conta. Endereço não encontrado.");
-        navigation.navigate("Address");
+        navigation.navigate("Address", { add: false });
+        return;
+      }
+      const user = await viewer.criarConta(email, senha, nome, telefone, "CLIENTE", cpf);
+      
+      if (!user) {
+        alert("Erro ao criar conta. Tente novamente.");
         return;
       }
       user.adicionarEndereco(address);

@@ -9,6 +9,8 @@ export type AddressType = {
   complemento: string;
   cidade: string;
   cep: string;
+  id: string;
+  userUid: string;
 };
 
 interface Props {
@@ -29,27 +31,31 @@ export const AddressProvider: React.FC<Props> = ({ children }) => {
 
   const saveAddressToStorage = async (address: Endereco) => {
     try {
+      AsyncStorage.removeItem("address");
       const jsonValue = JSON.stringify(address);
       await AsyncStorage.setItem("address", jsonValue);
     } catch (error) {
       console.error("Error saving address to storage:", error);
       throw error;
     }
-  }
+  };
 
   const loadAddressFromStorage = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("address");
       if (jsonValue !== null) {
         const parsedAddress: AddressType = JSON.parse(jsonValue);
-        setAddress(new Endereco(
+        const endereco = new Endereco(
           parsedAddress.rua,
           parsedAddress.numero,
           parsedAddress.bairro,
           parsedAddress.complemento,
           parsedAddress.cidade,
           parsedAddress.cep
-        ));
+        );
+        endereco.setId(parsedAddress.id);
+        endereco.setUserUid(parsedAddress.userUid);
+        setAddress(endereco);
       }
     } catch (error) {
       console.error("Error loading address from storage:", error);
@@ -59,7 +65,7 @@ export const AddressProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     (async () => {
       await loadAddressFromStorage();
-    })()
+    })();
   }, []);
 
   return (

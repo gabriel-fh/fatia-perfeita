@@ -20,19 +20,20 @@ const Profile = () => {
   const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [loading, setLoading] = useState(true);
-  const { address, saveAddressToStorage } = useAddress();
+  const { saveAddressToStorage } = useAddress();
 
   useEffect(() => {
     const fetchUser = async () => {
       if (auth.currentUser && auth.currentUser.uid) {
         const user = await viewer.carregarUsuario(auth.currentUser.uid);
-        
+
         if (!user) {
           setLoading(false);
           return;
         }
 
         const address = await viewer.obterUmEnderecoDoUsuario(auth.currentUser.uid);
+
         if (address) {
           await saveAddressToStorage(address);
         }
@@ -58,10 +59,6 @@ const Profile = () => {
     navigation.navigate("Main", { screen: "Home" });
     setUsuario(null);
   };
-
-  useEffect(() => {
-    console.log("Endereço do usuário:", address);
-  }, [address]);
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
