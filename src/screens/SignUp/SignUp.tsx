@@ -26,6 +26,13 @@ const SignUp = () => {
 
   const handleSignUp = async () => {
     try {
+      
+      if (!address) {
+        alert("Erro ao criar conta. Endereço não encontrado.");
+        navigation.navigate("Address", { add: false });
+        return;
+      }
+
       const user = await viewer.criarConta(email, senha, nome, telefone, "CLIENTE", cpf);
       
       if (!user) {
@@ -33,11 +40,6 @@ const SignUp = () => {
         return;
       }
 
-      if (!address) {
-        alert("Erro ao criar conta. Endereço não encontrado.");
-        navigation.navigate("Address", { add: false });
-        return;
-      }
       user.adicionarEndereco(address);
       const enderecoDB = await viewer.vincularEndereco(address);
 
