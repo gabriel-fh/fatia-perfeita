@@ -1,5 +1,5 @@
 import { Endereco } from "../Endereco";
-import { ref, get, set, push, equalTo, orderByChild, query } from "firebase/database";
+import { ref, get, set, push } from "firebase/database";
 import { auth, database } from "@/src/setup/FirebaseSetup";
 
 export default class DaoEndereco {
@@ -57,19 +57,25 @@ export default class DaoEndereco {
 
   async obterEnderecosDoUsuario(uid: string): Promise<Endereco[]> {
     try {
-      const dbRefEnderecos = ref(database, `enderecos`);
-      const q = query(dbRefEnderecos, orderByChild("userUid"), equalTo(uid));
-      const snapshot = await get(q);
+      const dbRefEnderecos = ref(database, `/usuarios/${uid}/enderecos`);
+      const snapshot = await get(dbRefEnderecos);
       const enderecos: Endereco[] = [];
 
       if (snapshot.exists()) {
-        snapshot.forEach((childSnapshot) => {
-          const data = childSnapshot.val();
-          const endereco = new Endereco(data.rua, data.numero, data.bairro, data.complemento, data.cidade, data.cep);
-          endereco.setId(childSnapshot.key);
-          endereco.setUserUid(uid);
-          enderecos.push(endereco);
-        });
+        const data = snapshot.val();
+        const enderecoKeys = Object.keys(data);
+
+        if (enderecoKeys.length === 0) {
+          console.log("Nenhum endereço encontrado para o usuário.");
+          return enderecos;
+        }
+        for (const key of enderecoKeys) {
+          const endereco = await this.obterEnderecoPorId(key);
+          if (endereco) {
+            enderecos.push(endereco);
+          }
+        }
+        return enderecos;
       } else {
         console.log("Nenhum endereço encontrado para o usuário.");
       }
