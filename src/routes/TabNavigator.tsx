@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Home from "../screens/Home/Home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Product from "../screens/Product/Product";
@@ -7,9 +7,30 @@ import { Ionicons, FontAwesome6, FontAwesome } from "@expo/vector-icons";
 import { colors } from "../utils/styles";
 import Profile from "../screens/Profile/Profile";
 import Cart from "../screens/Cart/Cart";
+import Orders from "../screens/Orders/Orders";
+import DaoUsuario from "../model/dao/DaoUsuario";
+import { auth } from "../setup/FirebaseSetup";
 
 const TabNavigator = () => {
   const Tab = createBottomTabNavigator();
+
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+  useEffect(() => {
+    const daoUsuario = new DaoUsuario();
+
+    const checkUserRole = async () => {
+      if (auth.currentUser === null) {
+        setIsAdmin(false); // Usuário não autenticado, não é admin
+        return; // Usuário não está autenticado, não faz nada
+      }
+      const user = await daoUsuario.obterUsuarioPeloUID(auth.currentUser?.uid || "");
+      if (user) {
+        setIsAdmin(user.getFuncao() === "ADMIN");
+      }
+    };
+    checkUserRole();
+  }, []);
 
   const icons = useMemo(
     () => ({
@@ -42,9 +63,9 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={Home} options={{ title: "Início" }} />
-      <Tab.Screen name="Products" component={Product} options={{ title: "Produtos" }} />
+      {isAdmin && <Tab.Screen name="Products" component={Product} options={{ title: "Produtos" }} />}
       <Tab.Screen name="Cart" component={Cart} options={{ title: "Carrinho" }} />
-      <Tab.Screen name="Orders" component={Home} options={{ title: "Pedidos" }} />
+      <Tab.Screen name="Orders" component={Orders} options={{ title: "Pedidos" }} />
       <Tab.Screen name="Profile" component={Profile} options={{ title: "Perfil" }} />
     </Tab.Navigator>
   );

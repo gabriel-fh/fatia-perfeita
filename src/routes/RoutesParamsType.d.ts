@@ -10,4 +10,5 @@ export type RoutesParamsType = {
   FirstPage: undefined;
   Checkout: undefined;
   MyAddresses: undefined;
+  OrderDetails: { id: string };
 };

@@ -11,6 +11,7 @@ import FirstPage from "../screens/FirstPage/FirstPage";
 import { useAddress } from "../contexts/Address";
 import Checkout from "../screens/Checkout/Checkout";
 import MyAddresses from "../screens/MyAddresses/MyAddresses";
+import OrderDetails from "../screens/OrderDetails/OrderDetails";
 
 const Screens = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -29,6 +30,7 @@ const Screens = () => {
       <Stack.Screen name="Address" component={Address} options={{ gestureEnabled: false }} />
       <Stack.Screen name="Checkout" component={Checkout} options={{ gestureEnabled: false }} />
       <Stack.Screen name="MyAddresses" component={MyAddresses} options={{ gestureEnabled: false }} />
+      <Stack.Screen name="OrderDetails" component={OrderDetails} options={{ gestureEnabled: false }} />
       {!address && (
         <>
           <Stack.Screen name="FirstPage" component={FirstPage} options={{ gestureEnabled: false }} />
