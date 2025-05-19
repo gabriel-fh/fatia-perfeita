@@ -31,6 +31,7 @@ export const AddressProvider: React.FC<Props> = ({ children }) => {
 
   const saveAddressToStorage = async (address: Endereco) => {
     try {
+      setAddress(address);
       AsyncStorage.removeItem("address");
       const jsonValue = JSON.stringify(address);
       await AsyncStorage.setItem("address", jsonValue);
