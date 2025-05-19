@@ -6,8 +6,9 @@ export type RoutesParamsType = {
   Profile: undefined;
   Login: undefined;
   SignUp: undefined;
-  Address: undefined;
+  Address: { add?: boolean};
   FirstPage: undefined;
   Checkout: undefined;
+  MyAddresses: undefined;
   OrderDetails: { id: string };
 };

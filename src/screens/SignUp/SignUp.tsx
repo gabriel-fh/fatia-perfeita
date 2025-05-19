@@ -22,24 +22,26 @@ const SignUp = () => {
   const [telefone, setTelefone] = React.useState("");
   const [cpf, setCpf] = React.useState("");
   const [senha, setSenha] = React.useState("");
-  const { address, saveAddressToStorage } = useAddress();
+  const { address, setAddress, saveAddressToStorage } = useAddress();
 
   const handleSignUp = async () => {
     try {
-      const user = await viewer.criarConta(email, senha, nome, telefone, "CLIENTE", cpf);
-      if (!user) {
-        alert("Erro ao criar conta. Tente novamente.");
-        return;
-      }
       if (!address) {
         alert("Erro ao criar conta. Endereço não encontrado.");
-        navigation.navigate("Address");
+        navigation.navigate("Address", { add: false });
+        return;
+      }
+      const user = await viewer.criarConta(email, senha, nome, telefone, "CLIENTE", cpf);
+      
+      if (!user) {
+        alert("Erro ao criar conta. Tente novamente.");
         return;
       }
       user.adicionarEndereco(address);
       const enderecoDB = await viewer.vincularEndereco(address);
 
       if (enderecoDB) {
+        setAddress(enderecoDB);
         await saveAddressToStorage(enderecoDB);
       }
 
