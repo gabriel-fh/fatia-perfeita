@@ -79,7 +79,7 @@ export default class DaoEndereco {
       } else {
         console.log("Nenhum endereço encontrado para o usuário.");
       }
-
+      
       return enderecos;
     } catch (error: any) {
       if (error.code === "PERMISSION_DENIED") {

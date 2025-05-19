@@ -31,17 +31,24 @@ const Profile = () => {
           setLoading(false);
           return;
         }
-        const address = await viewer.obterUmEnderecoDoUsuario(auth.currentUser.uid);
-        setAddress(address);
-        await saveAddressToStorage(address);
         setUsuario(user);
+        const address = await viewer.obterUmEnderecoDoUsuario(auth.currentUser.uid);
+        if (address) {
+          setAddress(address);
+          await saveAddressToStorage(address);
+        }
       }
       setLoading(false);
     };
 
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        fetchUser();
+        try{
+          await fetchUser();
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          setLoading(false);
+        }
       } else {
         setUsuario(null);
         setLoading(false);

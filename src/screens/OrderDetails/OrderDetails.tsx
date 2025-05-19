@@ -8,6 +8,8 @@ import { colors } from "@/src/utils/styles";
 import { SituacaoPedido } from "@/src/model/Pedido";
 import { auth } from "@/src/setup/FirebaseSetup";
 import ViewerUsuario from "@/src/viewer/ViewerUsuario";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Header from "@/src/components/Header/Header";
 
 const viewer = new ViewerPedido();
 const viewerUsuario = new ViewerUsuario();
@@ -94,9 +96,8 @@ const OrderDetails = () => {
   const user = pedido?.getUser();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Detalhes do Pedido</Text>
-
+    <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
+      <Header title="Detalhes do Pedido" />
       <Text style={styles.label}>Data:</Text>
       <Text style={styles.value}>{formatDate(pedido.getData())}</Text>
 
@@ -116,17 +117,23 @@ const OrderDetails = () => {
         keyExtractor={(item) => item.getCodigo()}
         renderItem={({ item }: { item: ProdutoPedido }) => (
           <View style={styles.produtoItem}>
-            <Text>
+            <Text style={{ fontFamily: "SpaceGrotesk_400Regular", color: "#fff" }}>
               {item.getNome()} (x{item.getQuantidade()})
             </Text>
-            <Text>{formatToReal(item.getPrecoBase() * item.getQuantidade())}</Text>
+            <Text style={{ fontFamily: "SpaceGrotesk_400Regular", color: "#fff" }}>
+              {formatToReal(item.getPrecoBase() * item.getQuantidade())}
+            </Text>
           </View>
         )}
       />
 
       <View style={styles.totais}>
-        <Text>Subtotal: {formatToReal(pedido.getSubtotal())}</Text>
-        <Text>Taxa de Serviço: {formatToReal(pedido.getTaxaServico())}</Text>
+        <Text style={{ fontFamily: "SpaceGrotesk_400Regular", color: "#fff" }}>
+          Subtotal: {formatToReal(pedido.getSubtotal())}
+        </Text>
+        <Text style={{ fontFamily: "SpaceGrotesk_400Regular", color: "#fff" }}>
+          Taxa de Serviço: {formatToReal(pedido.getTaxaServico())}
+        </Text>
         <Text style={styles.total}>Total: {formatToReal(pedido.getTotal())}</Text>
       </View>
 
@@ -162,7 +169,7 @@ const OrderDetails = () => {
 
       <Text style={styles.label}>Pagamento:</Text>
       <Text style={styles.value}>{pedido.getMetodoPagamento()}</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -178,11 +185,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   label: {
-    fontWeight: "bold",
+    fontFamily: "SpaceGrotesk_600SemiBold",
+    fontSize: 16,
+    color: "#fff",
     marginTop: 10,
   },
   value: {
     marginBottom: 8,
+    fontFamily: "SpaceGrotesk_400Regular",
+    color: "#fff",
   },
   produtoItem: {
     flexDirection: "row",
@@ -198,6 +209,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 8,
     fontSize: 16,
+    fontFamily: "SpaceGrotesk_600SemiBold",
+    color: "#fff",
   },
   error: {
     color: "red",
