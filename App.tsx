@@ -12,6 +12,7 @@ import {
 } from "@expo-google-fonts/space-grotesk";
 import { Routes } from "./src/routes/Routes";
 import { ActivityIndicator, View } from "react-native";
+import * as Updates from "expo-updates";
 // import FlashMessage from "react-native-flash-message";
 
 // import Toast from "react-native-toast-message";
@@ -26,6 +27,22 @@ export default function App() {
     SpaceGrotesk_600SemiBold,
     SpaceGrotesk_700Bold,
   });
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          await Updates.reloadAsync();
+          console.log("Update available, fetching and reloading app...");
+        }
+        console.error("No updates available");
+      } catch (error) {
+        console.error(`Error fetching latest Expo update: ${error}`);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     async function prepare() {

@@ -1,9 +1,5 @@
 import Usuario, { FuncaoUsuario } from "@/src/model/Usuario";
-import {
-  ref,
-  get,
-  set,
-} from "firebase/database";
+import { ref, get, set } from "firebase/database";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, database } from "@/src/setup/FirebaseSetup";
 
@@ -34,13 +30,12 @@ export default class DaoUsuario {
     cpf: string
   ): Promise<Usuario | null> {
     try {
+      const usuario = new Usuario("user.uid", nome, email, telefone, funcao, cpf);
       const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
       const user = userCredential.user;
-
-      const usuario = new Usuario(user.uid, nome, email, telefone, funcao, cpf);
+      usuario.setUid(user.uid);
       const dbRefNovoUsuario = ref(database, `/usuarios/${user.uid}`);
-      await set(dbRefNovoUsuario, {...usuario, enderecos: []});
-      
+      await set(dbRefNovoUsuario, usuario);
       return usuario;
     } catch (error) {
       console.error(error);
