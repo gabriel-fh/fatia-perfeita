@@ -1,6 +1,6 @@
 import { database } from "@/src/setup/FirebaseSetup";
-import { get, push, ref, set } from "firebase/database";
-import { Pedido } from "../Pedido";
+import { get, push, ref, set, update } from "firebase/database";
+import { Pedido, SituacaoPedido } from "../Pedido";
 import { PedidoDTO } from "../PedidoDTO";
 import DaoEndereco from "./DaoEndereco";
 import DaoUsuario from "./DaoUsuario";
@@ -103,9 +103,10 @@ export default class DaoPedido {
   }
 
 
-  async alterarStatus(pedidoId: string, novoStatus: string) {
+  async alterarStatus(pedidoId: string, status: SituacaoPedido, pedido: PedidoDTO) {
     const dbRefPedido = ref(database, `/pedidos/${pedidoId}`);
-    await set(dbRefPedido, { status: novoStatus });
+    await update(dbRefPedido, { situacao: status });
+    pedido.setSituacao(status);
   }
 
   async obterPedidosDoUsuario(uid: string): Promise<PedidoDTO[]> {

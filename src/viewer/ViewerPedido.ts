@@ -1,5 +1,6 @@
 import CtrlManterPedidos from "../controller/CtrlManterPedidos";
-import { Pedido } from "../model/Pedido";
+import { Pedido, SituacaoPedido } from "../model/Pedido";
+import { PedidoDTO } from "../model/PedidoDTO";
 
 export default class ViewerPedido {
   #ctrl: CtrlManterPedidos;
@@ -29,4 +30,10 @@ export default class ViewerPedido {
   async incluirPedido(pedido: Pedido) {
     return this.#ctrl.incluir(pedido);
   }
+
+  async alterarStatus(pedidoId: string, status: SituacaoPedido, pedido: PedidoDTO) {
+    const refPedido = await this.#ctrl.alterar(pedidoId, status, pedido);
+    return refPedido;
+  }
+
 }

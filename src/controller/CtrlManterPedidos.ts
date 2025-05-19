@@ -1,5 +1,6 @@
 import DaoPedido from "../model/dao/DaoPedido";
-import { Pedido } from "../model/Pedido";
+import { Pedido, SituacaoPedido } from "../model/Pedido";
+import { PedidoDTO } from "../model/PedidoDTO";
 import ViewerPedido from "../viewer/ViewerPedido";
 
 export default class CtrlManterPedidos {
@@ -30,9 +31,9 @@ export default class CtrlManterPedidos {
     return refPedido;
   }
 
-  // async alterar(pedido: Pedido) {
-  //   const refPedido = await this.#dao.alterarStatus(pedido.get, pedido.getStatus());
-  //   return refPedido;
-  // }
+  async alterar(pedidoId: string, status: SituacaoPedido, pedido: PedidoDTO) {
+    const refPedido = await this.#dao.alterarStatus(pedidoId, status, pedido);
+    return refPedido;
+  }
 
 }

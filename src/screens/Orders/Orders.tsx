@@ -6,21 +6,39 @@ import ViewerPedido from "@/src/viewer/ViewerPedido";
 import { auth } from "@/src/setup/FirebaseSetup";
 import { RootStackParamList } from "@/src/routes/Routes";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import ViewerUsuario from "@/src/viewer/ViewerUsuario";
 
 const viewer = new ViewerPedido();
+const viewerUsuario = new ViewerUsuario();
 
 const Orders = () => {
   const [pedidos, setPedidos] = useState<PedidoDTO[]>();
   const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(() => {
+    const checkUserRole = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userData = await viewerUsuario.carregarUsuario(user.uid);
+        userData && setIsAdmin(userData.getFuncao() === "ADMIN");
+      }
+    };
+
+    checkUserRole();
+  }, []);
+
+  useFocusEffect(() => {
     const fetchPedidos = async () => {
-      const pedidos = await viewer.carregarPedidosDoUsuario(auth.currentUser?.uid || "");
+      const pedidos = isAdmin
+        ? await viewer.carregarPedidos()
+        : await viewer.carregarPedidosDoUsuario(auth.currentUser?.uid || "");
+
       setPedidos(pedidos);
     };
     fetchPedidos();
-  }, []);
+  });
 
   const formatToReal = (valor: number): string =>
     new Intl.NumberFormat("pt-BR", {

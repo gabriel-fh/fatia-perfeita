@@ -1,9 +1,7 @@
 import { Endereco } from "./Endereco";
+import { MetodoPagamento, SituacaoPedido } from "./Pedido";
 import ProdutoPedido from "./ProdutoPedido";
 import Usuario from "./Usuario";
-
-export type SituacaoPedido = "NOVO" | "EM_PREPARO" | "EM_ENTREGA" | "ENTREGUE" | "CANCELADO";
-export type MetodoPagamento = "CARTAO_CREDITO" | "DINHEIRO" | "PIX";
 
 export class PedidoDTO {
     private data!: Date;
@@ -79,5 +77,9 @@ export class PedidoDTO {
 
     getEndereco(): Endereco {
         return this.endereco;
+    }
+
+    setSituacao(situacao: SituacaoPedido) {
+        this.situacao = situacao;
     }
 }
