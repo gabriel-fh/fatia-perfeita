@@ -22,6 +22,7 @@ type CartStore = {
   clearCartItems: () => void;
   getTotalItemsInCart: () => number;
   getProductByCodigo: (codigo: string) => CartItem | undefined;
+  getCartValue: () => number;
 };
 
 export const useCartStore = create<CartStore>()(
@@ -79,6 +80,9 @@ export const useCartStore = create<CartStore>()(
       getProductByCodigo: (codigo) => {
         return get().cart.find((p) => p.codigo === codigo);
       },
+      getCartValue: () => {
+        return get().cart.reduce((acc, item) => acc + item.preco_base * item.quantidade, 0);
+      }
     }),
     {
       name: "@FatiaPerfeita:cart",

@@ -7,9 +7,21 @@ import Produto, { SituacaoProduto, TipoProduto } from "@/src/model/Produto";
 import Header from "@/src/components/Header/Header";
 import ProductCard from "@/src/components/ProductCard/ProductCard";
 import Button from "@/src/components/Button/Button";
-
+import { useNavigation } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { RootStackParamList } from "@/src/routes/Routes";
+import { auth } from "@/src/setup/FirebaseSetup";
 const Cart = () => {
   const { cart, clearCartItems, getTotalItemsInCart } = useCartStore();
+  const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
+
+  const handleCheckout = () => {
+    if (!auth.currentUser) {
+      navigation.navigate("Login");
+      return;
+    }
+    navigation.navigate("Checkout");
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
@@ -25,37 +37,34 @@ const Cart = () => {
       {cart.length === 0 ? (
         <Text style={styles.empty}>Seu carrinho está vazio.</Text>
       ) : (
-        <FlatList
-          data={cart}
-          keyExtractor={(item) => item.codigo}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <ProductCard
-              infos={
-                new Produto(
-                  item.codigo,
-                  item.nome,
-                  item.imagem,
-                  item.descricao,
-                  item.tipo as TipoProduto,
-                  item.preco_base,
-                  item.situacao as SituacaoProduto
-                )
-              }
-              variant="cart"
-            />
-          )}
-          contentContainerStyle={{ paddingBottom: 80 }}
-        />
+        <>
+          <FlatList
+            data={cart}
+            keyExtractor={(item) => item.codigo}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <ProductCard
+                infos={
+                  new Produto(
+                    item.codigo,
+                    item.nome,
+                    item.imagem,
+                    item.descricao,
+                    item.tipo as TipoProduto,
+                    item.preco_base,
+                    item.situacao as SituacaoProduto
+                  )
+                }
+                variant="cart"
+              />
+            )}
+            contentContainerStyle={{ paddingBottom: 80 }}
+          />
+          <View style={styles.floatButton}>
+            <Button title={"Continuar"} onPress={handleCheckout} />
+          </View>
+        </>
       )}
-      <View style={styles.floatButton}>
-        <Button
-          title={"Continuar"}
-          onPress={function (): void {
-            throw new Error("Function not implemented.");
-          }}
-        />
-      </View>
     </SafeAreaView>
   );
 };

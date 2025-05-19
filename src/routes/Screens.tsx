@@ -9,6 +9,7 @@ import SignUp from "../screens/SignUp/SignUp";
 import Address from "../screens/Address/Address";
 import FirstPage from "../screens/FirstPage/FirstPage";
 import { useAddress } from "../contexts/Address";
+import Checkout from "../screens/Checkout/Checkout";
 
 const Screens = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -24,9 +25,10 @@ const Screens = () => {
       <Stack.Screen name="Profile" component={Profile} options={{ gestureEnabled: false }} />
       <Stack.Screen name="Login" component={Login} options={{ gestureEnabled: false }} />
       <Stack.Screen name="SignUp" component={SignUp} options={{ gestureEnabled: false }} />
+      <Stack.Screen name="Address" component={Address} options={{ gestureEnabled: false }} />
+      <Stack.Screen name="Checkout" component={Checkout} options={{ gestureEnabled: false }} />
       {!address && (
         <>
-          <Stack.Screen name="Address" component={Address} options={{ gestureEnabled: false }} />
           <Stack.Screen name="FirstPage" component={FirstPage} options={{ gestureEnabled: false }} />
         </>
       )}

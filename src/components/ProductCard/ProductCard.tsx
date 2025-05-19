@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 16,
     padding: 8,
-    marginRight: 15,
+    marginRight: 10,
   },
 
   addRemove: {

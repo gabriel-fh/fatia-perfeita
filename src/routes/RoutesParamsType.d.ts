@@ -8,4 +8,5 @@ export type RoutesParamsType = {
   SignUp: undefined;
   Address: undefined;
   FirstPage: undefined;
+  Checkout: undefined;
 };
