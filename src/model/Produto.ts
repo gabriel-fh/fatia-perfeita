@@ -1,8 +1,8 @@
 import ModelError from "./ModelError";
+import { Pedido } from "./Pedido";
 
 export type TipoProduto = "PIZZA" | "BEBIDA" | "SOBREMESA";
 export type SituacaoProduto = "DISPONIVEL" | "INDISPONIVEL";
-type Pedido = {}; // Defina o tipo Pedido de acordo com sua implementação
 
 export default class Produto {
   private codigo!: string;
@@ -12,7 +12,7 @@ export default class Produto {
   private tipo!: TipoProduto;
   private preco_base!: number;
   private situacao!: SituacaoProduto;
-  private pedidos: Pedido[] = [];
+  private pedidos: Pedido[];
 
   constructor(
     codigo: string,
@@ -101,11 +101,10 @@ export default class Produto {
   }
 
   adicionarPedidos(pedido: Pedido): void {
-    // if (pedido instanceof Pedido) {
-    //   this.pedidos.push(pedido);
-    // } else {
-    //   throw new ModelError("O objeto deve ser uma instância de Pedido");
-    // }
+    if(!(pedido instanceof Pedido)) {
+      throw new ModelError("Pedido inválido.");
+    }
+    this.pedidos.push(pedido);
   }
 
   static validarCodigo(codigo: string): void {

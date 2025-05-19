@@ -1,5 +1,6 @@
 import { Endereco } from "./Endereco";
 import ModelError from "./ModelError";
+import { Pedido } from "./Pedido";
 
 export type FuncaoUsuario = "ADMIN" | "CLIENTE";
 
@@ -11,6 +12,7 @@ export default class Usuario {
   private telefone!: string;
   private cpf!: string;
   private enderecos!: Endereco[];
+  private pedidos!: Pedido[];
 
   constructor(uid: string, nome: string, email: string, telefone: string, funcao: FuncaoUsuario, cpf: string) {
     this.setUid(uid);
@@ -20,6 +22,7 @@ export default class Usuario {
     this.setTelefone(telefone);
     this.setCpf(cpf);
     this.enderecos = [];
+    this.pedidos = [];
   }
 
   getUid(): string {
@@ -48,6 +51,10 @@ export default class Usuario {
 
   getEnderecos(): Endereco[] {
     return this.enderecos;
+  }
+
+  getPedidos(): Pedido[] {
+    return this.pedidos;
   }
 
   setUid(uid: string) {
@@ -86,6 +93,14 @@ export default class Usuario {
     }
     endereco.setUserUid(this.uid);
     this.enderecos.push(endereco);
+  }
+
+  adicionarPedido(pedido: Pedido) {
+    if (!(pedido instanceof Pedido)) {
+      throw new ModelError("Pedido inválido.");
+    }
+    pedido.setUserUid(this.uid);
+    this.pedidos.push(pedido);
   }
 
   static validarSenha(senha: string) {

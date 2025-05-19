@@ -2,17 +2,18 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { colors } from "@/src/utils/styles";
 import { FontAwesome, FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
+import { MetodoPagamento } from "@/src/model/Pedido";
 
 type PaymentMethodProps = {
-  paymentMethod: string;
-  setPaymentMethod: (method: string) => void;
+  paymentMethod: MetodoPagamento;
+  setPaymentMethod: React.Dispatch<React.SetStateAction<MetodoPagamento>>;
 };
 
 const paymentOptions = [
-  { label: "Cartão de Crédito", value: "CARTAO_DE_CREDITO", Icon: FontAwesome, iconName: "credit-card-alt" },
+  { label: "Cartão de Crédito", value: "CARTAO_CREDITO", Icon: FontAwesome, iconName: "credit-card-alt" },
   { label: "Dinheiro", value: "DINHEIRO", Icon: FontAwesome5, iconName: "money-bill-wave" },
   { label: "Pix", value: "PIX", Icon: FontAwesome6, iconName: "pix" },
-];
+] as const
 
 const PaymentMethod = ({ paymentMethod, setPaymentMethod }: PaymentMethodProps) => {
   return (

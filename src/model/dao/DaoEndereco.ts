@@ -30,7 +30,9 @@ export default class DaoEndereco {
 
       if (snapshot.exists()) {
         const data = snapshot.val();
-        return new Endereco(data.rua, data.numero, data.bairro, data.complemento, data.cidade, data.cep);
+        const endereco = new Endereco(data.rua, data.numero, data.bairro, data.complemento, data.cidade, data.cep);
+        endereco.setId(id);
+        return endereco;
       } else {
         console.log("Nenhum endereço encontrado com o ID fornecido.");
         return null;

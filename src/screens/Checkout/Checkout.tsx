@@ -12,11 +12,12 @@ import { useAddress } from "@/src/contexts/Address";
 import PaymentMethod from "./components/PaymentMethod";
 import PurchaseDetails from "./components/PurchaseDetails";
 import Button from "@/src/components/Button/Button";
-
+import { MetodoPagamento, Pedido } from "@/src/model/Pedido";
+import { auth } from "@/src/setup/FirebaseSetup";
 const Checkout = () => {
   const { cart, getCartValue } = useCartStore();
   const { address } = useAddress();
-  const [paymentMethod, setPaymentMethod] = useState("DINHEIRO");
+  const [paymentMethod, setPaymentMethod] = useState<MetodoPagamento>("DINHEIRO");
 
   const RenderItem = () => {
     return cart.map((item) => (
@@ -37,6 +38,28 @@ const Checkout = () => {
       />
     ));
   };
+
+  const onSubmit = () => {
+    const subTotal = getCartValue();
+    const taxaDeServico = 5; // Defina a taxa de serviço aqui
+    const total = subTotal + taxaDeServico;
+    const userId = auth.currentUser?.uid || "";
+    const enderecoId = address?.getId() || "";
+
+    const pedido = new Pedido(
+      subTotal,
+      taxaDeServico,
+      total,
+      'NOVO',
+      paymentMethod,
+      userId,
+      enderecoId
+    )
+
+    // cart.forEach((produto) => {
+    //   pedido.adicionarProduto(produto);
+    // })
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
