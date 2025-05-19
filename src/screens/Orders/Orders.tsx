@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import { PedidoDTO } from "@/src/model/PedidoDTO";
 import { colors } from "@/src/utils/styles";
 import ViewerPedido from "@/src/viewer/ViewerPedido";
 import { auth } from "@/src/setup/FirebaseSetup";
-import { RootStackParamList } from "@/src/routes/Routes";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import ViewerUsuario from "@/src/viewer/ViewerUsuario";
+import Header from "@/src/components/Header/Header";
+import NotAuth from "@/src/components/NoAuth/NotAuth";
+import { SafeAreaView } from "react-native-safe-area-context";
+import OrderCard from "./components/OrderCard";
 
 const viewer = new ViewerPedido();
 const viewerUsuario = new ViewerUsuario();
 
+
 const Orders = () => {
-  const [pedidos, setPedidos] = useState<PedidoDTO[]>();
-  const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
+  const [pedidos, setPedidos] = useState<PedidoDTO[] | null>();
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const checkUserRole = async () => {
@@ -36,54 +39,48 @@ const Orders = () => {
         : await viewer.carregarPedidosDoUsuario(auth.currentUser?.uid || "");
 
       setPedidos(pedidos);
+      setLoading(false);
     };
-    fetchPedidos();
-  });
 
-  const formatToReal = (valor: number): string =>
-    new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(valor);
-
-  const formatDate = (date: Date) =>
-    new Date(date).toLocaleString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        fetchPedidos();
+      } else {
+        setPedidos(null);
+        setLoading(false);
+      }
     });
 
-  const renderItem = ({ item }: { item: PedidoDTO }) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() =>
-        navigation.navigate("OrderDetails", {
-          id: item.getId(),
-        })
-      }
-      activeOpacity={0.7}
-    >
-      <View style={styles.cardHeader}>
-        <Text style={styles.situacao}>{item.getSituacao()}</Text>
-        <Text style={styles.data}>{formatDate(item.getData())}</Text>
-      </View>
-      <Text style={styles.total}>Total: {formatToReal(item.getTotal())}</Text>
-      <Text style={styles.itens}>{item.getProdutos().length} itens</Text>
-    </TouchableOpacity>
-  );
+    return () => unsubscribe();
+  });
+
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Seus Pedidos</Text>
-      <FlatList
-        data={pedidos}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 20 }}
-      />
-    </View>
+    <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
+      <Header title="Pedidos" />
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      ) : !auth.currentUser ? (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <NotAuth />
+        </View>
+      ) : pedidos && pedidos?.length > 0 ? (
+        <FlatList
+          data={pedidos}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item }) => <OrderCard item={item} />}
+          contentContainerStyle={{ paddingBottom: 20 }}
+        />
+      ) : (
+        <>
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <Text style={styles.title}>Nenhum pedido encontrado</Text>
+          </View>
+        </>
+      )}
+    </SafeAreaView>
   );
 };
 
@@ -95,32 +92,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontWeight: "bold",
+    fontFamily: "SpaceGrotesk_600SemiBold",
     marginBottom: 12,
-  },
-  card: {
-    backgroundColor: colors.bgTertiary,
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  situacao: {
-    fontWeight: "bold",
-  },
-  data: {
-    color: "#999",
-    fontSize: 12,
-  },
-  total: {
-    fontSize: 16,
-    marginTop: 8,
-  },
-  itens: {
-    marginTop: 4,
+    color: "#fff",
   },
 });
 
