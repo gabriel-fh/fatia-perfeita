@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, StatusBar, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { colors } from "../../utils/styles";
@@ -15,14 +15,20 @@ const Home = () => {
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [currentProducts, setcurrentProducts] = useState(1);
 
-  useFocusEffect(() => {
-    const fetchData = async () => {
-      const data = await viewer.carregarProdutos();
+  const fetchData = async () => {
+    const data = await viewer.carregarProdutos();
+    setProdutos(data);
+  };
 
-      setProdutos(data);
-    };
+  useEffect(() => {
     fetchData();
-  });
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   const filteredProducts = produtos.filter((product) => {
     if (currentProducts === 1) {

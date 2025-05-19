@@ -1,14 +1,14 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Produto from "../model/Produto";
 import ProdutoPedido from "../model/ProdutoPedido";
 import type { PersistStorage } from "zustand/middleware";
+import Produto from "../model/Produto";
 
 type CartStore = {
   cart: ProdutoPedido[];
   addProductToCart: (product: Produto, quantidade: number) => void;
-  decreaseProductQuantity: (codigo: string, quantidade: number) => void;
+  decreaseProductQuantity: (product: Produto, quantidade: number) => void;
   removeProductFromCart: (codigo: string) => void;
   clearCartItems: () => void;
   getTotalItemsInCart: () => number;
@@ -26,17 +26,18 @@ const customStorage: PersistStorage<CartStore> = {
 
     // Reidrata ProdutoPedido
     if (parsed.state?.cart) {
-      parsed.state.cart = parsed.state.cart.map((item: any) =>
-        new ProdutoPedido(
-          item.codigo,
-          item.nome,
-          item.imagem,
-          item.descricao,
-          item.tipo,
-          item.preco_base,
-          item.situacao,
-          item.quantidade
-        )
+      parsed.state.cart = parsed.state.cart.map(
+        (item: any) =>
+          new ProdutoPedido(
+            item.codigo,
+            item.nome,
+            item.imagem,
+            item.descricao,
+            item.tipo,
+            item.preco_base,
+            item.situacao,
+            item.quantidade
+          )
       );
     }
 
@@ -56,7 +57,7 @@ export const useCartStore = create<CartStore>()(
       cart: [],
       addProductToCart: (product: Produto, quantidade: number) => {
         set((state) => {
-          const index = state.cart.findIndex(p => p.getCodigo() === product.getCodigo());
+          const index = state.cart.findIndex((p) => p.getCodigo() === product.getCodigo());
 
           if (index !== -1) {
             const updatedCart = [...state.cart];
@@ -78,26 +79,30 @@ export const useCartStore = create<CartStore>()(
         });
       },
 
-      decreaseProductQuantity: (codigo, quantidade) => {
+      decreaseProductQuantity: (product: Produto, quantidade: number) => {
         set((state) => {
-          const index = state.cart.findIndex(p => p.getCodigo() === codigo);
+          const index = state.cart.findIndex((p) => p.getCodigo() === product.getCodigo());
           if (index === -1) return state;
-
+      
           const updatedCart = [...state.cart];
           const produto = updatedCart[index];
-
-          try {
-            produto.removerQuantidade(quantidade);
-            return { cart: updatedCart };
-          } catch {
-            return { cart: state.cart.filter(p => p.getCodigo() !== codigo) };
+          const novaQuantidade = produto.getQuantidade() - quantidade;
+      
+          if (novaQuantidade <= 0) {
+            // Remove o produto do carrinho
+            return { cart: state.cart.filter((p) => p.getCodigo() !== product.getCodigo()) };
           }
+      
+          // Atualiza a quantidade
+          produto.removerQuantidade(quantidade);
+          return { cart: updatedCart };
         });
       },
+      
 
       removeProductFromCart: (codigo) => {
         set((state) => ({
-          cart: state.cart.filter(p => p.getCodigo() !== codigo),
+          cart: state.cart.filter((p) => p.getCodigo() !== codigo),
         }));
       },
 
@@ -108,7 +113,7 @@ export const useCartStore = create<CartStore>()(
       },
 
       getProductByCodigo: (codigo) => {
-        return get().cart.find(p => p.getCodigo() === codigo);
+        return get().cart.find((p) => p.getCodigo() === codigo);
       },
 
       getCartValue: () => {
