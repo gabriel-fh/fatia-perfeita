@@ -61,12 +61,16 @@ const OrderDetails = () => {
     }
   };
 
-  const formatToReal = (valor: number): string =>
-    new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(valor);
+  const formatToReal = (valor: number): string => {
+    const valorFormatado = valor.toFixed(2);
 
+    const [inteira, decimal] = valorFormatado.split(".");
+
+    const inteiraComPonto = inteira.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    return `R$ ${inteiraComPonto},${decimal}`;
+  };
+  
   const formatDate = (date: Date) =>
     new Date(date).toLocaleString("pt-BR", {
       day: "2-digit",

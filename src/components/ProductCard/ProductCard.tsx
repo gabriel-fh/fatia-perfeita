@@ -11,12 +11,16 @@ type ProductCardProps = {
 };
 
 const ProductCard = ({ infos, variant = "default" }: ProductCardProps) => {
-  const formatToReal = (valor: number | bigint | Intl.StringNumericLiteral): string => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(valor);
+  const formatToReal = (valor: number): string => {
+    const valorFormatado = valor.toFixed(2);
+
+    const [inteira, decimal] = valorFormatado.split(".");
+
+    const inteiraComPonto = inteira.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    return `R$ ${inteiraComPonto},${decimal}`;
   };
+  
 
   return (
     <TouchableOpacity
