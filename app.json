@@ -5,9 +5,15 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
-    "scheme": "fatiaperfeita",
+    "scheme": "com.fatiaperfeita.fatiaperfeita",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "updates": {
+      "enabled": true,
+      "fallbackToCacheTimeout": 0,
+      "checkAutomatically": "ON_LOAD",
+      "url": "https://u.expo.dev/c0cc609b-eafb-486e-aecf-ad61f66d381e"
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -16,12 +22,18 @@
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "googleServicesFile": "./google-services.json",
+      "package": "com.fatiaperfeita.fatiaperfeita"
     },
     "jsEngine": "jsc",
-
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c0cc609b-eafb-486e-aecf-ad61f66d381e"
+      }
     }
   }
 }
