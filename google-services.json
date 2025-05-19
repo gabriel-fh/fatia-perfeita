@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "470134118547",
+    "firebase_url": "https://fatia-perfeita-default-rtdb.firebaseio.com",
+    "project_id": "fatia-perfeita",
+    "storage_bucket": "fatia-perfeita.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470134118547:android:fc3b6d046a42709e079566",
+        "android_client_info": {
+          "package_name": "com.fatiaperfeita.fatiaperfeita"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "470134118547-e72r1gpnb1fdshod599usmn7uvgdeos5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLupXQqtD3DAZGUXtpypEkDDh2MmlyzJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "470134118547-e72r1gpnb1fdshod599usmn7uvgdeos5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
