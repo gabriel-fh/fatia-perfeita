@@ -29,7 +29,7 @@ const Input = ({ label, placeholder, value, required, password, onChangeText }: 
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={password && !showPassword}
-          autoCapitalize={password ? "none" : "sentences"}
+          autoCapitalize={password || label.includes('mail') ? "none" : "sentences"}
         />
         {password && (
           <TouchableOpacity

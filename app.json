@@ -12,7 +12,7 @@
       "enabled": true,
       "fallbackToCacheTimeout": 0,
       "checkAutomatically": "ON_LOAD",
-      "url": "https://u.expo.dev/c1fde18f-b6c5-430a-ad4d-4d079b646e2f"
+      "url": "https://u.expo.dev/310ff160-9e7d-4afd-b08e-e42ffc7d8cf6"
     },
     "ios": {
       "supportsTablet": true
@@ -34,9 +34,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "c1fde18f-b6c5-430a-ad4d-4d079b646e2f"
+        "projectId": "310ff160-9e7d-4afd-b08e-e42ffc7d8cf6"
       }
     },
-    "runtimeVersion": "1.0.0" 
+    "runtimeVersion": "1.0.0"
   }
 }
