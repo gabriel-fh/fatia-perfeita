@@ -3,7 +3,6 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@/src/utils/styles";
 import { ScrollView } from "react-native-gesture-handler";
-import ViewerUsuario from "@/src/viewer/ViewerUsuario";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/src/routes/Routes";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
@@ -11,8 +10,9 @@ import Input from "@/src/components/Input/Input";
 import Button from "@/src/components/Button/Button";
 import Header from "@/src/components/Header/Header";
 import { useAddress } from "@/src/contexts/Address";
+import CtrlManterUsuarios from "@/src/controller/CtrlManterUsuarios";
 
-const viewer = new ViewerUsuario();
+const ctrl = new CtrlManterUsuarios();
 
 const SignUp = () => {
   const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
@@ -33,7 +33,7 @@ const SignUp = () => {
         return;
       }
 
-      const user = await viewer.criarConta(email, senha, nome, telefone, "CLIENTE", cpf);
+      const user = await ctrl.criarConta(email, senha, nome, telefone, "CLIENTE", cpf);
       
       if (!user) {
         alert("Erro ao criar conta. Tente novamente.");
@@ -41,7 +41,7 @@ const SignUp = () => {
       }
 
       user.adicionarEndereco(address);
-      const enderecoDB = await viewer.vincularEndereco(address);
+      const enderecoDB = await ctrl.vincularEndereco(address);
 
       if (enderecoDB) {
         setAddress(enderecoDB);

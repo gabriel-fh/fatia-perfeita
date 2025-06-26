@@ -2,16 +2,10 @@ import DaoEndereco from "../model/dao/DaoEndereco";
 import DaoUsuario from "../model/dao/DaoUsuario";
 import { Endereco } from "../model/Endereco";
 import { FuncaoUsuario } from "../model/Usuario";
-import ViewerUsuario from "../viewer/ViewerUsuario";
 
 export default class CtrlManterUsuarios {
-  viewer: ViewerUsuario;
   #dao = new DaoUsuario();
   #daoEndereco = new DaoEndereco();
-
-  constructor(viewer: ViewerUsuario) {
-    this.viewer = viewer;
-  }
 
   async carregarUsuario(uid: string) {
     const usuario = await this.#dao.obterUsuarioPeloUID(uid);
@@ -34,10 +28,4 @@ export default class CtrlManterUsuarios {
     const enderecos = await this.#daoEndereco.obterEnderecosDoUsuario(uid);
     return enderecos[0];
   }
-
-  // async excluir(usuario: Usuario) {
-  //   const refUsuario = await this.#dao.excluir(usuario);
-
-  //   return refUsuario;
-  // }
 }

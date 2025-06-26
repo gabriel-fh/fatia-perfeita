@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import ViewerPedido from "@/src/viewer/ViewerPedido"; // ajuste o caminho se necessário
 import { PedidoDTO } from "@/src/model/PedidoDTO";
 import ProdutoPedido from "@/src/model/ProdutoPedido";
 import { colors } from "@/src/utils/styles";
 import { SituacaoPedido } from "@/src/model/Pedido";
 import { auth } from "@/src/setup/FirebaseSetup";
-import ViewerUsuario from "@/src/viewer/ViewerUsuario";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/src/components/Header/Header";
+import CtrlManterPedidos from "@/src/controller/CtrlManterPedidos";
+import CtrlManterUsuarios from "@/src/controller/CtrlManterUsuarios";
 
-const viewer = new ViewerPedido();
-const viewerUsuario = new ViewerUsuario();
+const ctrl = new CtrlManterPedidos();
+const ctrlUsuario = new CtrlManterUsuarios();
 
 const OrderDetails = () => {
   const route = useRoute();
@@ -30,7 +30,7 @@ const OrderDetails = () => {
     const checkUserRole = async () => {
       const user = auth.currentUser;
       if (user) {
-        const userData = await viewerUsuario.carregarUsuario(user.uid);
+        const userData = await ctrlUsuario.carregarUsuario(user.uid);
         userData && setIsAdmin(userData.getFuncao() === "ADMIN");
       }
     };
@@ -41,7 +41,7 @@ const OrderDetails = () => {
   useEffect(() => {
     const fetchPedido = async () => {
       try {
-        const result = await viewer.carregarPedido(id);
+        const result = await ctrl.carregarPedido(id);
 
         setPedido(result);
       } catch (error) {
@@ -56,7 +56,7 @@ const OrderDetails = () => {
 
   const alterarStatus = async (status: SituacaoPedido) => {
     if (pedido) {
-      await viewer.alterarStatus(id, status, pedido);
+      await ctrl.alterarStatus(id, status, pedido);
       setPedido(pedido);
     }
   };

@@ -3,20 +3,20 @@ import { StyleSheet, StatusBar, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { colors } from "../../utils/styles";
 import Header from "./components/Header";
-import ViewerProduto from "@/src/viewer/ViewerProduto";
 import Produto from "@/src/model/Produto";
 import ProductCard from "@/src/components/ProductCard/ProductCard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SubNavigation from "./components/SubNavigation";
 import { useFocusEffect } from "@react-navigation/native";
-const viewer = new ViewerProduto();
+import CtrlManterProdutos from "@/src/controller/CtrlManterProdutos";
+const ctrl = new CtrlManterProdutos();
 
 const Home = () => {
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [currentProducts, setcurrentProducts] = useState(1);
 
   const fetchData = async () => {
-    const data = await viewer.carregarProdutos();
+    const data = await ctrl.carregarProdutos();
     setProdutos(data);
   };
 

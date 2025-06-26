@@ -13,10 +13,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Produto, { SituacaoProduto, TipoProduto } from "@/src/model/Produto";
-import ViewerProduto from "@/src/viewer/ViewerProduto";
 import { colors } from "@/src/utils/styles";
+import CtrlManterProdutos from "@/src/controller/CtrlManterProdutos";
 
-const viewer = new ViewerProduto();
+const ctrl = new CtrlManterProdutos();
 
 export default function Product() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
@@ -35,7 +35,7 @@ export default function Product() {
 
   const carregarProdutos = async () => {
     setLoading(true);
-    const data = await viewer.carregarProdutos();
+    const data = await ctrl.carregarProdutos();
     setProdutos(data);
     setLoading(false);
   };
@@ -48,9 +48,9 @@ export default function Product() {
     const produto = new Produto(codigo, nome, imagem, descricao, tipo, parseFloat(precoBase), situacao);
 
     if (editando) {
-      await viewer.alterarProduto(produto);
+      await ctrl.alterarProduto(produto);
     } else {
-      await viewer.incluirProduto(produto);
+      await ctrl.incluirProduto(produto);
     }
 
     setModalVisible(false);
@@ -72,7 +72,7 @@ export default function Product() {
   };
 
   const excluirProduto = async () => {
-    await viewer.excluirProduto(codigo);
+    await ctrl.excluirProduto(codigo);
     setModalVisible(false);
     carregarProdutos();
   };

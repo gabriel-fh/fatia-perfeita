@@ -13,14 +13,14 @@ import PurchaseDetails from "./components/PurchaseDetails";
 import Button from "@/src/components/Button/Button";
 import { MetodoPagamento, Pedido } from "@/src/model/Pedido";
 import { auth } from "@/src/setup/FirebaseSetup";
-import ViewerUsuario from "@/src/viewer/ViewerUsuario";
-import ViewerPedido from "@/src/viewer/ViewerPedido";
 import { RootStackParamList } from "@/src/routes/Routes";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
+import CtrlManterPedidos from "@/src/controller/CtrlManterPedidos";
+import CtrlManterUsuarios from "@/src/controller/CtrlManterUsuarios";
 
-const viewer = new ViewerPedido();
-const viewerUsuario = new ViewerUsuario();
+const ctrl = new CtrlManterPedidos();
+const ctrlUsuario = new CtrlManterUsuarios();
 
 const Checkout = () => {
   const { cart, getCartValue } = useCartStore();
@@ -40,7 +40,7 @@ const Checkout = () => {
       return;
     }
 
-    const usuario = await viewerUsuario.carregarUsuario(auth.currentUser.uid);
+    const usuario = await ctrlUsuario.carregarUsuario(auth.currentUser.uid);
 
     if (!usuario || !endereco) {
       return;
@@ -50,7 +50,7 @@ const Checkout = () => {
 
     pedido.setProdutos(cart);
 
-    const pedidoId = await viewer.incluirPedido(pedido);
+    const pedidoId = await ctrl.incluirPedido(pedido);
 
     if (!pedidoId) {
       alert("Erro ao incluir pedido");

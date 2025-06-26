@@ -6,7 +6,6 @@ import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { RootStackParamList } from "@/src/routes/Routes";
 import { auth } from "@/src/setup/FirebaseSetup";
-import ViewerUsuario from "@/src/viewer/ViewerUsuario";
 import Usuario from "@/src/model/Usuario";
 import NotAuth from "@/src/components/NoAuth/NotAuth";
 import Header from "@/src/components/Header/Header";
@@ -14,8 +13,9 @@ import UserInfo from "./components/UserInfo";
 import Options from "./components/Options";
 import { useAddress } from "@/src/contexts/Address";
 import { Endereco } from "@/src/model/Endereco";
+import CtrlManterUsuarios from "@/src/controller/CtrlManterUsuarios";
 
-const viewer = new ViewerUsuario();
+const ctrl = new CtrlManterUsuarios();
 
 const Profile = () => {
   const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
@@ -26,13 +26,13 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       if (auth.currentUser && auth.currentUser.uid) {
-        const user = await viewer.carregarUsuario(auth.currentUser.uid);
+        const user = await ctrl.carregarUsuario(auth.currentUser.uid);
         if (!user) {
           setLoading(false);
           return;
         }
         setUsuario(user);
-        const address = await viewer.obterUmEnderecoDoUsuario(auth.currentUser.uid);
+        const address = await ctrl.obterUmEnderecoDoUsuario(auth.currentUser.uid);
         if (address) {
           setAddress(address);
           await saveAddressToStorage(address);
