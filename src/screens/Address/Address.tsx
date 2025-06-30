@@ -10,8 +10,8 @@ import Header from "@/src/components/Header/Header";
 import Input from "@/src/components/Input/Input";
 import { Endereco } from "@/src/model/Endereco";
 import { RoutesParamsType } from "@/src/routes/RoutesParamsType";
-import ViewerEndereco from "@/src/viewer/ViewerEndereco";
 import { useAddress } from "@/src/contexts/Address";
+import CtrlManterEnderecos from "@/src/controller/CtrlManterEnderecos";
 
 type AddressType = {
   rua: string;
@@ -25,7 +25,7 @@ type AddressType = {
 type AddressProps = {
   route: RouteProp<RoutesParamsType, "Address">;
 };
-const viewer = new ViewerEndereco();
+const ctrl = new CtrlManterEnderecos();
 
 const Address = ({ route }: AddressProps) => {
   const { add } = route.params;
@@ -67,7 +67,7 @@ const Address = ({ route }: AddressProps) => {
       );
       
       if (add) {
-        await viewer.incluirEndereco(endereco);
+        await ctrl.incluirEndereco(endereco);
         navigation.goBack();
         return;
       }

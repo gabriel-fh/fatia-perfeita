@@ -201,6 +201,8 @@ export default class DaoPedido {
       }
     }
 
-    return pedidosArray;
+    const pedidosOrdenados = pedidosArray.sort((a, b) => b.getData().getTime() - a.getData().getTime());
+
+    return pedidosOrdenados;
   }
 }

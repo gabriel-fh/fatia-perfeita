@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import { PedidoDTO } from "@/src/model/PedidoDTO";
 import { colors } from "@/src/utils/styles";
-import ViewerPedido from "@/src/viewer/ViewerPedido";
 import { auth } from "@/src/setup/FirebaseSetup";
 import { useFocusEffect } from "@react-navigation/native";
-import ViewerUsuario from "@/src/viewer/ViewerUsuario";
 import Header from "@/src/components/Header/Header";
 import NotAuth from "@/src/components/NoAuth/NotAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OrderCard from "./components/OrderCard";
+import CtrlManterPedidos from "@/src/controller/CtrlManterPedidos";
+import CtrlManterUsuarios from "@/src/controller/CtrlManterUsuarios";
 
-const viewer = new ViewerPedido();
-const viewerUsuario = new ViewerUsuario();
+const ctrl = new CtrlManterPedidos();
+const ctrlUsuario = new CtrlManterUsuarios();
 
 
 const Orders = () => {
@@ -24,7 +24,7 @@ const Orders = () => {
     const checkUserRole = async () => {
       const user = auth.currentUser;
       if (user) {
-        const userData = await viewerUsuario.carregarUsuario(user.uid);
+        const userData = await ctrlUsuario.carregarUsuario(user.uid);
         userData && setIsAdmin(userData.getFuncao() === "ADMIN");
       }
     };
@@ -35,8 +35,8 @@ const Orders = () => {
   useFocusEffect(() => {
     const fetchPedidos = async () => {
       const pedidos = isAdmin
-        ? await viewer.carregarPedidos()
-        : await viewer.carregarPedidosDoUsuario(auth.currentUser?.uid || "");
+        ? await ctrl.carregarPedidos()
+        : await ctrl.carregarPedidosDoUsuario(auth.currentUser?.uid || "");
 
       setPedidos(pedidos);
       setLoading(false);

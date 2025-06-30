@@ -7,14 +7,15 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
 type HeaderProps = {
   title: string;
+  goTo?: () => void;
 };
 
-const Header = ({ title }: HeaderProps) => {
+const Header = ({ title, goTo }: HeaderProps) => {
   const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.icon}>
+      <TouchableOpacity onPress={() => (goTo ? goTo() : navigation.goBack())} style={styles.icon}>
         <Entypo name="chevron-small-left" size={24} color="#fff" />
       </TouchableOpacity>
       <Text style={styles.title}>{title}</Text>

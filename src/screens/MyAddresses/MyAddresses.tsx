@@ -4,14 +4,14 @@ import { colors } from "@/src/utils/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/src/components/Header/Header";
 import AddressCard from "./components/AddressCard";
-import ViewerEndereco from "@/src/viewer/ViewerEndereco";
 import { auth } from "@/src/setup/FirebaseSetup";
 import { Endereco } from "@/src/model/Endereco";
 import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { RootStackParamList } from "@/src/routes/Routes";
+import CtrlManterEnderecos from "@/src/controller/CtrlManterEnderecos";
 
-const viewer = new ViewerEndereco();
+const ctrl = new CtrlManterEnderecos();
 
 const MyAddresses = () => {
   const [addresses, setAddresses] = useState<Endereco[] | []>([]);
@@ -21,7 +21,7 @@ const MyAddresses = () => {
     const loadEnderecos = async () => {
       const uid = auth.currentUser?.uid;
       if (uid) {
-        const data = await viewer.carregarEnderecos(uid);
+        const data = await ctrl.carregarEnderecos(uid);
         setAddresses(data);
       }
     };
