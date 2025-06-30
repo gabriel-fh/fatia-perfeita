@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { PedidoDTO } from "@/src/model/PedidoDTO";
 import ProdutoPedido from "@/src/model/ProdutoPedido";
 import { colors } from "@/src/utils/styles";
@@ -10,6 +10,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/src/components/Header/Header";
 import CtrlManterPedidos from "@/src/controller/CtrlManterPedidos";
 import CtrlManterUsuarios from "@/src/controller/CtrlManterUsuarios";
+import { RootStackParamList } from "@/src/routes/Routes";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
 const ctrl = new CtrlManterPedidos();
 const ctrlUsuario = new CtrlManterUsuarios();
@@ -18,6 +20,7 @@ const OrderDetails = () => {
   const route = useRoute();
   const { id } = route.params as { id: string };
 
+  const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
   const [pedido, setPedido] = useState<PedidoDTO | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -70,7 +73,7 @@ const OrderDetails = () => {
 
     return `R$ ${inteiraComPonto},${decimal}`;
   };
-  
+
   const formatDate = (date: Date) =>
     new Date(date).toLocaleString("pt-BR", {
       day: "2-digit",
@@ -101,7 +104,7 @@ const OrderDetails = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={["right", "left", "top"]}>
-      <Header title="Detalhes do Pedido" />
+      <Header title="Detalhes do Pedido" goTo={() => navigation.navigate("Main", { screen: "Orders" })} />
       <Text style={styles.label}>Data:</Text>
       <Text style={styles.value}>{formatDate(pedido.getData())}</Text>
 

@@ -28,6 +28,23 @@ const formatDate = (date: Date) =>
 const OrderCard = ({ item }: { item: PedidoDTO }) => {
   const navigation = useNavigation<BottomTabNavigationProp<RootStackParamList>>();
 
+  const statusColor = () => {
+    switch (item.getSituacao()) {
+      case "EM_ENTREGA":
+        return "#ff9800";
+      case "ENTREGUE":
+        return "#2196f3";
+      case "EM_PREPARO":
+        return "yellow";
+      case "CANCELADO":
+        return "red";
+      case "NOVO":
+        return "white";
+      default:
+        return "#fff";
+    }
+  };
+
   return (
     <TouchableOpacity
       style={styles.card}
@@ -39,7 +56,7 @@ const OrderCard = ({ item }: { item: PedidoDTO }) => {
       activeOpacity={0.7}
     >
       <View style={styles.cardHeader}>
-        <Text style={styles.situacao}>{item.getSituacao()}</Text>
+        <Text style={[styles.situacao, { color: statusColor() }]}>{item.getSituacao()}</Text>
         <Text style={styles.data}>{formatDate(item.getData())}</Text>
       </View>
       <Text style={styles.total}>Total: {formatToReal(item.getTotal())}</Text>
